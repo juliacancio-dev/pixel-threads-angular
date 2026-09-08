@@ -92,7 +92,6 @@ Os arquivos finais ficam em `dist/pixel-threads-angular/browser`, prontos para d
 O workflow em [`.github/workflows/ci.yml`](.github/workflows/ci.yml) roda automaticamente a cada `push`/`pull request` para a branch `main`:
 
 1. Instala as dependências (`npm ci`)
-2. Executa os testes unitários (`npm test -- --watch=false --browsers=ChromeHeadless`)
-3. Gera o build de produção (`npm run build`)
+2. Gera o build de produção (`npm run build`)
 
-Isso garante que nenhuma alteração quebre o build ou os testes antes de ser mesclada.
+Isso garante que nenhuma alteração quebre o build antes de ser mesclada. Não há etapa de testes automatizados porque o projeto ainda não possui arquivos `.spec.ts`.
