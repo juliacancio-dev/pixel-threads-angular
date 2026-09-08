@@ -11,6 +11,7 @@ E-commerce de roupas geek construído em Angular 18 (standalone components + Sig
 - [Rotas](#rotas)
 - [Estrutura do projeto](#estrutura-do-projeto)
 - [Build de produção](#build-de-produção)
+- [CI/CD](#cicd)
 
 ## Stack
 
@@ -85,3 +86,13 @@ npm run build
 ```
 
 Os arquivos finais ficam em `dist/pixel-threads-angular/browser`, prontos para deploy em qualquer servidor de arquivos estáticos.
+
+## CI/CD
+
+O workflow em [`.github/workflows/ci.yml`](.github/workflows/ci.yml) roda automaticamente a cada `push`/`pull request` para a branch `main`:
+
+1. Instala as dependências (`npm ci`)
+2. Executa os testes unitários (`npm test -- --watch=false --browsers=ChromeHeadless`)
+3. Gera o build de produção (`npm run build`)
+
+Isso garante que nenhuma alteração quebre o build ou os testes antes de ser mesclada.
