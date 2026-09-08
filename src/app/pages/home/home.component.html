@@ -1,0 +1,79 @@
+<main>
+
+  <!-- HERO -->
+  <section class="hero container">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Nova coleção 8-bit</span>
+        <h1>Vista o seu <span>modo geek</span> favorito.</h1>
+        <p>Camisetas, moletons e acessórios inspirados em games, cultura pixel e ficção científica. Estampas exclusivas, algodão premium e aquele acabamento que só quem entende do assunto reconhece.</p>
+        <div class="hero-actions">
+          <a routerLink="/busca" class="btn btn-primary pixel-cut">Ver coleção completa</a>
+          <a href="#lancamentos" class="btn btn-outline pixel-cut">Lançamentos da semana</a>
+        </div>
+      </div>
+      <div class="hero-art pixel-cut" aria-hidden="true">🕹️</div>
+    </div>
+  </section>
+
+  <!-- CATEGORIAS -->
+  <section class="container">
+    <div class="chips">
+      <a routerLink="/busca" [queryParams]="{categoria: 'games'}" class="chip active pixel-cut-sm">🎮 Games</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'filmes'}" class="chip pixel-cut-sm">🎬 Filmes &amp; Séries</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'programacao'}" class="chip pixel-cut-sm">💻 Programação</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'ciencia'}" class="chip pixel-cut-sm">🔬 Ciência</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'ficcao'}" class="chip pixel-cut-sm">👽 Ficção</a>
+    </div>
+  </section>
+
+  <!-- VITRINE DE PRODUTOS -->
+  <section class="section container" id="lancamentos">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Vitrine</span>
+        <h2>Lançamentos da semana</h2>
+      </div>
+      <a routerLink="/busca" class="btn btn-ghost btn-sm pixel-cut-sm">Ver tudo</a>
+    </div>
+
+    <div class="product-grid">
+      @for (produto of produtos; track produto.id) {
+        <a [routerLink]="['/produto', produto.id]" class="card pixel-cut">
+          <div class="card-art pixel-cut" [style.background]="produto.gradiente">
+            @if (produto.novo) {
+              <span class="tag">NOVO</span>
+            }
+            {{ produto.emoji }}
+          </div>
+          <div class="card-body">
+            <span class="card-cat">{{ produto.categoria }}</span>
+            <h3 class="card-title">{{ produto.nome }}</h3>
+            <div class="card-footer">
+              <span class="price">{{ produto.preco | currency:'BRL' }}</span>
+              <span class="add-btn" role="button" aria-label="Adicionar à cesta" (click)="adicionarACesta(produto, $event)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="container">
+    <div class="newsletter pixel-cut">
+      <div>
+        <span class="eyebrow">Fique por dentro</span>
+        <h2 style="margin-bottom:4px;">Receba drops exclusivos no seu e-mail</h2>
+        <p style="margin:0;">Avisamos antes de todo mundo quando uma estampa nova ou uma reposição limitada chega na loja.</p>
+      </div>
+      <form class="newsletter-form" #newsletterForm="ngForm" (ngSubmit)="enviarNewsletter(newsletterForm)" novalidate>
+        <input type="email" name="newsletter-email" placeholder="seuemail@exemplo.com" required [(ngModel)]="emailNewsletter" #emailField="ngModel" aria-label="E-mail para newsletter">
+        <button type="submit" class="btn btn-primary pixel-cut-sm">Assinar</button>
+      </form>
+    </div>
+  </section>
+
+</main>
