@@ -1,0 +1,45 @@
+<main class="auth-wrap">
+  <div class="auth-card pixel-cut">
+    <span class="eyebrow" style="justify-content:center;">Bem-vindo de volta</span>
+    <h1 style="text-align:center;">Entrar na conta</h1>
+    <p class="auth-sub">Acesse para ver seus pedidos, favoritos e cupons exclusivos.</p>
+
+    <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+
+      <div class="field" [class.invalid]="form.controls.email.invalid && form.controls.email.touched">
+        <label for="login-email">E-mail<span class="req">*</span></label>
+        <input
+          type="email"
+          id="login-email"
+          formControlName="email"
+          placeholder="seuemail@exemplo.com">
+        <span class="field-error">Digite um e-mail válido.</span>
+      </div>
+
+      <div class="field" [class.invalid]="form.controls.senha.invalid && form.controls.senha.touched">
+        <label for="login-senha">Senha<span class="req">*</span></label>
+        <div class="input-wrap">
+          <input
+            [type]="mostrarSenha ? 'text' : 'password'"
+            id="login-senha"
+            formControlName="senha"
+            placeholder="Sua senha">
+          <button type="button" class="toggle-pass" (click)="toggleSenha()">{{ mostrarSenha ? 'OCULTAR' : 'MOSTRAR' }}</button>
+        </div>
+        <span class="field-error">A senha deve ter no mínimo 6 caracteres.</span>
+      </div>
+
+      <div class="form-row-between">
+        <label class="checkbox-line">
+          <input type="checkbox" formControlName="lembrar">
+          Lembrar de mim
+        </label>
+        <a routerLink="/esqueci" class="link-muted">Esqueci minha senha</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block pixel-cut">Entrar</button>
+    </form>
+
+    <p class="auth-footer">Ainda não tem conta? <a href="javascript:void(0)" class="link-muted">Cadastre-se</a></p>
+  </div>
+</main>
