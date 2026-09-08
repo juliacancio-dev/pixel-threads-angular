@@ -1,0 +1,120 @@
+@if (produto) {
+<main class="container">
+
+  <nav class="breadcrumb" aria-label="Caminho de navegação">
+    <a routerLink="/">Início</a><span class="sep">/</span>
+    <a routerLink="/busca" [queryParams]="{categoria: produto.categoria.toLowerCase()}">{{ produto.categoria }}</a><span class="sep">/</span>
+    <span class="current">{{ produto.nome }}</span>
+  </nav>
+
+  <div class="product-detail">
+
+    <!-- GALERIA -->
+    <div>
+      <div class="gallery-main pixel-cut" aria-live="polite">{{ produto.emoji }}</div>
+      <div class="gallery-thumbs">
+        <button type="button" class="active" aria-label="Ver imagem frontal">{{ produto.emoji }}</button>
+        <button type="button" aria-label="Ver imagem das costas">🧵</button>
+        <button type="button" aria-label="Ver imagem no manequim">🧍</button>
+        <button type="button" aria-label="Ver detalhe do tecido">🔍</button>
+      </div>
+    </div>
+
+    <!-- INFORMAÇÕES -->
+    <div>
+      <span class="eyebrow">{{ produto.categoria }} · Edição limitada</span>
+      <h1>{{ produto.nome }}</h1>
+      <span class="stock-tag">Em estoque — envio em até 2 dias úteis</span>
+
+      <div class="pd-price">
+        @if (produto.precoAntigo) {
+          <span class="old">{{ produto.precoAntigo | currency:'BRL' }}</span>
+        }
+        <span class="price">{{ produto.preco | currency:'BRL' }}</span>
+      </div>
+      <p>{{ produto.descricao }}</p>
+
+      <form (ngSubmit)="adicionarACesta()" novalidate>
+        <div class="option-group">
+          <span class="option-label">Tamanho <span style="color:var(--magenta)">*</span></span>
+          <div class="size-options">
+            @for (tamanho of ['P', 'M', 'G', 'GG']; track tamanho) {
+              <input type="radio" name="tamanho" [id]="'tam-' + tamanho" [value]="tamanho" [(ngModel)]="tamanhoSelecionado">
+              <label [for]="'tam-' + tamanho">{{ tamanho }}</label>
+            }
+          </div>
+          @if (tamanhoInvalido) {
+            <span class="field-error" style="display:block;">Selecione um tamanho.</span>
+          }
+        </div>
+
+        <div class="option-group">
+          <span class="option-label">Quantidade</span>
+          <div class="qty-stepper">
+            <button type="button" class="qty-minus" aria-label="Diminuir quantidade" (click)="diminuirQuantidade()">−</button>
+            <input type="number" [(ngModel)]="quantidade" name="quantidade" min="1" max="10" aria-label="Quantidade">
+            <button type="button" class="qty-plus" aria-label="Aumentar quantidade" (click)="aumentarQuantidade()">+</button>
+          </div>
+        </div>
+
+        <div class="pd-actions">
+          <button type="submit" class="btn btn-primary pixel-cut">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L4 3H2"/></svg>
+            Adicionar à cesta
+          </button>
+          <a routerLink="/cesta" class="btn btn-outline pixel-cut">Comprar agora</a>
+        </div>
+      </form>
+
+      <div class="pd-tabs" role="tablist">
+        <button type="button" [class.active]="abaAtiva === 'descricao'" (click)="selecionarAba('descricao')" role="tab">Descrição</button>
+        <button type="button" [class.active]="abaAtiva === 'medidas'" (click)="selecionarAba('medidas')" role="tab">Medidas</button>
+        <button type="button" [class.active]="abaAtiva === 'cuidados'" (click)="selecionarAba('cuidados')" role="tab">Cuidados</button>
+      </div>
+      @if (abaAtiva === 'descricao') {
+        <div class="pd-tab-panel" role="tabpanel">
+          <ul class="spec-list">
+            <li><strong>Tecido:</strong> 100% algodão penteado 30.1</li>
+            <li><strong>Estampa:</strong> Silk-screen alta durabilidade</li>
+            <li><strong>Modelagem:</strong> Unissex, corte reto</li>
+            <li><strong>Origem:</strong> Produzida no Brasil</li>
+          </ul>
+        </div>
+      }
+      @if (abaAtiva === 'medidas') {
+        <div class="pd-tab-panel" role="tabpanel">
+          <p style="margin:0;">P: 66×48cm · M: 70×51cm · G: 74×54cm · GG: 78×57cm (comprimento × largura, medidas aproximadas).</p>
+        </div>
+      }
+      @if (abaAtiva === 'cuidados') {
+        <div class="pd-tab-panel" role="tabpanel">
+          <p style="margin:0;">Lavar à mão ou máquina em ciclo delicado, água fria, virada do avesso. Não usar alvejante. Secar à sombra.</p>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- RELACIONADOS -->
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Combina com</span>
+        <h2>Você também pode curtir</h2>
+      </div>
+    </div>
+    <div class="product-grid">
+      @for (relacionado of relacionados; track relacionado.id) {
+        <a [routerLink]="['/produto', relacionado.id]" class="card pixel-cut">
+          <div class="card-art pixel-cut" [style.background]="relacionado.gradiente">{{ relacionado.emoji }}</div>
+          <div class="card-body">
+            <span class="card-cat">{{ relacionado.categoria }}</span>
+            <h3 class="card-title">{{ relacionado.nome }}</h3>
+            <div class="card-footer"><span class="price">{{ relacionado.preco | currency:'BRL' }}</span></div>
+          </div>
+        </a>
+      }
+    </div>
+  </section>
+
+</main>
+}
