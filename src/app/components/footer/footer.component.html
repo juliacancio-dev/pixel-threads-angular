@@ -1,0 +1,45 @@
+@if (!paginaAuth()) {
+  <footer class="site-footer container">
+    @if (paginaInicial()) {
+      <div class="footer-grid">
+        <div>
+          <a routerLink="/" class="logo">PIXEL<span>THREADS</span></a>
+          <p style="margin-top:12px;">Roupas e acessórios para quem vive em modo geek desde o primeiro save.</p>
+        </div>
+        <div>
+          <h4>LOJA</h4>
+          <ul>
+            <li><a routerLink="/busca" [queryParams]="{categoria: 'games'}">Games</a></li>
+            <li><a routerLink="/busca" [queryParams]="{categoria: 'filmes'}">Filmes &amp; Séries</a></li>
+            <li><a routerLink="/busca" [queryParams]="{categoria: 'programacao'}">Programação</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>CONTA</h4>
+          <ul>
+            <li><a routerLink="/login">Entrar</a></li>
+            <li><a routerLink="/esqueci">Esqueci minha senha</a></li>
+            <li><a routerLink="/cesta">Minha cesta</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>AJUDA</h4>
+          <ul>
+            <li><a href="javascript:void(0)">Trocas e devoluções</a></li>
+            <li><a href="javascript:void(0)">Guia de tamanhos</a></li>
+            <li><a href="javascript:void(0)">Fale conosco</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 PIXEL THREADS · Projeto acadêmico P1</span>
+        <span>Feito com &lt;3 e muito café pixelizado</span>
+      </div>
+    } @else {
+      <div class="footer-bottom">
+        <span>© 2026 PIXEL THREADS · Projeto acadêmico P1</span>
+        <a routerLink="/" class="link-muted">Voltar à loja</a>
+      </div>
+    }
+  </footer>
+}
