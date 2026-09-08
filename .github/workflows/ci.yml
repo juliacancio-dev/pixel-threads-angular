@@ -23,5 +23,8 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
+      - name: Rodar testes unitários
+        run: npm test -- --watch=false --browsers=ChromeHeadless
+
       - name: Build de produção
         run: npm run build
