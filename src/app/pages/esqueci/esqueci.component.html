@@ -1,0 +1,25 @@
+<main class="auth-wrap">
+  <div class="auth-card pixel-cut">
+    <span class="eyebrow" style="justify-content:center;">Sem pânico</span>
+    <h1 style="text-align:center;">Recuperar senha</h1>
+    <p class="auth-sub">Digite o e-mail da sua conta e enviaremos um link para você criar uma nova senha.</p>
+
+    <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+
+      <div class="field" [class.invalid]="form.controls.email.invalid && form.controls.email.touched">
+        <label for="rec-email">E-mail cadastrado<span class="req">*</span></label>
+        <input
+          type="email"
+          id="rec-email"
+          formControlName="email"
+          placeholder="seuemail@exemplo.com">
+        <span class="field-error">Digite um e-mail válido para continuar.</span>
+        <p class="field-hint">Enviaremos o link de redefinição para este endereço.</p>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block pixel-cut">Enviar link de recuperação</button>
+    </form>
+
+    <p class="auth-footer">Lembrou a senha? <a routerLink="/login" class="link-muted">Voltar para o login</a></p>
+  </div>
+</main>
