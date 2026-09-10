@@ -1,0 +1,68 @@
+<main class="auth-wrap">
+  <div class="auth-card pixel-cut">
+    <span class="eyebrow" style="justify-content:center;">Bem-vindo à loja</span>
+    <h1 style="text-align:center;">Criar conta</h1>
+    <p class="auth-sub">Cadastre-se para acompanhar pedidos, favoritar produtos e receber cupons exclusivos.</p>
+
+    <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+
+      <div class="field" [class.invalid]="form.controls.nome.invalid && form.controls.nome.touched">
+        <label for="cad-nome">Nome completo<span class="req">*</span></label>
+        <input
+          type="text"
+          id="cad-nome"
+          formControlName="nome"
+          placeholder="Seu nome completo">
+        <span class="field-error">Digite seu nome completo.</span>
+      </div>
+
+      <div class="field" [class.invalid]="form.controls.email.invalid && form.controls.email.touched">
+        <label for="cad-email">E-mail<span class="req">*</span></label>
+        <input
+          type="email"
+          id="cad-email"
+          formControlName="email"
+          placeholder="seuemail@exemplo.com">
+        <span class="field-error">Digite um e-mail válido.</span>
+      </div>
+
+      <div class="field" [class.invalid]="form.controls.senha.invalid && form.controls.senha.touched">
+        <label for="cad-senha">Senha<span class="req">*</span></label>
+        <div class="input-wrap">
+          <input
+            [type]="mostrarSenha ? 'text' : 'password'"
+            id="cad-senha"
+            formControlName="senha"
+            placeholder="Crie uma senha">
+          <button type="button" class="toggle-pass" (click)="toggleSenha()">{{ mostrarSenha ? 'OCULTAR' : 'MOSTRAR' }}</button>
+        </div>
+        <span class="field-error">A senha deve ter no mínimo 6 caracteres.</span>
+      </div>
+
+      <div class="field" [class.invalid]="(form.controls.confirmarSenha.invalid || form.errors?.['senhasDiferentes']) && form.controls.confirmarSenha.touched">
+        <label for="cad-confirmar-senha">Confirmar senha<span class="req">*</span></label>
+        <div class="input-wrap">
+          <input
+            [type]="mostrarConfirmarSenha ? 'text' : 'password'"
+            id="cad-confirmar-senha"
+            formControlName="confirmarSenha"
+            placeholder="Repita a senha">
+          <button type="button" class="toggle-pass" (click)="toggleConfirmarSenha()">{{ mostrarConfirmarSenha ? 'OCULTAR' : 'MOSTRAR' }}</button>
+        </div>
+        <span class="field-error">As senhas precisam ser iguais.</span>
+      </div>
+
+      <div class="field" [class.invalid]="form.controls.aceiteTermos.invalid && form.controls.aceiteTermos.touched">
+        <label class="checkbox-line">
+          <input type="checkbox" formControlName="aceiteTermos">
+          Li e aceito os termos de uso e a política de privacidade
+        </label>
+        <span class="field-error">É preciso aceitar os termos para continuar.</span>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block pixel-cut">Criar conta</button>
+    </form>
+
+    <p class="auth-footer">Já tem conta? <a routerLink="/login" class="link-muted">Entrar</a></p>
+  </div>
+</main>

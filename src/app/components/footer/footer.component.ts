@@ -25,6 +25,6 @@ export class FooterComponent {
   }
 
   private ehPaginaAuth(url: string): boolean {
-    return url.startsWith('/login') || url.startsWith('/esqueci');
+    return url.startsWith('/login') || url.startsWith('/esqueci') || url.startsWith('/cadastro');
   }
 }
