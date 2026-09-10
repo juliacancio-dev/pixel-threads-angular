@@ -12,6 +12,7 @@ export class ProdutoService {
       nome: 'Camiseta Invaders 8-Bit',
       categoria: 'Games',
       emoji: '👾',
+      imagem: 'assets/produtos/camiseta-base.jpg',
       gradiente: 'radial-gradient(circle at 30% 30%,#3a2470,#1c1140)',
       preco: 79.90,
       precoAntigo: 99.90,
@@ -23,6 +24,7 @@ export class ProdutoService {
       nome: 'Camiseta Error 404',
       categoria: 'Programação',
       emoji: '💻',
+      imagem: 'assets/produtos/camiseta-base.jpg',
       gradiente: 'radial-gradient(circle at 70% 30%,#2c4a6b,#151d33)',
       preco: 69.90,
       descricao: 'Para quem já perdeu a conta de quantas vezes debugou até altas horas. Estampa minimalista com humor de programador.'
@@ -32,6 +34,7 @@ export class ProdutoService {
       nome: 'Camiseta Byte Cat',
       categoria: 'Games',
       emoji: '🐱',
+      imagem: 'assets/produtos/camiseta-base.jpg',
       gradiente: 'radial-gradient(circle at 40% 60%,#4a2a5c,#1c1140)',
       preco: 74.90,
       novo: true,
@@ -42,6 +45,7 @@ export class ProdutoService {
       nome: 'Camiseta Matrix Code',
       categoria: 'Filmes',
       emoji: '🟩',
+      imagem: 'assets/produtos/camiseta-base.jpg',
       gradiente: 'radial-gradient(circle at 50% 40%,#1f5c3f,#0f2419)',
       preco: 84.90,
       descricao: 'Inspirada na chuva de código verde mais famosa do cinema. Para quem já escolheu o comprimido vermelho.'
@@ -51,6 +55,7 @@ export class ProdutoService {
       nome: 'Camiseta Level Up',
       categoria: 'Games',
       emoji: '⬆️',
+      imagem: 'assets/produtos/camiseta-base.jpg',
       gradiente: 'radial-gradient(circle at 60% 40%,#6b4a1f,#241a0d)',
       preco: 69.90,
       descricao: 'Comemore cada conquista do dia a dia com essa estampa retrô inspirada nos jogos clássicos.'
@@ -60,6 +65,7 @@ export class ProdutoService {
       nome: 'Camiseta Circuito Robô',
       categoria: 'Ciência',
       emoji: '🤖',
+      imagem: 'assets/produtos/camiseta-base.jpg',
       gradiente: 'radial-gradient(circle at 35% 65%,#2a4a4a,#101f1f)',
       preco: 79.90,
       novo: true,
@@ -70,6 +76,7 @@ export class ProdutoService {
       nome: 'Camiseta Alien Pixel',
       categoria: 'Ficção',
       emoji: '👽',
+      imagem: 'assets/produtos/camiseta-base.jpg',
       gradiente: 'radial-gradient(circle at 45% 35%,#3d2a5c,#181026)',
       preco: 74.90,
       descricao: 'Um alienígena pixelado para os fãs de ficção científica e teorias sobre vida extraterrestre.'
@@ -79,6 +86,7 @@ export class ProdutoService {
       nome: 'Camiseta Retro Console',
       categoria: 'Games',
       emoji: '🎮',
+      imagem: 'assets/produtos/camiseta-base.jpg',
       gradiente: 'radial-gradient(circle at 55% 55%,#5c2a3d,#26101a)',
       preco: 89.90,
       descricao: 'Uma homenagem aos consoles retrô que marcaram época. Nostalgia em forma de estampa.'

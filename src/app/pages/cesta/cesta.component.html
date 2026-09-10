@@ -15,7 +15,11 @@
 
         @for (item of cestaService.itens(); track item.produtoId + '-' + item.tamanho; let i = $index) {
           <div class="cart-item pixel-cut">
-            <div class="cart-item-art pixel-cut-sm">{{ item.emoji }}</div>
+            <div class="cart-item-art pixel-cut-sm">
+              <img class="product-photo" [src]="item.imagem" [alt]="item.nome">
+              <div class="product-tint" [style.background]="item.gradiente" aria-hidden="true"></div>
+              <span class="product-print" aria-hidden="true">{{ item.emoji }}</span>
+            </div>
             <div class="cart-item-info">
               <h3>{{ item.nome }}</h3>
               <span>Tamanho {{ item.tamanho }}</span>

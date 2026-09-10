@@ -11,9 +11,17 @@
 
     <!-- GALERIA -->
     <div>
-      <div class="gallery-main pixel-cut" aria-live="polite">{{ produto.emoji }}</div>
+      <div class="gallery-main pixel-cut" aria-live="polite">
+        <img class="product-photo" [src]="produto.imagem" [alt]="produto.nome">
+        <div class="product-tint" [style.background]="produto.gradiente" aria-hidden="true"></div>
+        <span class="product-print" aria-hidden="true">{{ produto.emoji }}</span>
+      </div>
       <div class="gallery-thumbs">
-        <button type="button" class="active" aria-label="Ver imagem frontal">{{ produto.emoji }}</button>
+        <button type="button" class="active" aria-label="Ver imagem frontal">
+          <img class="product-photo" [src]="produto.imagem" [alt]="produto.nome">
+          <div class="product-tint" [style.background]="produto.gradiente" aria-hidden="true"></div>
+          <span class="product-print" aria-hidden="true">{{ produto.emoji }}</span>
+        </button>
         <button type="button" aria-label="Ver imagem das costas">🧵</button>
         <button type="button" aria-label="Ver imagem no manequim">🧍</button>
         <button type="button" aria-label="Ver detalhe do tecido">🔍</button>
@@ -105,7 +113,11 @@
     <div class="product-grid">
       @for (relacionado of relacionados; track relacionado.id) {
         <a [routerLink]="['/produto', relacionado.id]" class="card pixel-cut">
-          <div class="card-art pixel-cut" [style.background]="relacionado.gradiente">{{ relacionado.emoji }}</div>
+          <div class="card-art pixel-cut">
+            <img class="product-photo" [src]="relacionado.imagem" [alt]="relacionado.nome" loading="lazy">
+            <div class="product-tint" [style.background]="relacionado.gradiente" aria-hidden="true"></div>
+            <span class="product-print" aria-hidden="true">{{ relacionado.emoji }}</span>
+          </div>
           <div class="card-body">
             <span class="card-cat">{{ relacionado.categoria }}</span>
             <h3 class="card-title">{{ relacionado.nome }}</h3>

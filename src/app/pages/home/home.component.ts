@@ -30,6 +30,8 @@ export class HomeComponent {
       produtoId: produto.id,
       nome: produto.nome,
       emoji: produto.emoji,
+      imagem: produto.imagem,
+      gradiente: produto.gradiente,
       tamanho: 'M',
       quantidade: 1,
       preco: produto.preco

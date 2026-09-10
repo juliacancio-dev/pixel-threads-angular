@@ -40,11 +40,13 @@
     <div class="product-grid">
       @for (produto of produtos; track produto.id) {
         <a [routerLink]="['/produto', produto.id]" class="card pixel-cut">
-          <div class="card-art pixel-cut" [style.background]="produto.gradiente">
+          <div class="card-art pixel-cut">
+            <img class="product-photo" [src]="produto.imagem" [alt]="produto.nome" loading="lazy">
+            <div class="product-tint" [style.background]="produto.gradiente" aria-hidden="true"></div>
             @if (produto.novo) {
               <span class="tag">NOVO</span>
             }
-            {{ produto.emoji }}
+            <span class="product-print" aria-hidden="true">{{ produto.emoji }}</span>
           </div>
           <div class="card-body">
             <span class="card-cat">{{ produto.categoria }}</span>

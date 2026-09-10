@@ -25,6 +25,8 @@ describe('CestaService', () => {
       produtoId: 1,
       nome: 'Camiseta Invaders 8-Bit',
       emoji: '👾',
+      imagem: 'assets/produtos/camiseta-base.jpg',
+      gradiente: 'radial-gradient(circle at 30% 30%,#3a2470,#1c1140)',
       tamanho: 'M',
       quantidade: 2,
       preco: 79.9
@@ -39,6 +41,8 @@ describe('CestaService', () => {
       produtoId: 2,
       nome: 'Camiseta Error 404',
       emoji: '💻',
+      imagem: 'assets/produtos/camiseta-base.jpg',
+      gradiente: 'radial-gradient(circle at 70% 30%,#2c4a6b,#151d33)',
       tamanho: 'P',
       quantidade: 1,
       preco: 69.9

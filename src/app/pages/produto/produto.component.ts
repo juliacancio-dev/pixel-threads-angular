@@ -70,6 +70,8 @@ export class ProdutoComponent implements OnInit {
       produtoId: this.produto.id,
       nome: this.produto.nome,
       emoji: this.produto.emoji,
+      imagem: this.produto.imagem,
+      gradiente: this.produto.gradiente,
       tamanho: this.tamanhoSelecionado,
       quantidade: this.quantidade,
       preco: this.produto.preco
