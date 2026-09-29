@@ -2,9 +2,9 @@ export interface Produto {
   id: number;
   nome: string;
   categoria: string;
-  emoji: string;
   imagem: string;
-  gradiente: string;
+  fotos?: string[];
+  tamanhos: string[];
   preco: number;
   precoAntigo?: number;
   novo?: boolean;

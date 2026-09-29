@@ -29,10 +29,8 @@ export class HomeComponent {
     this.cestaService.adicionarItem({
       produtoId: produto.id,
       nome: produto.nome,
-      emoji: produto.emoji,
       imagem: produto.imagem,
-      gradiente: produto.gradiente,
-      tamanho: 'M',
+      tamanho: this.produtoService.getTamanhoPadrao(produto),
       quantidade: 1,
       preco: produto.preco
     });

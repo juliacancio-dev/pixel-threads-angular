@@ -12,18 +12,21 @@
           <a href="#lancamentos" class="btn btn-outline pixel-cut">Lançamentos da semana</a>
         </div>
       </div>
-      <div class="hero-art pixel-cut" aria-hidden="true">🕹️</div>
+      <div class="hero-art pixel-cut">
+        <img src="assets/produtos/control-freak/foto-1.webp" alt="Homem vestindo a Camiseta Control Freak">
+      </div>
     </div>
   </section>
 
   <!-- CATEGORIAS -->
   <section class="container">
     <div class="chips">
-      <a routerLink="/busca" [queryParams]="{categoria: 'games'}" class="chip active pixel-cut-sm">🎮 Games</a>
-      <a routerLink="/busca" [queryParams]="{categoria: 'filmes'}" class="chip pixel-cut-sm">🎬 Filmes &amp; Séries</a>
-      <a routerLink="/busca" [queryParams]="{categoria: 'programacao'}" class="chip pixel-cut-sm">💻 Programação</a>
-      <a routerLink="/busca" [queryParams]="{categoria: 'ciencia'}" class="chip pixel-cut-sm">🔬 Ciência</a>
-      <a routerLink="/busca" [queryParams]="{categoria: 'ficcao'}" class="chip pixel-cut-sm">👽 Ficção</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'games'}" class="chip active pixel-cut-sm"><img src="assets/produtos/control-freak/foto-1.webp" alt="" aria-hidden="true">Games</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'filmes'}" class="chip pixel-cut-sm"><img src="assets/produtos/rick-and-morty/foto-1.webp" alt="" aria-hidden="true">Filmes &amp; Séries</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'animes'}" class="chip pixel-cut-sm"><img src="assets/produtos/demon-slayer/foto-1.webp" alt="" aria-hidden="true">Animes</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'herois'}" class="chip pixel-cut-sm"><img src="assets/produtos/x-men-97/foto-1.webp" alt="" aria-hidden="true">Heróis</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'infantil'}" class="chip pixel-cut-sm"><img src="assets/produtos/relampago-mcqueen/foto-1.webp" alt="" aria-hidden="true">Infantil</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'musica'}" class="chip pixel-cut-sm"><img src="assets/produtos/led-zeppelin/foto-1.webp" alt="" aria-hidden="true">Música</a>
     </div>
   </section>
 
@@ -42,11 +45,9 @@
         <a [routerLink]="['/produto', produto.id]" class="card pixel-cut">
           <div class="card-art pixel-cut">
             <img class="product-photo" [src]="produto.imagem" [alt]="produto.nome" loading="lazy">
-            <div class="product-tint" [style.background]="produto.gradiente" aria-hidden="true"></div>
             @if (produto.novo) {
               <span class="tag">NOVO</span>
             }
-            <span class="product-print" aria-hidden="true">{{ produto.emoji }}</span>
           </div>
           <div class="card-body">
             <span class="card-cat">{{ produto.categoria }}</span>

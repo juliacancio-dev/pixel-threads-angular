@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Produto } from '../models/produto.model';
 
+export const TAMANHOS_ADULTO = ['P', 'M', 'G', 'GG'];
+export const TAMANHOS_INFANTIL = ['2', '4', '6', '8', '10', '12'];
+
 @Injectable({
   providedIn: 'root'
 })
@@ -9,92 +12,178 @@ export class ProdutoService {
   private produtos: Produto[] = [
     {
       id: 1,
-      nome: 'Camiseta Invaders 8-Bit',
+      nome: 'Camiseta Control Freak',
       categoria: 'Games',
-      emoji: '👾',
-      imagem: 'assets/produtos/camiseta-base.jpg',
-      gradiente: 'radial-gradient(circle at 30% 30%,#3a2470,#1c1140)',
+      imagem: 'assets/produtos/control-freak/foto-1.webp',
+      tamanhos: TAMANHOS_ADULTO,
       preco: 79.90,
-      precoAntigo: 99.90,
       novo: true,
-      descricao: 'Estampa exclusiva inspirada nos clássicos jogos de nave, silk-screen de alta durabilidade sobre algodão penteado 30.1. Aquela camiseta que todo geek de carteirinha reconhece de longe.'
+      descricao: 'Todos os controles que marcaram a história dos videogames reunidos numa estampa só. Para quem não larga o joystick por nada.'
     },
     {
       id: 2,
-      nome: 'Camiseta Error 404',
-      categoria: 'Programação',
-      emoji: '💻',
-      imagem: 'assets/produtos/camiseta-base.jpg',
-      gradiente: 'radial-gradient(circle at 70% 30%,#2c4a6b,#151d33)',
-      preco: 69.90,
-      descricao: 'Para quem já perdeu a conta de quantas vezes debugou até altas horas. Estampa minimalista com humor de programador.'
+      nome: 'Camiseta Rick and Morty Peace Among Worlds',
+      categoria: 'Filmes',
+      imagem: 'assets/produtos/rick-and-morty/foto-1.webp',
+      fotos: ['assets/produtos/rick-and-morty/foto-1.webp', 'assets/produtos/rick-and-morty/foto-2.webp', 'assets/produtos/rick-and-morty/foto-3.webp'],
+      tamanhos: TAMANHOS_ADULTO,
+      preco: 89.90,
+      novo: true,
+      descricao: 'O Rick mais sincero do multiverso mandando sua mensagem de paz entre os mundos. Estampa com cores neon sobre malha preta.'
     },
     {
       id: 3,
-      nome: 'Camiseta Byte Cat',
-      categoria: 'Games',
-      emoji: '🐱',
-      imagem: 'assets/produtos/camiseta-base.jpg',
-      gradiente: 'radial-gradient(circle at 40% 60%,#4a2a5c,#1c1140)',
-      preco: 74.90,
-      novo: true,
-      descricao: 'Um gatinho pixelado que conquistou a internet, agora estampado em algodão macio e resistente.'
+      nome: 'Camiseta Demon Slayer Olhares',
+      categoria: 'Animes',
+      imagem: 'assets/produtos/demon-slayer/foto-1.webp',
+      fotos: ['assets/produtos/demon-slayer/foto-1.webp', 'assets/produtos/demon-slayer/foto-2.webp', 'assets/produtos/demon-slayer/foto-3.webp'],
+      tamanhos: TAMANHOS_ADULTO,
+      preco: 84.90,
+      descricao: 'Os olhares de Tanjiro, Nezuko, Zenitsu e Inosuke em faixas coloridas. Para fãs de Kimetsu no Yaiba.'
     },
     {
       id: 4,
-      nome: 'Camiseta Matrix Code',
-      categoria: 'Filmes',
-      emoji: '🟩',
-      imagem: 'assets/produtos/camiseta-base.jpg',
-      gradiente: 'radial-gradient(circle at 50% 40%,#1f5c3f,#0f2419)',
-      preco: 84.90,
-      descricao: 'Inspirada na chuva de código verde mais famosa do cinema. Para quem já escolheu o comprimido vermelho.'
+      nome: 'Camiseta X-Men \'97',
+      categoria: 'Heróis',
+      imagem: 'assets/produtos/x-men-97/foto-1.webp',
+      tamanhos: TAMANHOS_ADULTO,
+      preco: 94.90,
+      precoAntigo: 119.90,
+      novo: true,
+      descricao: 'Os mutantes da série animada X-Men \'97 em quadrinhos coloridos sobre malha off-white. Um clássico dos anos 90 de volta.'
     },
     {
       id: 5,
-      nome: 'Camiseta Level Up',
+      nome: 'Camiseta You Are Offline',
       categoria: 'Games',
-      emoji: '⬆️',
-      imagem: 'assets/produtos/camiseta-base.jpg',
-      gradiente: 'radial-gradient(circle at 60% 40%,#6b4a1f,#241a0d)',
+      imagem: 'assets/produtos/you-are-offline/foto-1.webp',
+      tamanhos: TAMANHOS_ADULTO,
       preco: 69.90,
-      descricao: 'Comemore cada conquista do dia a dia com essa estampa retrô inspirada nos jogos clássicos.'
+      descricao: 'O dinossauro mais famoso da internet, aquele que aparece quando a conexão cai. Estampa minimalista em pixel art.'
     },
     {
       id: 6,
-      nome: 'Camiseta Circuito Robô',
-      categoria: 'Ciência',
-      emoji: '🤖',
-      imagem: 'assets/produtos/camiseta-base.jpg',
-      gradiente: 'radial-gradient(circle at 35% 65%,#2a4a4a,#101f1f)',
-      preco: 79.90,
-      novo: true,
-      descricao: 'Circuitos estilizados e um robozinho carismático para quem ama tecnologia e ciência.'
+      nome: 'Camiseta Dragon Ball Z Shenlong',
+      categoria: 'Animes',
+      imagem: 'assets/produtos/dragon-ball-shenlong/foto-1.webp',
+      tamanhos: TAMANHOS_ADULTO,
+      preco: 89.90,
+      descricao: 'Shenlong e as sete esferas do dragão numa estampa detalhada. Faça seu pedido e vista a lenda.'
     },
     {
       id: 7,
-      nome: 'Camiseta Alien Pixel',
-      categoria: 'Ficção',
-      emoji: '👽',
-      imagem: 'assets/produtos/camiseta-base.jpg',
-      gradiente: 'radial-gradient(circle at 45% 35%,#3d2a5c,#181026)',
-      preco: 74.90,
-      descricao: 'Um alienígena pixelado para os fãs de ficção científica e teorias sobre vida extraterrestre.'
+      nome: 'Camiseta Led Zeppelin Mothership',
+      categoria: 'Música',
+      imagem: 'assets/produtos/led-zeppelin/foto-1.webp',
+      tamanhos: TAMANHOS_ADULTO,
+      preco: 94.90,
+      descricao: 'A arte clássica do álbum Mothership do Led Zeppelin. Rock pesado para quem tem bom gosto musical.'
     },
     {
       id: 8,
-      nome: 'Camiseta Retro Console',
+      nome: 'Camiseta Seu Madruga "Deus Ajuda"',
+      categoria: 'Filmes',
+      imagem: 'assets/produtos/seu-madruga/foto-1.webp',
+      tamanhos: TAMANHOS_ADULTO,
+      preco: 69.90,
+      precoAntigo: 84.90,
+      descricao: '"Deus ajuda quem cedo madruga" com o personagem mais querido da vila. Humor clássico da TV em estampa branca.'
+    },
+    {
+      id: 9,
+      nome: 'Camiseta Fantasma "Do You Believe in Ghosts?"',
       categoria: 'Games',
-      emoji: '🎮',
-      imagem: 'assets/produtos/camiseta-base.jpg',
-      gradiente: 'radial-gradient(circle at 55% 55%,#5c2a3d,#26101a)',
-      preco: 89.90,
-      descricao: 'Uma homenagem aos consoles retrô que marcaram época. Nostalgia em forma de estampa.'
+      imagem: 'assets/produtos/fantasma/foto-1.webp',
+      tamanhos: TAMANHOS_ADULTO,
+      preco: 84.90,
+      novo: true,
+      descricao: 'Um fantasminha travesso em tons de roxo estampado nas costas. Visual moderno e divertido sobre malha branca.'
+    },
+    {
+      id: 10,
+      nome: 'Camiseta Princesa Peach',
+      categoria: 'Games',
+      imagem: 'assets/produtos/princesa-peach/foto-1.webp',
+      tamanhos: TAMANHOS_ADULTO,
+      preco: 79.90,
+      descricao: 'A princesa mais famosa do Reino dos Cogumelos em estampa estilo brasão universitário sobre malha rosa.'
+    },
+    {
+      id: 11,
+      nome: 'Camiseta Tartarugas Ninja',
+      categoria: 'Filmes',
+      imagem: 'assets/produtos/tartarugas-ninja/foto-1.webp',
+      tamanhos: TAMANHOS_ADULTO,
+      preco: 79.90,
+      descricao: 'Leonardo, Raphael, Donatello e Michelangelo em quadros coloridos. Cowabunga!'
+    },
+    {
+      id: 12,
+      nome: 'Camiseta Os Mestres',
+      categoria: 'Filmes',
+      imagem: 'assets/produtos/os-mestres/foto-1.webp',
+      fotos: ['assets/produtos/os-mestres/foto-1.webp', 'assets/produtos/os-mestres/foto-2.webp', 'assets/produtos/os-mestres/foto-3.webp'],
+      tamanhos: TAMANHOS_ADULTO,
+      preco: 74.90,
+      descricao: 'Mestre Kame, Yoda e outros grandes mestres atravessando a faixa de pedestres no estilo Abbey Road.'
+    },
+    {
+      id: 13,
+      nome: 'Camiseta X-Men Xavier\'s School',
+      categoria: 'Heróis',
+      imagem: 'assets/produtos/x-men-xavier/foto-1.webp',
+      tamanhos: TAMANHOS_ADULTO,
+      preco: 79.90,
+      descricao: 'O emblema da escola do Professor Xavier para jovens superdotados. Discreta e cheia de referência.'
+    },
+    {
+      id: 14,
+      nome: 'Camiseta Infantil Homem-Aranha LED',
+      categoria: 'Infantil',
+      imagem: 'assets/produtos/homem-aranha-led/foto-1.webp',
+      tamanhos: TAMANHOS_INFANTIL,
+      preco: 99.90,
+      novo: true,
+      descricao: 'Estampa do Homem-Aranha com olhos de LED que acendem. 100% algodão e LED à prova d\'água.'
+    },
+    {
+      id: 15,
+      nome: 'Camiseta Infantil Hulk',
+      categoria: 'Infantil',
+      imagem: 'assets/produtos/hulk-infantil/foto-1.webp',
+      tamanhos: TAMANHOS_INFANTIL,
+      preco: 59.90,
+      descricao: 'O gigante esmeralda em ação numa estampa cheia de energia para os pequenos heróis.'
+    },
+    {
+      id: 16,
+      nome: 'Camiseta Infantil Relâmpago McQueen',
+      categoria: 'Infantil',
+      imagem: 'assets/produtos/relampago-mcqueen/foto-1.webp',
+      fotos: ['assets/produtos/relampago-mcqueen/foto-1.webp', 'assets/produtos/relampago-mcqueen/foto-2.webp'],
+      tamanhos: TAMANHOS_INFANTIL,
+      preco: 59.90,
+      descricao: 'Katchau! O Relâmpago McQueen de Carros em estampa vermelha para os pequenos pilotos.'
+    },
+    {
+      id: 17,
+      nome: 'Camiseta Infantil Galinha Pintadinha',
+      categoria: 'Infantil',
+      imagem: 'assets/produtos/galinha-pintadinha/foto-1.webp',
+      tamanhos: TAMANHOS_INFANTIL,
+      preco: 54.90,
+      precoAntigo: 64.90,
+      descricao: 'A Galinha Pintadinha estampada de corpo inteiro em malha azul. Fofura garantida para a criançada.'
     }
   ];
 
   getProdutos(): Produto[] {
     return this.produtos;
+  }
+
+  /** Tamanho sugerido para compras rápidas (botão "+" dos cards). */
+  getTamanhoPadrao(produto: Produto): string {
+    return produto.tamanhos[Math.floor((produto.tamanhos.length - 1) / 2)];
   }
 
   getProdutoPorId(id: number): Produto | undefined {

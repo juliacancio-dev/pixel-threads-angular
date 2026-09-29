@@ -14,12 +14,12 @@ describe('ProdutoService', () => {
   });
 
   it('deve retornar todos os produtos', () => {
-    expect(service.getProdutos().length).toBe(8);
+    expect(service.getProdutos().length).toBe(17);
   });
 
   it('deve retornar um produto pelo id', () => {
     const produto = service.getProdutoPorId(1);
-    expect(produto?.nome).toBe('Camiseta Invaders 8-Bit');
+    expect(produto?.nome).toBe('Camiseta Control Freak');
   });
 
   it('deve retornar undefined para um id inexistente', () => {
@@ -32,10 +32,29 @@ describe('ProdutoService', () => {
     expect(relacionados.some(p => p.id === 1)).toBeFalse();
   });
 
+  it('deve usar tamanhos por idade nas camisetas infantis e P a GG nas adultas', () => {
+    const produtos = service.getProdutos();
+    const infantis = produtos.filter(p => p.categoria === 'Infantil');
+    const adultas = produtos.filter(p => p.categoria !== 'Infantil');
+
+    expect(infantis.length).toBeGreaterThan(0);
+    expect(infantis.every(p => !p.tamanhos.includes('M'))).toBeTrue();
+    expect(infantis.every(p => p.tamanhos.includes('6'))).toBeTrue();
+    expect(adultas.every(p => p.tamanhos.join() === 'P,M,G,GG')).toBeTrue();
+  });
+
+  it('deve sugerir um tamanho padrão que exista no produto', () => {
+    const adulta = service.getProdutoPorId(1)!;
+    const infantil = service.getProdutos().find(p => p.categoria === 'Infantil')!;
+
+    expect(service.getTamanhoPadrao(adulta)).toBe('M');
+    expect(service.getTamanhoPadrao(infantil)).toBe('6');
+  });
+
   it('deve buscar produtos por termo', () => {
-    const resultado = service.buscar('matrix');
+    const resultado = service.buscar('zeppelin');
     expect(resultado.length).toBe(1);
-    expect(resultado[0].nome).toContain('Matrix');
+    expect(resultado[0].nome).toContain('Zeppelin');
   });
 
   it('deve buscar produtos por categoria', () => {
@@ -45,7 +64,7 @@ describe('ProdutoService', () => {
   });
 
   it('deve combinar termo e categoria na busca', () => {
-    const resultado = service.buscar('camiseta', 'Filmes');
+    const resultado = service.buscar('rick', 'Filmes');
     expect(resultado.length).toBe(1);
     expect(resultado[0].categoria).toBe('Filmes');
   });
