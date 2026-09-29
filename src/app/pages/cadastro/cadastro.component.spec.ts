@@ -15,18 +15,18 @@ describe('CadastroComponent', () => {
   });
 
   it('deve ser criado com o formulário inválido inicialmente', () => {
-    const fixture = TestBed.createComponent(CadastroComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(CadastroComponent);
+    const componente = montagem.componentInstance;
 
-    expect(component).toBeTruthy();
-    expect(component.form.valid).toBeFalse();
+    expect(componente).toBeTruthy();
+    expect(componente.formulario.valid).toBeFalse();
   });
 
   it('deve validar todos os campos quando preenchidos corretamente', () => {
-    const fixture = TestBed.createComponent(CadastroComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(CadastroComponent);
+    const componente = montagem.componentInstance;
 
-    component.form.setValue({
+    componente.formulario.setValue({
       nome: 'Julia Jesus',
       email: 'julia@pixelthreads.com',
       senha: '123456',
@@ -34,14 +34,14 @@ describe('CadastroComponent', () => {
       aceiteTermos: true
     });
 
-    expect(component.form.valid).toBeTrue();
+    expect(componente.formulario.valid).toBeTrue();
   });
 
   it('deve invalidar o formulário quando as senhas forem diferentes', () => {
-    const fixture = TestBed.createComponent(CadastroComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(CadastroComponent);
+    const componente = montagem.componentInstance;
 
-    component.form.setValue({
+    componente.formulario.setValue({
       nome: 'Julia Jesus',
       email: 'julia@pixelthreads.com',
       senha: '123456',
@@ -49,15 +49,15 @@ describe('CadastroComponent', () => {
       aceiteTermos: true
     });
 
-    expect(component.form.valid).toBeFalse();
-    expect(component.form.errors?.['senhasDiferentes']).toBeTrue();
+    expect(componente.formulario.valid).toBeFalse();
+    expect(componente.formulario.errors?.['senhasDiferentes']).toBeTrue();
   });
 
   it('deve invalidar o formulário quando os termos não forem aceitos', () => {
-    const fixture = TestBed.createComponent(CadastroComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(CadastroComponent);
+    const componente = montagem.componentInstance;
 
-    component.form.setValue({
+    componente.formulario.setValue({
       nome: 'Julia Jesus',
       email: 'julia@pixelthreads.com',
       senha: '123456',
@@ -65,37 +65,37 @@ describe('CadastroComponent', () => {
       aceiteTermos: false
     });
 
-    expect(component.form.valid).toBeFalse();
-    expect(component.form.controls.aceiteTermos.errors?.['required']).toBeTrue();
+    expect(componente.formulario.valid).toBeFalse();
+    expect(componente.formulario.controls.aceiteTermos.errors?.['required']).toBeTrue();
   });
 
   it('deve alternar a visibilidade da senha e da confirmação de senha', () => {
-    const fixture = TestBed.createComponent(CadastroComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(CadastroComponent);
+    const componente = montagem.componentInstance;
 
-    expect(component.mostrarSenha).toBeFalse();
-    component.toggleSenha();
-    expect(component.mostrarSenha).toBeTrue();
+    expect(componente.mostrarSenha).toBeFalse();
+    componente.alternarSenha();
+    expect(componente.mostrarSenha).toBeTrue();
 
-    expect(component.mostrarConfirmarSenha).toBeFalse();
-    component.toggleConfirmarSenha();
-    expect(component.mostrarConfirmarSenha).toBeTrue();
+    expect(componente.mostrarConfirmarSenha).toBeFalse();
+    componente.alternarConfirmarSenha();
+    expect(componente.mostrarConfirmarSenha).toBeTrue();
   });
 
   it('deve cadastrar o cliente, deixá-lo logado e ir para a loja', () => {
-    const fixture = TestBed.createComponent(CadastroComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(CadastroComponent);
+    const componente = montagem.componentInstance;
     const usuarios = TestBed.inject(UsuarioService);
     const navegar = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
-    component.form.setValue({
+    componente.formulario.setValue({
       nome: 'Julia Jesus',
       email: 'julia@pixelthreads.com',
       senha: '123456',
       confirmarSenha: '123456',
       aceiteTermos: true
     });
-    component.enviar();
+    componente.enviar();
 
     expect(usuarios.emailCadastrado('julia@pixelthreads.com')).toBeTrue();
     expect(usuarios.usuarioLogado()?.nome).toBe('Julia Jesus');
@@ -103,28 +103,28 @@ describe('CadastroComponent', () => {
   });
 
   it('não deve cadastrar um e-mail que já existe', () => {
-    const fixture = TestBed.createComponent(CadastroComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(CadastroComponent);
+    const componente = montagem.componentInstance;
     const navegar = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
-    component.form.setValue({
+    componente.formulario.setValue({
       nome: 'Outra Pessoa',
       email: 'cliente@pixelthreads.com',
       senha: '123456',
       confirmarSenha: '123456',
       aceiteTermos: true
     });
-    component.enviar();
+    componente.enviar();
 
-    expect(component.form.controls.email.errors?.['emailEmUso']).toBeTrue();
+    expect(componente.formulario.controls.email.errors?.['emailEmUso']).toBeTrue();
     expect(navegar).not.toHaveBeenCalled();
   });
 
   it('deve marcar todos os campos como tocados ao enviar formulário inválido', () => {
-    const fixture = TestBed.createComponent(CadastroComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(CadastroComponent);
+    const componente = montagem.componentInstance;
 
-    component.enviar();
-    expect(component.form.touched).toBeTrue();
+    componente.enviar();
+    expect(componente.formulario.touched).toBeTrue();
   });
 });

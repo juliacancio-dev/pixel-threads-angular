@@ -1,74 +1,85 @@
-<main class="auth-wrap">
-  <div class="auth-card pixel-cut">
-    <span class="eyebrow" style="justify-content:center;">Bem-vindo à loja</span>
-    <h1 style="text-align:center;">Criar conta</h1>
-    <p class="auth-sub">Cadastre-se para acompanhar pedidos, favoritar produtos e receber cupons exclusivos.</p>
+<main class="container d-flex align-items-center justify-content-center py-5 area-conta">
+  <div class="card w-100 p-4 p-sm-5 cartao-conta">
+    <span class="eyebrow d-flex justify-content-center">Bem-vindo à loja</span>
+    <h1 class="h2 fw-bold text-center">Criar conta</h1>
+    <p class="text-center small text-body-secondary mb-4">Cadastre-se para acompanhar pedidos, favoritar produtos e receber cupons exclusivos.</p>
 
-    <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+    <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
 
-      <div class="field" [class.invalid]="form.controls.nome.invalid && form.controls.nome.touched">
-        <label for="cad-nome">Nome completo<span class="req">*</span></label>
+      <div class="mb-3">
+        <label for="cad-nome" class="form-label">Nome completo<span class="text-magenta ms-1">*</span></label>
         <input
           type="text"
+          class="form-control"
           id="cad-nome"
           formControlName="nome"
-          placeholder="Seu nome completo">
-        <span class="field-error">Digite seu nome completo.</span>
+          placeholder="Seu nome completo"
+          [class.is-invalid]="formulario.controls.nome.invalid && formulario.controls.nome.touched">
+        <div class="invalid-feedback">Digite seu nome completo.</div>
       </div>
 
-      <div class="field" [class.invalid]="form.controls.email.invalid && form.controls.email.touched">
-        <label for="cad-email">E-mail<span class="req">*</span></label>
+      <div class="mb-3">
+        <label for="cad-email" class="form-label">E-mail<span class="text-magenta ms-1">*</span></label>
         <input
           type="email"
+          class="form-control"
           id="cad-email"
           formControlName="email"
-          placeholder="seuemail@exemplo.com">
-        <span class="field-error">
-          @if (form.controls.email.errors?.['emailEmUso']) {
-            Este e-mail já está cadastrado. <a routerLink="/login" class="link-muted">Entrar</a>
+          placeholder="seuemail@exemplo.com"
+          [class.is-invalid]="formulario.controls.email.invalid && formulario.controls.email.touched">
+        <div class="invalid-feedback">
+          @if (formulario.controls.email.errors?.['emailEmUso']) {
+            Este e-mail já está cadastrado. <a routerLink="/login">Entrar</a>
           } @else {
             Digite um e-mail válido.
           }
-        </span>
+        </div>
       </div>
 
-      <div class="field" [class.invalid]="form.controls.senha.invalid && form.controls.senha.touched">
-        <label for="cad-senha">Senha<span class="req">*</span></label>
-        <div class="input-wrap">
+      <div class="mb-3">
+        <label for="cad-senha" class="form-label">Senha<span class="text-magenta ms-1">*</span></label>
+        <div class="input-group has-validation">
           <input
             [type]="mostrarSenha ? 'text' : 'password'"
+            class="form-control"
             id="cad-senha"
             formControlName="senha"
-            placeholder="Crie uma senha">
-          <button type="button" class="toggle-pass" (click)="toggleSenha()">{{ mostrarSenha ? 'OCULTAR' : 'MOSTRAR' }}</button>
+            placeholder="Crie uma senha"
+            [class.is-invalid]="formulario.controls.senha.invalid && formulario.controls.senha.touched">
+          <button type="button" class="btn btn-outline-secondary font-monospace small" (click)="alternarSenha()">{{ mostrarSenha ? 'OCULTAR' : 'MOSTRAR' }}</button>
+          <div class="invalid-feedback">A senha deve ter no mínimo 6 caracteres.</div>
         </div>
-        <span class="field-error">A senha deve ter no mínimo 6 caracteres.</span>
       </div>
 
-      <div class="field" [class.invalid]="(form.controls.confirmarSenha.invalid || form.errors?.['senhasDiferentes']) && form.controls.confirmarSenha.touched">
-        <label for="cad-confirmar-senha">Confirmar senha<span class="req">*</span></label>
-        <div class="input-wrap">
+      <div class="mb-3">
+        <label for="cad-confirmar-senha" class="form-label">Confirmar senha<span class="text-magenta ms-1">*</span></label>
+        <div class="input-group has-validation">
           <input
             [type]="mostrarConfirmarSenha ? 'text' : 'password'"
+            class="form-control"
             id="cad-confirmar-senha"
             formControlName="confirmarSenha"
-            placeholder="Repita a senha">
-          <button type="button" class="toggle-pass" (click)="toggleConfirmarSenha()">{{ mostrarConfirmarSenha ? 'OCULTAR' : 'MOSTRAR' }}</button>
+            placeholder="Repita a senha"
+            [class.is-invalid]="(formulario.controls.confirmarSenha.invalid || formulario.errors?.['senhasDiferentes']) && formulario.controls.confirmarSenha.touched">
+          <button type="button" class="btn btn-outline-secondary font-monospace small" (click)="alternarConfirmarSenha()">{{ mostrarConfirmarSenha ? 'OCULTAR' : 'MOSTRAR' }}</button>
+          <div class="invalid-feedback">As senhas precisam ser iguais.</div>
         </div>
-        <span class="field-error">As senhas precisam ser iguais.</span>
       </div>
 
-      <div class="field" [class.invalid]="form.controls.aceiteTermos.invalid && form.controls.aceiteTermos.touched">
-        <label class="checkbox-line">
-          <input type="checkbox" formControlName="aceiteTermos">
-          Li e aceito os termos de uso e a política de privacidade
-        </label>
-        <span class="field-error">É preciso aceitar os termos para continuar.</span>
+      <div class="form-check mb-4">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="cad-termos"
+          formControlName="aceiteTermos"
+          [class.is-invalid]="formulario.controls.aceiteTermos.invalid && formulario.controls.aceiteTermos.touched">
+        <label class="form-check-label small" for="cad-termos">Li e aceito os termos de uso e a política de privacidade</label>
+        <div class="invalid-feedback">É preciso aceitar os termos para continuar.</div>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-block pixel-cut">Criar conta</button>
+      <button type="submit" class="btn btn-primary btn-lg w-100">Criar conta</button>
     </form>
 
-    <p class="auth-footer">Já tem conta? <a routerLink="/login" class="link-muted">Entrar</a></p>
+    <p class="text-center small text-body-secondary mt-4 mb-0">Já tem conta? <a routerLink="/login">Entrar</a></p>
   </div>
 </main>

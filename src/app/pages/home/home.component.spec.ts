@@ -11,28 +11,28 @@ describe('HomeComponent', () => {
   });
 
   it('deve ser criado e carregar os produtos', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(HomeComponent);
+    const componente = montagem.componentInstance;
 
-    expect(component).toBeTruthy();
-    expect(component.produtos.length).toBeGreaterThan(0);
+    expect(componente).toBeTruthy();
+    expect(componente.produtos.length).toBeGreaterThan(0);
   });
 
   it('deve marcar a newsletter como inválida quando o formulário não é válido', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(HomeComponent);
+    const componente = montagem.componentInstance;
 
-    component.enviarNewsletter({ valid: false });
-    expect(component.newsletterInvalido).toBeTrue();
+    componente.assinarInformativo({ valid: false });
+    expect(componente.informativoInvalido).toBeTrue();
   });
 
   it('deve limpar o campo de e-mail ao enviar a newsletter com sucesso', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    const component = fixture.componentInstance;
-    component.emailNewsletter = 'usuario@pixelthreads.com';
+    const montagem = TestBed.createComponent(HomeComponent);
+    const componente = montagem.componentInstance;
+    componente.emailInformativo = 'usuario@pixelthreads.com';
 
-    component.enviarNewsletter({ valid: true, resetForm: () => {} });
-    expect(component.emailNewsletter).toBe('');
-    expect(component.newsletterInvalido).toBeFalse();
+    componente.assinarInformativo({ valid: true, resetForm: () => {} });
+    expect(componente.emailInformativo).toBe('');
+    expect(componente.informativoInvalido).toBeFalse();
   });
 });

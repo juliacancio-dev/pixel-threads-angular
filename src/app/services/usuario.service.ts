@@ -22,11 +22,11 @@ export const USUARIO_DEMO: Usuario = {
 export class UsuarioService {
 
   private usuarios: Usuario[] = this.carregarUsuarios();
-  private logadoSignal = signal<UsuarioLogado | null>(this.carregarSessao());
+  private logadoSinal = signal<UsuarioLogado | null>(this.carregarSessao());
 
-  usuarioLogado = this.logadoSignal.asReadonly();
-  estaLogado = computed(() => this.logadoSignal() !== null);
-  primeiroNome = computed(() => this.logadoSignal()?.nome.split(' ')[0] ?? '');
+  usuarioLogado = this.logadoSinal.asReadonly();
+  estaLogado = computed(() => this.logadoSinal() !== null);
+  primeiroNome = computed(() => this.logadoSinal()?.nome.split(' ')[0] ?? '');
 
   emailCadastrado(email: string): boolean {
     return this.buscarPorEmail(email) !== undefined;
@@ -55,14 +55,14 @@ export class UsuarioService {
   }
 
   sair(): void {
-    this.logadoSignal.set(null);
+    this.logadoSinal.set(null);
     this.remover(localStorage, CHAVE_SESSAO);
     this.remover(sessionStorage, CHAVE_SESSAO);
   }
 
   private iniciarSessao(usuario: Usuario, lembrar: boolean): void {
     const sessao: UsuarioLogado = { nome: usuario.nome, email: usuario.email };
-    this.logadoSignal.set(sessao);
+    this.logadoSinal.set(sessao);
     this.remover(lembrar ? sessionStorage : localStorage, CHAVE_SESSAO);
     this.salvar(lembrar ? localStorage : sessionStorage, CHAVE_SESSAO, sessao);
   }
@@ -87,30 +87,30 @@ export class UsuarioService {
       ?? this.ler<UsuarioLogado>(localStorage, CHAVE_SESSAO);
   }
 
-  // O navegador pode bloquear o storage (aba anônima, por exemplo); nesse caso
+  // O navegador pode bloquear o armazenamento (aba anônima, por exemplo); nesse caso
   // a loja continua funcionando, só não guarda os dados entre recarregamentos.
-  private ler<T>(storage: Storage, chave: string): T | null {
+  private ler<T>(armazenamento: Storage, chave: string): T | null {
     try {
-      const valor = storage.getItem(chave);
+      const valor = armazenamento.getItem(chave);
       return valor ? JSON.parse(valor) as T : null;
     } catch {
       return null;
     }
   }
 
-  private salvar(storage: Storage, chave: string, valor: unknown): void {
+  private salvar(armazenamento: Storage, chave: string, valor: unknown): void {
     try {
-      storage.setItem(chave, JSON.stringify(valor));
+      armazenamento.setItem(chave, JSON.stringify(valor));
     } catch {
-      // storage indisponível: mantém só em memória
+      // armazenamento indisponível: mantém só em memória
     }
   }
 
-  private remover(storage: Storage, chave: string): void {
+  private remover(armazenamento: Storage, chave: string): void {
     try {
-      storage.removeItem(chave);
+      armazenamento.removeItem(chave);
     } catch {
-      // storage indisponível: nada a remover
+      // armazenamento indisponível: nada a remover
     }
   }
 }

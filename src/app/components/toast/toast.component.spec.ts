@@ -9,7 +9,7 @@ describe('ToastComponent', () => {
   });
 
   it('deve ser criado', () => {
-    const fixture = TestBed.createComponent(ToastComponent);
-    expect(fixture.componentInstance).toBeTruthy();
+    const montagem = TestBed.createComponent(ToastComponent);
+    expect(montagem.componentInstance).toBeTruthy();
   });
 });

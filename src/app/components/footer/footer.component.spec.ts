@@ -11,7 +11,7 @@ describe('FooterComponent', () => {
   });
 
   it('deve ser criado', () => {
-    const fixture = TestBed.createComponent(FooterComponent);
-    expect(fixture.componentInstance).toBeTruthy();
+    const montagem = TestBed.createComponent(FooterComponent);
+    expect(montagem.componentInstance).toBeTruthy();
   });
 });

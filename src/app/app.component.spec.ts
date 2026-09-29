@@ -11,12 +11,12 @@ describe('AppComponent', () => {
   });
 
   it('deve criar a aplicação', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    expect(fixture.componentInstance).toBeTruthy();
+    const montagem = TestBed.createComponent(AppComponent);
+    expect(montagem.componentInstance).toBeTruthy();
   });
 
   it(`deve ter o título 'pixel-threads-angular'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    expect(fixture.componentInstance.title).toBe('pixel-threads-angular');
+    const montagem = TestBed.createComponent(AppComponent);
+    expect(montagem.componentInstance.titulo).toBe('pixel-threads-angular');
   });
 });

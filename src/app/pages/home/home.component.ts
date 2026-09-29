@@ -15,37 +15,37 @@ import { ToastService } from '../../services/toast.service';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  private produtoService = inject(ProdutoService);
-  private cestaService = inject(CestaService);
-  private toastService = inject(ToastService);
+  private servicoProduto = inject(ProdutoService);
+  private servicoCesta = inject(CestaService);
+  private servicoToast = inject(ToastService);
 
-  produtos: Produto[] = this.produtoService.getProdutos();
-  emailNewsletter = '';
-  newsletterInvalido = false;
+  produtos: Produto[] = this.servicoProduto.listarProdutos();
+  emailInformativo = '';
+  informativoInvalido = false;
 
-  adicionarACesta(produto: Produto, event: Event): void {
-    event.preventDefault();
-    event.stopPropagation();
-    this.cestaService.adicionarItem({
+  adicionarACesta(produto: Produto, evento: Event): void {
+    evento.preventDefault();
+    evento.stopPropagation();
+    this.servicoCesta.adicionarItem({
       produtoId: produto.id,
       nome: produto.nome,
       imagem: produto.imagem,
-      tamanho: this.produtoService.getTamanhoPadrao(produto),
+      tamanho: this.servicoProduto.obterTamanhoPadrao(produto),
       quantidade: 1,
       preco: produto.preco
     });
-    this.toastService.mostrar('Item adicionado à cesta ✓');
+    this.servicoToast.mostrar('Item adicionado à cesta ✓');
   }
 
-  enviarNewsletter(form: any): void {
-    if (form.valid) {
-      this.toastService.mostrar('Inscrição confirmada! Fique de olho no seu e-mail.');
-      this.emailNewsletter = '';
-      this.newsletterInvalido = false;
-      form.resetForm();
+  assinarInformativo(formulario: any): void {
+    if (formulario.valid) {
+      this.servicoToast.mostrar('Inscrição confirmada! Fique de olho no seu e-mail.');
+      this.emailInformativo = '';
+      this.informativoInvalido = false;
+      formulario.resetForm();
     } else {
-      this.newsletterInvalido = true;
-      this.toastService.mostrar('Confira os campos destacados em vermelho.');
+      this.informativoInvalido = true;
+      this.servicoToast.mostrar('Confira os campos destacados em vermelho.');
     }
   }
 }

@@ -13,25 +13,25 @@ import { UsuarioService } from '../../services/usuario.service';
   styleUrl: './esqueci.component.css'
 })
 export class EsqueciComponent {
-  private fb = inject(FormBuilder);
-  private toastService = inject(ToastService);
-  private usuarioService = inject(UsuarioService);
+  private construtorFormulario = inject(FormBuilder);
+  private servicoToast = inject(ToastService);
+  private servicoUsuario = inject(UsuarioService);
 
-  form = this.fb.group({
+  formulario = this.construtorFormulario.group({
     email: ['', [Validators.required, Validators.email]]
   });
 
   enviar(): void {
-    if (this.form.valid) {
-      if (!this.usuarioService.emailCadastrado(this.form.value.email!)) {
-        this.toastService.mostrar('Não encontramos nenhuma conta com este e-mail.');
+    if (this.formulario.valid) {
+      if (!this.servicoUsuario.emailCadastrado(this.formulario.value.email!)) {
+        this.servicoToast.mostrar('Não encontramos nenhuma conta com este e-mail.');
         return;
       }
-      this.toastService.mostrar('Link de recuperação enviado! Confira seu e-mail.');
-      this.form.reset({ email: '' });
+      this.servicoToast.mostrar('Link de recuperação enviado! Confira seu e-mail.');
+      this.formulario.reset({ email: '' });
     } else {
-      this.form.markAllAsTouched();
-      this.toastService.mostrar('Confira os campos destacados em vermelho.');
+      this.formulario.markAllAsTouched();
+      this.servicoToast.mostrar('Confira os campos destacados em vermelho.');
     }
   }
 }

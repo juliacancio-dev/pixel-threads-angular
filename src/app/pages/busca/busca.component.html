@@ -1,63 +1,74 @@
 <main class="container">
 
-  <nav class="breadcrumb" aria-label="Caminho de navegação">
-    <a routerLink="/">Início</a><span class="sep">/</span>
-    <span class="current">Resultados da busca</span>
+  <nav aria-label="Caminho de navegação">
+    <ol class="breadcrumb small font-monospace py-3 mb-0">
+      <li class="breadcrumb-item"><a routerLink="/">Início</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Resultados da busca</li>
+    </ol>
   </nav>
 
-  <div class="search-layout">
+  <div class="row g-4 pt-2 pb-5">
 
     <!-- FILTROS -->
-    <aside class="filters pixel-cut">
-      <div class="filter-group">
-        <h4>Categoria</h4>
-        @for (categoria of categorias; track categoria.nome) {
-          <label class="filter-check">
-            <input type="checkbox" [(ngModel)]="categoria.marcado" (change)="aplicarFiltros()"> {{ categoria.nome }}
-          </label>
-        }
-      </div>
-
-      <div class="filter-group">
-        <h4>Tamanho adulto</h4>
-        @for (tamanho of tamanhosAdulto; track tamanho.nome) {
-          <label class="filter-check">
-            <input type="checkbox" [(ngModel)]="tamanho.marcado" (change)="aplicarFiltros()"> {{ tamanho.nome }}
-          </label>
-        }
-      </div>
-
-      <div class="filter-group">
-        <h4>Tamanho infantil</h4>
-        @for (tamanho of tamanhosInfantil; track tamanho.nome) {
-          <label class="filter-check">
-            <input type="checkbox" [(ngModel)]="tamanho.marcado" (change)="aplicarFiltros()"> {{ tamanho.nome }} anos
-          </label>
-        }
-      </div>
-
-      <div class="filter-group">
-        <h4>Preço máximo</h4>
-        <div class="price-range">
-          <output>até {{ precoMaximo | currency:'BRL' }}</output>
-          <input type="range" min="50" max="150" step="5" [(ngModel)]="precoMaximo" (input)="aplicarFiltros()">
+    <aside class="col-lg-3">
+      <div class="card p-3 sticky-lg-top filtros">
+        <div class="mb-4">
+          <h4 class="titulo-filtro">Categoria</h4>
+          @for (categoria of categorias; track categoria.nome; let i = $index) {
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" [id]="'cat-' + i" [(ngModel)]="categoria.marcado" (change)="aplicarFiltros()">
+              <label class="form-check-label" [for]="'cat-' + i">{{ categoria.nome }}</label>
+            </div>
+          }
         </div>
-      </div>
 
-      <div class="filter-group">
-        <h4>Avaliação</h4>
-        <label class="filter-check"><input type="checkbox"> ★★★★☆ ou mais</label>
-        <label class="filter-check"><input type="checkbox"> ★★★☆☆ ou mais</label>
-      </div>
+        <div class="mb-4">
+          <h4 class="titulo-filtro">Tamanho adulto</h4>
+          @for (tamanho of tamanhosAdulto; track tamanho.nome) {
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" [id]="'tam-ad-' + tamanho.nome" [(ngModel)]="tamanho.marcado" (change)="aplicarFiltros()">
+              <label class="form-check-label" [for]="'tam-ad-' + tamanho.nome">{{ tamanho.nome }}</label>
+            </div>
+          }
+        </div>
 
-      <button type="button" class="btn btn-ghost btn-sm btn-block pixel-cut-sm" (click)="limparFiltros()">Limpar filtros</button>
+        <div class="mb-4">
+          <h4 class="titulo-filtro">Tamanho infantil</h4>
+          @for (tamanho of tamanhosInfantil; track tamanho.nome) {
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" [id]="'tam-inf-' + tamanho.nome" [(ngModel)]="tamanho.marcado" (change)="aplicarFiltros()">
+              <label class="form-check-label" [for]="'tam-inf-' + tamanho.nome">{{ tamanho.nome }} anos</label>
+            </div>
+          }
+        </div>
+
+        <div class="mb-4">
+          <label for="preco-maximo" class="titulo-filtro d-block">Preço máximo</label>
+          <output class="price small">até {{ precoMaximo | currency:'BRL' }}</output>
+          <input type="range" class="form-range" id="preco-maximo" min="50" max="150" step="5" [(ngModel)]="precoMaximo" (input)="aplicarFiltros()">
+        </div>
+
+        <div class="mb-4">
+          <h4 class="titulo-filtro">Avaliação</h4>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="aval-4">
+            <label class="form-check-label" for="aval-4">★★★★☆ ou mais</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="aval-3">
+            <label class="form-check-label" for="aval-3">★★★☆☆ ou mais</label>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-outline-secondary btn-sm w-100" (click)="limparFiltros()">Limpar filtros</button>
+      </div>
     </aside>
 
     <!-- RESULTADOS -->
-    <div>
-      <div class="results-toolbar">
-        <p style="margin:0;"><strong style="color:var(--text)">{{ resultados.length }}</strong> resultado(s)@if (termoBusca) { para <strong style="color:var(--cyan)">"{{ termoBusca }}"</strong> }</p>
-        <select aria-label="Ordenar resultados" [(ngModel)]="ordenacao" (change)="aplicarFiltros()">
+    <div class="col-lg-9">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <p class="mb-0 text-body-secondary"><strong class="text-body">{{ resultados.length }}</strong> resultado(s)@if (termoBusca) { para <strong class="text-info">"{{ termoBusca }}"</strong> }</p>
+        <select class="form-select w-auto" aria-label="Ordenar resultados" [(ngModel)]="ordenacao" (change)="aplicarFiltros()">
           <option value="relevancia">Relevância</option>
           <option value="menor-preco">Menor preço</option>
           <option value="maior-preco">Maior preço</option>
@@ -66,40 +77,52 @@
       </div>
 
       @if (resultados.length) {
-        <div class="product-grid">
+        <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3">
           @for (produto of resultadosDaPagina; track produto.id) {
-            <a [routerLink]="['/produto', produto.id]" class="card pixel-cut">
-              <div class="card-art pixel-cut">
-                <img class="product-photo" [src]="produto.imagem" [alt]="produto.nome" loading="lazy">
-                @if (produto.novo) {
-                  <span class="tag">NOVO</span>
-                }
-              </div>
-              <div class="card-body">
-                <span class="card-cat">{{ produto.categoria }}</span>
-                <h3 class="card-title">{{ produto.nome }}</h3>
-                <div class="card-footer">
-                  <span class="price">{{ produto.preco | currency:'BRL' }}</span>
-                  <span class="add-btn" role="button" aria-label="Adicionar à cesta" (click)="adicionarACesta(produto, $event)">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                  </span>
+            <div class="col">
+              <a [routerLink]="['/produto', produto.id]" class="card h-100 card-produto text-decoration-none">
+                <div class="position-relative">
+                  <div class="ratio ratio-1x1">
+                    <img class="card-img-top object-fit-cover" [src]="produto.imagem" [alt]="produto.nome" loading="lazy">
+                  </div>
+                  @if (produto.novo) {
+                    <span class="badge badge-novo position-absolute top-0 start-0 m-2">NOVO</span>
+                  }
                 </div>
-              </div>
-            </a>
+                <div class="card-body d-flex flex-column gap-1">
+                  <span class="categoria-produto">{{ produto.categoria }}</span>
+                  <h3 class="card-title h6 mb-0">{{ produto.nome }}</h3>
+                  <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
+                    <span class="price fs-5">{{ produto.preco | currency:'BRL' }}</span>
+                    <span class="btn btn-sm btn-outline-info" role="button" aria-label="Adicionar à cesta" (click)="adicionarACesta(produto, $event)">
+                      <i class="bi bi-plus-lg"></i>
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </div>
           }
         </div>
 
         @if (totalPaginas > 1) {
-          <nav class="pagination" aria-label="Paginação de resultados">
-            <button type="button" aria-label="Página anterior" [disabled]="paginaAtual === 1" (click)="irParaPagina(paginaAtual - 1)">‹</button>
-            @for (pagina of paginas; track pagina) {
-              <button type="button" [class.current]="pagina === paginaAtual" [attr.aria-current]="pagina === paginaAtual ? 'page' : null" (click)="irParaPagina(pagina)">{{ pagina }}</button>
-            }
-            <button type="button" aria-label="Próxima página" [disabled]="paginaAtual === totalPaginas" (click)="irParaPagina(paginaAtual + 1)">›</button>
+          <nav class="mt-4" aria-label="Paginação de resultados">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" [class.disabled]="paginaAtual === 1">
+                <button type="button" class="page-link" aria-label="Página anterior" [disabled]="paginaAtual === 1" (click)="irParaPagina(paginaAtual - 1)">‹</button>
+              </li>
+              @for (pagina of paginas; track pagina) {
+                <li class="page-item" [class.active]="pagina === paginaAtual">
+                  <button type="button" class="page-link" [attr.aria-current]="pagina === paginaAtual ? 'page' : null" (click)="irParaPagina(pagina)">{{ pagina }}</button>
+                </li>
+              }
+              <li class="page-item" [class.disabled]="paginaAtual === totalPaginas">
+                <button type="button" class="page-link" aria-label="Próxima página" [disabled]="paginaAtual === totalPaginas" (click)="irParaPagina(paginaAtual + 1)">›</button>
+              </li>
+            </ul>
           </nav>
         }
       } @else {
-        <p style="color:var(--text-muted)">Nenhum produto encontrado com os filtros selecionados.</p>
+        <div class="alert alert-secondary">Nenhum produto encontrado com os filtros selecionados.</div>
       }
     </div>
   </div>

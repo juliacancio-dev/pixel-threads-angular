@@ -11,20 +11,20 @@ import { signal } from '@angular/core';
   styleUrl: './footer.component.css'
 })
 export class FooterComponent {
-  private router = inject(Router);
-  paginaAuth = signal(this.ehPaginaAuth(this.router.url));
-  paginaInicial = signal(this.router.url === '/');
+  private roteador = inject(Router);
+  paginaAutenticacao = signal(this.ehPaginaAutenticacao(this.roteador.url));
+  paginaInicial = signal(this.roteador.url === '/');
 
   constructor() {
-    this.router.events
-      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-      .subscribe(e => {
-        this.paginaAuth.set(this.ehPaginaAuth(e.urlAfterRedirects));
-        this.paginaInicial.set(e.urlAfterRedirects === '/');
+    this.roteador.events
+      .pipe(filter((evento): evento is NavigationEnd => evento instanceof NavigationEnd))
+      .subscribe(evento => {
+        this.paginaAutenticacao.set(this.ehPaginaAutenticacao(evento.urlAfterRedirects));
+        this.paginaInicial.set(evento.urlAfterRedirects === '/');
       });
   }
 
-  private ehPaginaAuth(url: string): boolean {
+  private ehPaginaAutenticacao(url: string): boolean {
     return url.startsWith('/login') || url.startsWith('/esqueci') || url.startsWith('/cadastro');
   }
 }

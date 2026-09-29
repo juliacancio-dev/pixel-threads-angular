@@ -5,9 +5,9 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../services/toast.service';
 import { UsuarioService } from '../../services/usuario.service';
 
-function senhasIguaisValidator(control: AbstractControl): ValidationErrors | null {
-  const senha = control.get('senha')?.value;
-  const confirmarSenha = control.get('confirmarSenha')?.value;
+function validarSenhasIguais(controle: AbstractControl): ValidationErrors | null {
+  const senha = controle.get('senha')?.value;
+  const confirmarSenha = controle.get('confirmarSenha')?.value;
   return senha && confirmarSenha && senha !== confirmarSenha ? { senhasDiferentes: true } : null;
 }
 
@@ -19,53 +19,53 @@ function senhasIguaisValidator(control: AbstractControl): ValidationErrors | nul
   styleUrl: './cadastro.component.css'
 })
 export class CadastroComponent {
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private toastService = inject(ToastService);
-  private usuarioService = inject(UsuarioService);
+  private construtorFormulario = inject(FormBuilder);
+  private roteador = inject(Router);
+  private rota = inject(ActivatedRoute);
+  private servicoToast = inject(ToastService);
+  private servicoUsuario = inject(UsuarioService);
 
   mostrarSenha = false;
   mostrarConfirmarSenha = false;
 
   /** Página para onde voltar depois de entrar (ex.: a cesta, ao finalizar a compra). */
-  readonly voltar = this.rotaSegura(this.route.snapshot.queryParamMap.get('voltar'));
+  readonly voltar = this.rotaSegura(this.rota.snapshot.queryParamMap.get('voltar'));
 
   private rotaSegura(url: string | null): string {
     return url && url.startsWith('/') && !url.startsWith('//') ? url : '/';
   }
 
-  form = this.fb.group({
+  formulario = this.construtorFormulario.group({
     nome: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
     senha: ['', [Validators.required, Validators.minLength(6)]],
     confirmarSenha: ['', [Validators.required]],
     aceiteTermos: [false, [Validators.requiredTrue]]
-  }, { validators: senhasIguaisValidator });
+  }, { validators: validarSenhasIguais });
 
-  toggleSenha(): void {
+  alternarSenha(): void {
     this.mostrarSenha = !this.mostrarSenha;
   }
 
-  toggleConfirmarSenha(): void {
+  alternarConfirmarSenha(): void {
     this.mostrarConfirmarSenha = !this.mostrarConfirmarSenha;
   }
 
   enviar(): void {
-    if (this.form.valid) {
-      const { nome, email, senha } = this.form.getRawValue();
-      if (!this.usuarioService.cadastrar(nome!, email!, senha!)) {
-        this.form.controls.email.setErrors({ emailEmUso: true });
-        this.form.controls.email.markAsTouched();
-        this.toastService.mostrar('Este e-mail já está cadastrado.');
+    if (this.formulario.valid) {
+      const { nome, email, senha } = this.formulario.getRawValue();
+      if (!this.servicoUsuario.cadastrar(nome!, email!, senha!)) {
+        this.formulario.controls.email.setErrors({ emailEmUso: true });
+        this.formulario.controls.email.markAsTouched();
+        this.servicoToast.mostrar('Este e-mail já está cadastrado.');
         return;
       }
-      this.toastService.mostrar(`Conta criada! Olá, ${this.usuarioService.primeiroNome()}.`);
-      this.form.reset({ nome: '', email: '', senha: '', confirmarSenha: '', aceiteTermos: false });
-      this.router.navigateByUrl(this.voltar);
+      this.servicoToast.mostrar(`Conta criada! Olá, ${this.servicoUsuario.primeiroNome()}.`);
+      this.formulario.reset({ nome: '', email: '', senha: '', confirmarSenha: '', aceiteTermos: false });
+      this.roteador.navigateByUrl(this.voltar);
     } else {
-      this.form.markAllAsTouched();
-      this.toastService.mostrar('Confira os campos destacados em vermelho.');
+      this.formulario.markAllAsTouched();
+      this.servicoToast.mostrar('Confira os campos destacados em vermelho.');
     }
   }
 }

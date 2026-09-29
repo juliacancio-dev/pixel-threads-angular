@@ -1,1 +1,5 @@
-<div class="toast" [class.show]="toastService.visivel()">{{ toastService.mensagem() }}</div>
+<div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+  <div class="toast border-info" [class.show]="servicoToast.visivel()" role="status" aria-live="polite">
+    <div class="toast-body font-monospace">{{ servicoToast.mensagem() }}</div>
+  </div>
+</div>

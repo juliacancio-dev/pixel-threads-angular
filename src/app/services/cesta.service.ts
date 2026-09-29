@@ -1,29 +1,29 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { CartItem } from '../models/cart-item.model';
+import { ItemCesta } from '../models/item-cesta.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CestaService {
 
-  private itensSignal = signal<CartItem[]>([
+  private itensSinal = signal<ItemCesta[]>([
     { produtoId: 1, nome: 'Camiseta Control Freak', imagem: 'assets/produtos/control-freak/foto-1.webp', tamanho: 'M', quantidade: 1, preco: 79.90 },
     { produtoId: 6, nome: 'Camiseta Dragon Ball Z Shenlong', imagem: 'assets/produtos/dragon-ball-shenlong/foto-1.webp', tamanho: 'G', quantidade: 2, preco: 89.90 },
     { produtoId: 12, nome: 'Camiseta Os Mestres', imagem: 'assets/produtos/os-mestres/foto-1.webp', tamanho: 'P', quantidade: 1, preco: 74.90 }
   ]);
 
-  itens = this.itensSignal.asReadonly();
+  itens = this.itensSinal.asReadonly();
 
   totalItens = computed(() =>
-    this.itensSignal().reduce((total, item) => total + item.quantidade, 0)
+    this.itensSinal().reduce((total, item) => total + item.quantidade, 0)
   );
 
   subtotal = computed(() =>
-    this.itensSignal().reduce((total, item) => total + item.preco * item.quantidade, 0)
+    this.itensSinal().reduce((total, item) => total + item.preco * item.quantidade, 0)
   );
 
-  adicionarItem(item: CartItem): void {
-    this.itensSignal.update(itens => {
+  adicionarItem(item: ItemCesta): void {
+    this.itensSinal.update(itens => {
       const existente = itens.find(i => i.produtoId === item.produtoId && i.tamanho === item.tamanho);
       if (existente) {
         return itens.map(i =>
@@ -34,17 +34,17 @@ export class CestaService {
     });
   }
 
-  removerItem(index: number): void {
-    this.itensSignal.update(itens => itens.filter((_, i) => i !== index));
+  removerItem(indice: number): void {
+    this.itensSinal.update(itens => itens.filter((_, i) => i !== indice));
   }
 
   limpar(): void {
-    this.itensSignal.set([]);
+    this.itensSinal.set([]);
   }
 
-  atualizarQuantidade(index: number, quantidade: number): void {
-    this.itensSignal.update(itens =>
-      itens.map((item, i) => (i === index ? { ...item, quantidade } : item))
+  atualizarQuantidade(indice: number, quantidade: number): void {
+    this.itensSinal.update(itens =>
+      itens.map((item, i) => (i === indice ? { ...item, quantidade } : item))
     );
   }
 }

@@ -14,37 +14,37 @@ import { UsuarioService } from '../../services/usuario.service';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  private router = inject(Router);
-  private toastService = inject(ToastService);
-  cestaService = inject(CestaService);
-  usuarioService = inject(UsuarioService);
+  private roteador = inject(Router);
+  private servicoToast = inject(ToastService);
+  servicoCesta = inject(CestaService);
+  servicoUsuario = inject(UsuarioService);
 
   menuAberto = false;
   termoBusca = '';
-  paginaAuth = signal(this.ehPaginaAuth(this.router.url));
+  paginaAutenticacao = signal(this.ehPaginaAutenticacao(this.roteador.url));
 
   constructor() {
-    this.router.events
-      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-      .subscribe(e => this.paginaAuth.set(this.ehPaginaAuth(e.urlAfterRedirects)));
+    this.roteador.events
+      .pipe(filter((evento): evento is NavigationEnd => evento instanceof NavigationEnd))
+      .subscribe(evento => this.paginaAutenticacao.set(this.ehPaginaAutenticacao(evento.urlAfterRedirects)));
   }
 
-  private ehPaginaAuth(url: string): boolean {
+  private ehPaginaAutenticacao(url: string): boolean {
     return url.startsWith('/login') || url.startsWith('/esqueci') || url.startsWith('/cadastro');
   }
 
-  toggleMenu(): void {
+  alternarMenu(): void {
     this.menuAberto = !this.menuAberto;
   }
 
   sair(): void {
-    this.usuarioService.sair();
-    this.toastService.mostrar('Você saiu da sua conta.');
-    this.router.navigate(['/']);
+    this.servicoUsuario.sair();
+    this.servicoToast.mostrar('Você saiu da sua conta.');
+    this.roteador.navigate(['/']);
   }
 
   buscar(): void {
-    this.router.navigate(['/busca'], { queryParams: { q: this.termoBusca || null } });
+    this.roteador.navigate(['/busca'], { queryParams: { q: this.termoBusca || null } });
     this.menuAberto = false;
   }
 }

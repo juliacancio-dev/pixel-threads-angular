@@ -11,18 +11,18 @@ describe('HeaderComponent', () => {
   });
 
   it('deve ser criado', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    expect(fixture.componentInstance).toBeTruthy();
+    const montagem = TestBed.createComponent(HeaderComponent);
+    expect(montagem.componentInstance).toBeTruthy();
   });
 
-  it('deve alternar o menu ao chamar toggleMenu()', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const component = fixture.componentInstance;
+  it('deve alternar o menu ao chamar alternarMenu()', () => {
+    const montagem = TestBed.createComponent(HeaderComponent);
+    const componente = montagem.componentInstance;
 
-    expect(component.menuAberto).toBeFalse();
-    component.toggleMenu();
-    expect(component.menuAberto).toBeTrue();
-    component.toggleMenu();
-    expect(component.menuAberto).toBeFalse();
+    expect(componente.menuAberto).toBeFalse();
+    componente.alternarMenu();
+    expect(componente.menuAberto).toBeTrue();
+    componente.alternarMenu();
+    expect(componente.menuAberto).toBeFalse();
   });
 });

@@ -1,25 +1,27 @@
-<main class="auth-wrap">
-  <div class="auth-card pixel-cut">
-    <span class="eyebrow" style="justify-content:center;">Sem pânico</span>
-    <h1 style="text-align:center;">Recuperar senha</h1>
-    <p class="auth-sub">Digite o e-mail da sua conta e enviaremos um link para você criar uma nova senha.</p>
+<main class="container d-flex align-items-center justify-content-center py-5 area-conta">
+  <div class="card w-100 p-4 p-sm-5 cartao-conta">
+    <span class="eyebrow d-flex justify-content-center">Sem pânico</span>
+    <h1 class="h2 fw-bold text-center">Recuperar senha</h1>
+    <p class="text-center small text-body-secondary mb-4">Digite o e-mail da sua conta e enviaremos um link para você criar uma nova senha.</p>
 
-    <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+    <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
 
-      <div class="field" [class.invalid]="form.controls.email.invalid && form.controls.email.touched">
-        <label for="rec-email">E-mail cadastrado<span class="req">*</span></label>
+      <div class="mb-4">
+        <label for="rec-email" class="form-label">E-mail cadastrado<span class="text-magenta ms-1">*</span></label>
         <input
           type="email"
+          class="form-control"
           id="rec-email"
           formControlName="email"
-          placeholder="seuemail@exemplo.com">
-        <span class="field-error">Digite um e-mail válido para continuar.</span>
-        <p class="field-hint">Enviaremos o link de redefinição para este endereço.</p>
+          placeholder="seuemail@exemplo.com"
+          [class.is-invalid]="formulario.controls.email.invalid && formulario.controls.email.touched">
+        <div class="invalid-feedback">Digite um e-mail válido para continuar.</div>
+        <div class="form-text">Enviaremos o link de redefinição para este endereço.</div>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-block pixel-cut">Enviar link de recuperação</button>
+      <button type="submit" class="btn btn-primary btn-lg w-100">Enviar link de recuperação</button>
     </form>
 
-    <p class="auth-footer">Lembrou a senha? <a routerLink="/login" class="link-muted">Voltar para o login</a></p>
+    <p class="text-center small text-body-secondary mt-4 mb-0">Lembrou a senha? <a routerLink="/login">Voltar para o login</a></p>
   </div>
 </main>

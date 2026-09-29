@@ -11,89 +11,89 @@ describe('BuscaComponent', () => {
   });
 
   it('deve ser criado e listar todos os produtos sem filtro', () => {
-    const fixture = TestBed.createComponent(BuscaComponent);
-    fixture.detectChanges();
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(BuscaComponent);
+    montagem.detectChanges();
+    const componente = montagem.componentInstance;
 
-    expect(component).toBeTruthy();
-    expect(component.resultados.length).toBe(component.todosProdutos.length);
+    expect(componente).toBeTruthy();
+    expect(componente.resultados.length).toBe(componente.todosProdutos.length);
   });
 
   it('deve filtrar produtos por termo de busca', () => {
-    const fixture = TestBed.createComponent(BuscaComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(BuscaComponent);
+    const componente = montagem.componentInstance;
 
-    component.termoBusca = 'zeppelin';
-    component.aplicarFiltros();
-    expect(component.resultados.length).toBe(1);
+    componente.termoBusca = 'zeppelin';
+    componente.aplicarFiltros();
+    expect(componente.resultados.length).toBe(1);
   });
 
   it('deve filtrar produtos por categoria marcada', () => {
-    const fixture = TestBed.createComponent(BuscaComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(BuscaComponent);
+    const componente = montagem.componentInstance;
 
-    component.categorias.find(c => c.nome === 'Games')!.marcado = true;
-    component.aplicarFiltros();
-    expect(component.resultados.every(p => p.categoria === 'Games')).toBeTrue();
+    componente.categorias.find(c => c.nome === 'Games')!.marcado = true;
+    componente.aplicarFiltros();
+    expect(componente.resultados.every(p => p.categoria === 'Games')).toBeTrue();
   });
 
   it('deve filtrar produtos por tamanho infantil', () => {
-    const fixture = TestBed.createComponent(BuscaComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(BuscaComponent);
+    const componente = montagem.componentInstance;
 
-    component.tamanhosInfantil.find(t => t.nome === '8')!.marcado = true;
-    component.aplicarFiltros();
-    expect(component.resultados.length).toBeGreaterThan(0);
-    expect(component.resultados.every(p => p.categoria === 'Infantil')).toBeTrue();
+    componente.tamanhosInfantil.find(t => t.nome === '8')!.marcado = true;
+    componente.aplicarFiltros();
+    expect(componente.resultados.length).toBeGreaterThan(0);
+    expect(componente.resultados.every(p => p.categoria === 'Infantil')).toBeTrue();
   });
 
   it('deve limpar os filtros aplicados', () => {
-    const fixture = TestBed.createComponent(BuscaComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(BuscaComponent);
+    const componente = montagem.componentInstance;
 
-    component.termoBusca = 'zeppelin';
-    component.precoMaximo = 50;
-    component.tamanhosAdulto[0].marcado = true;
-    component.limparFiltros();
+    componente.termoBusca = 'zeppelin';
+    componente.precoMaximo = 50;
+    componente.tamanhosAdulto[0].marcado = true;
+    componente.limparFiltros();
 
-    expect(component.termoBusca).toBe('');
-    expect(component.precoMaximo).toBe(150);
-    expect(component.resultados.length).toBe(component.todosProdutos.length);
+    expect(componente.termoBusca).toBe('');
+    expect(componente.precoMaximo).toBe(150);
+    expect(componente.resultados.length).toBe(componente.todosProdutos.length);
   });
 
   it('deve mostrar no máximo 8 produtos por página e navegar entre as páginas', () => {
-    const fixture = TestBed.createComponent(BuscaComponent);
-    fixture.detectChanges();
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(BuscaComponent);
+    montagem.detectChanges();
+    const componente = montagem.componentInstance;
     spyOn(window, 'scrollTo');
 
-    expect(component.totalPaginas).toBe(Math.ceil(component.resultados.length / 8));
-    expect(component.resultadosDaPagina.length).toBe(8);
+    expect(componente.totalPaginas).toBe(Math.ceil(componente.resultados.length / 8));
+    expect(componente.resultadosDaPagina.length).toBe(8);
 
-    component.irParaPagina(2);
-    expect(component.paginaAtual).toBe(2);
-    expect(component.resultadosDaPagina[0]).toBe(component.resultados[8]);
+    componente.irParaPagina(2);
+    expect(componente.paginaAtual).toBe(2);
+    expect(componente.resultadosDaPagina[0]).toBe(componente.resultados[8]);
   });
 
   it('não deve sair do intervalo de páginas válidas', () => {
-    const fixture = TestBed.createComponent(BuscaComponent);
-    fixture.detectChanges();
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(BuscaComponent);
+    montagem.detectChanges();
+    const componente = montagem.componentInstance;
 
-    component.irParaPagina(0);
-    component.irParaPagina(component.totalPaginas + 1);
-    expect(component.paginaAtual).toBe(1);
+    componente.irParaPagina(0);
+    componente.irParaPagina(componente.totalPaginas + 1);
+    expect(componente.paginaAtual).toBe(1);
   });
 
   it('deve voltar para a primeira página ao aplicar um filtro', () => {
-    const fixture = TestBed.createComponent(BuscaComponent);
-    fixture.detectChanges();
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(BuscaComponent);
+    montagem.detectChanges();
+    const componente = montagem.componentInstance;
     spyOn(window, 'scrollTo');
 
-    component.irParaPagina(2);
-    component.termoBusca = 'camiseta';
-    component.aplicarFiltros();
-    expect(component.paginaAtual).toBe(1);
+    componente.irParaPagina(2);
+    componente.termoBusca = 'camiseta';
+    componente.aplicarFiltros();
+    expect(componente.paginaAtual).toBe(1);
   });
 });

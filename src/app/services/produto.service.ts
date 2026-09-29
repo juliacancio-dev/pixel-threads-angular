@@ -177,20 +177,20 @@ export class ProdutoService {
     }
   ];
 
-  getProdutos(): Produto[] {
+  listarProdutos(): Produto[] {
     return this.produtos;
   }
 
   /** Tamanho sugerido para compras rápidas (botão "+" dos cards). */
-  getTamanhoPadrao(produto: Produto): string {
+  obterTamanhoPadrao(produto: Produto): string {
     return produto.tamanhos[Math.floor((produto.tamanhos.length - 1) / 2)];
   }
 
-  getProdutoPorId(id: number): Produto | undefined {
+  obterProdutoPorId(id: number): Produto | undefined {
     return this.produtos.find(p => p.id === id);
   }
 
-  getRelacionados(idAtual: number, quantidade = 4): Produto[] {
+  obterRelacionados(idAtual: number, quantidade = 4): Produto[] {
     return this.produtos.filter(p => p.id !== idAtual).slice(0, quantidade);
   }
 

@@ -15,11 +15,11 @@ import { ToastService } from '../../services/toast.service';
   styleUrl: './produto.component.css'
 })
 export class ProdutoComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private produtoService = inject(ProdutoService);
-  private cestaService = inject(CestaService);
-  private toastService = inject(ToastService);
+  private rota = inject(ActivatedRoute);
+  private roteador = inject(Router);
+  private servicoProduto = inject(ProdutoService);
+  private servicoCesta = inject(CestaService);
+  private servicoToast = inject(ToastService);
 
   produto?: Produto;
   relacionados: Produto[] = [];
@@ -31,15 +31,15 @@ export class ProdutoComponent implements OnInit {
   fotoAtiva = 0;
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = Number(params.get('id'));
-      this.produto = this.produtoService.getProdutoPorId(id);
+    this.rota.paramMap.subscribe(parametros => {
+      const id = Number(parametros.get('id'));
+      this.produto = this.servicoProduto.obterProdutoPorId(id);
       if (!this.produto) {
-        this.router.navigate(['/']);
+        this.roteador.navigate(['/']);
         return;
       }
-      this.relacionados = this.produtoService.getRelacionados(id, 4);
-      this.tamanhoSelecionado = this.produtoService.getTamanhoPadrao(this.produto);
+      this.relacionados = this.servicoProduto.obterRelacionados(id, 4);
+      this.tamanhoSelecionado = this.servicoProduto.obterTamanhoPadrao(this.produto);
       this.tamanhoInvalido = false;
       this.quantidade = 1;
       this.abaAtiva = 'descricao';
@@ -70,13 +70,13 @@ export class ProdutoComponent implements OnInit {
   adicionarACesta(): boolean {
     if (!this.tamanhoSelecionado) {
       this.tamanhoInvalido = true;
-      this.toastService.mostrar('Confira os campos destacados em vermelho.');
+      this.servicoToast.mostrar('Confira os campos destacados em vermelho.');
       return false;
     }
     this.tamanhoInvalido = false;
     if (!this.produto) return false;
 
-    this.cestaService.adicionarItem({
+    this.servicoCesta.adicionarItem({
       produtoId: this.produto.id,
       nome: this.produto.nome,
       imagem: this.produto.imagem,
@@ -84,13 +84,13 @@ export class ProdutoComponent implements OnInit {
       quantidade: this.quantidade,
       preco: this.produto.preco
     });
-    this.toastService.mostrar('Camiseta adicionada à cesta!');
+    this.servicoToast.mostrar('Camiseta adicionada à cesta!');
     return true;
   }
 
   comprarAgora(): void {
     if (this.adicionarACesta()) {
-      this.router.navigate(['/cesta']);
+      this.roteador.navigate(['/cesta']);
     }
   }
 }

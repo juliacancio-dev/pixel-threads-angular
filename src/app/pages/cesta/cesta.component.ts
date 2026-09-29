@@ -21,65 +21,65 @@ interface PedidoConfirmado {
   styleUrl: './cesta.component.css'
 })
 export class CestaComponent {
-  cestaService = inject(CestaService);
-  private toastService = inject(ToastService);
-  private usuarioService = inject(UsuarioService);
-  private router = inject(Router);
+  servicoCesta = inject(CestaService);
+  private servicoToast = inject(ToastService);
+  private servicoUsuario = inject(UsuarioService);
+  private roteador = inject(Router);
 
   cupom = '';
   pedidoConfirmado: PedidoConfirmado | null = null;
 
   get frete(): number {
-    return this.cestaService.subtotal() >= 150 ? 0 : 19.9;
+    return this.servicoCesta.subtotal() >= 150 ? 0 : 19.9;
   }
 
   get total(): number {
-    return this.cestaService.subtotal() + this.frete;
+    return this.servicoCesta.subtotal() + this.frete;
   }
 
-  diminuirQuantidade(index: number, quantidadeAtual: number): void {
-    this.cestaService.atualizarQuantidade(index, Math.max(1, quantidadeAtual - 1));
+  diminuirQuantidade(indice: number, quantidadeAtual: number): void {
+    this.servicoCesta.atualizarQuantidade(indice, Math.max(1, quantidadeAtual - 1));
   }
 
-  aumentarQuantidade(index: number, quantidadeAtual: number): void {
-    this.cestaService.atualizarQuantidade(index, Math.min(10, quantidadeAtual + 1));
+  aumentarQuantidade(indice: number, quantidadeAtual: number): void {
+    this.servicoCesta.atualizarQuantidade(indice, Math.min(10, quantidadeAtual + 1));
   }
 
-  onQuantidadeChange(index: number, valor: number): void {
+  aoMudarQuantidade(indice: number, valor: number): void {
     const quantidade = Math.min(10, Math.max(1, valor || 1));
-    this.cestaService.atualizarQuantidade(index, quantidade);
+    this.servicoCesta.atualizarQuantidade(indice, quantidade);
   }
 
-  removerItem(index: number): void {
-    this.cestaService.removerItem(index);
-    this.toastService.mostrar('Item removido da cesta.');
+  removerItem(indice: number): void {
+    this.servicoCesta.removerItem(indice);
+    this.servicoToast.mostrar('Item removido da cesta.');
   }
 
   finalizarCompra(): void {
-    const usuario = this.usuarioService.usuarioLogado();
+    const usuario = this.servicoUsuario.usuarioLogado();
     if (!usuario) {
-      this.toastService.mostrar('Entre na sua conta para finalizar a compra.');
-      this.router.navigate(['/login'], { queryParams: { voltar: '/cesta' } });
+      this.servicoToast.mostrar('Entre na sua conta para finalizar a compra.');
+      this.roteador.navigate(['/login'], { queryParams: { voltar: '/cesta' } });
       return;
     }
 
     this.pedidoConfirmado = {
       numero: String(Math.floor(100000 + Math.random() * 900000)),
-      quantidadeItens: this.cestaService.totalItens(),
+      quantidadeItens: this.servicoCesta.totalItens(),
       total: this.total,
       email: usuario.email
     };
-    this.cestaService.limpar();
-    this.toastService.mostrar('Pedido realizado com sucesso!');
+    this.servicoCesta.limpar();
+    this.servicoToast.mostrar('Pedido realizado com sucesso!');
   }
 
-  aplicarCupom(form: any): void {
+  aplicarCupom(formulario: any): void {
     if (this.cupom.trim()) {
-      this.toastService.mostrar('Cupom aplicado com sucesso!');
+      this.servicoToast.mostrar('Cupom aplicado com sucesso!');
       this.cupom = '';
-      form.resetForm();
+      formulario.resetForm();
     } else {
-      this.toastService.mostrar('Digite um cupom válido.');
+      this.servicoToast.mostrar('Digite um cupom válido.');
     }
   }
 }

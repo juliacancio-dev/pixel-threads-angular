@@ -13,48 +13,48 @@ import { USUARIO_DEMO, UsuarioService } from '../../services/usuario.service';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private toastService = inject(ToastService);
-  private usuarioService = inject(UsuarioService);
+  private construtorFormulario = inject(FormBuilder);
+  private roteador = inject(Router);
+  private rota = inject(ActivatedRoute);
+  private servicoToast = inject(ToastService);
+  private servicoUsuario = inject(UsuarioService);
 
   readonly usuarioDemo = USUARIO_DEMO;
   mostrarSenha = false;
   credenciaisInvalidas = false;
 
   /** Página para onde voltar depois de entrar (ex.: a cesta, ao finalizar a compra). */
-  readonly voltar = this.rotaSegura(this.route.snapshot.queryParamMap.get('voltar'));
+  readonly voltar = this.rotaSegura(this.rota.snapshot.queryParamMap.get('voltar'));
 
   private rotaSegura(url: string | null): string {
     return url && url.startsWith('/') && !url.startsWith('//') ? url : '/';
   }
 
-  form = this.fb.group({
+  formulario = this.construtorFormulario.group({
     email: ['', [Validators.required, Validators.email]],
     senha: ['', [Validators.required, Validators.minLength(6)]],
     lembrar: [false]
   });
 
-  toggleSenha(): void {
+  alternarSenha(): void {
     this.mostrarSenha = !this.mostrarSenha;
   }
 
   enviar(): void {
-    if (this.form.valid) {
-      const { email, senha, lembrar } = this.form.getRawValue();
-      if (!this.usuarioService.entrar(email!, senha!, !!lembrar)) {
+    if (this.formulario.valid) {
+      const { email, senha, lembrar } = this.formulario.getRawValue();
+      if (!this.servicoUsuario.entrar(email!, senha!, !!lembrar)) {
         this.credenciaisInvalidas = true;
-        this.toastService.mostrar('E-mail ou senha incorretos.');
+        this.servicoToast.mostrar('E-mail ou senha incorretos.');
         return;
       }
       this.credenciaisInvalidas = false;
-      this.toastService.mostrar(`Olá, ${this.usuarioService.primeiroNome()}! Login realizado.`);
-      this.form.reset({ email: '', senha: '', lembrar: false });
-      this.router.navigateByUrl(this.voltar);
+      this.servicoToast.mostrar(`Olá, ${this.servicoUsuario.primeiroNome()}! Login realizado.`);
+      this.formulario.reset({ email: '', senha: '', lembrar: false });
+      this.roteador.navigateByUrl(this.voltar);
     } else {
-      this.form.markAllAsTouched();
-      this.toastService.mostrar('Confira os campos destacados em vermelho.');
+      this.formulario.markAllAsTouched();
+      this.servicoToast.mostrar('Confira os campos destacados em vermelho.');
     }
   }
 }

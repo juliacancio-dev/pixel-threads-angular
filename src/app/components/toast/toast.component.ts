@@ -9,5 +9,5 @@ import { ToastService } from '../../services/toast.service';
   styleUrl: './toast.component.css'
 })
 export class ToastComponent {
-  toastService = inject(ToastService);
+  servicoToast = inject(ToastService);
 }

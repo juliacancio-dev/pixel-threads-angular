@@ -1,44 +1,44 @@
-@if (!paginaAuth()) {
-  <footer class="site-footer container">
+@if (!paginaAutenticacao()) {
+  <footer class="container border-top mt-5 pt-5 pb-4 small text-body-secondary">
     @if (paginaInicial()) {
-      <div class="footer-grid">
-        <div>
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-3">
           <a routerLink="/" class="logo">PIXEL<span>THREADS</span></a>
-          <p style="margin-top:12px;">Roupas e acessórios para quem vive em modo geek desde o primeiro save.</p>
+          <p class="mt-3">Roupas e acessórios para quem vive em modo geek desde o primeiro save.</p>
         </div>
-        <div>
-          <h4>LOJA</h4>
-          <ul>
-            <li><a routerLink="/busca" [queryParams]="{categoria: 'games'}">Games</a></li>
-            <li><a routerLink="/busca" [queryParams]="{categoria: 'filmes'}">Filmes &amp; Séries</a></li>
-            <li><a routerLink="/busca" [queryParams]="{categoria: 'animes'}">Animes</a></li>
+        <div class="col-6 col-md-4 col-lg-3">
+          <h4 class="h6 font-monospace text-body">LOJA</h4>
+          <ul class="list-unstyled d-flex flex-column gap-2">
+            <li><a class="link-secondary" routerLink="/busca" [queryParams]="{categoria: 'games'}">Games</a></li>
+            <li><a class="link-secondary" routerLink="/busca" [queryParams]="{categoria: 'filmes'}">Filmes &amp; Séries</a></li>
+            <li><a class="link-secondary" routerLink="/busca" [queryParams]="{categoria: 'animes'}">Animes</a></li>
           </ul>
         </div>
-        <div>
-          <h4>CONTA</h4>
-          <ul>
-            <li><a routerLink="/login">Entrar</a></li>
-            <li><a routerLink="/esqueci">Esqueci minha senha</a></li>
-            <li><a routerLink="/cesta">Minha cesta</a></li>
+        <div class="col-6 col-md-4 col-lg-3">
+          <h4 class="h6 font-monospace text-body">CONTA</h4>
+          <ul class="list-unstyled d-flex flex-column gap-2">
+            <li><a class="link-secondary" routerLink="/login">Entrar</a></li>
+            <li><a class="link-secondary" routerLink="/esqueci">Esqueci minha senha</a></li>
+            <li><a class="link-secondary" routerLink="/cesta">Minha cesta</a></li>
           </ul>
         </div>
-        <div>
-          <h4>AJUDA</h4>
-          <ul>
-            <li><a href="javascript:void(0)">Trocas e devoluções</a></li>
-            <li><a href="javascript:void(0)">Guia de tamanhos</a></li>
-            <li><a href="javascript:void(0)">Fale conosco</a></li>
+        <div class="col-6 col-md-4 col-lg-3">
+          <h4 class="h6 font-monospace text-body">AJUDA</h4>
+          <ul class="list-unstyled d-flex flex-column gap-2">
+            <li><a class="link-secondary" href="javascript:void(0)">Trocas e devoluções</a></li>
+            <li><a class="link-secondary" href="javascript:void(0)">Guia de tamanhos</a></li>
+            <li><a class="link-secondary" href="javascript:void(0)">Fale conosco</a></li>
           </ul>
         </div>
       </div>
-      <div class="footer-bottom">
-        <span>© 2026 PIXEL THREADS · Projeto acadêmico P1 · <a href="assets/produtos/CREDITOS.txt" target="_blank" rel="noopener" class="link-muted">Créditos das fotos</a></span>
+      <div class="d-flex flex-wrap justify-content-between gap-2 border-top pt-3 font-monospace">
+        <span>© 2026 PIXEL THREADS · Projeto acadêmico P1 · <a href="assets/produtos/CREDITOS.txt" target="_blank" rel="noopener">Créditos das fotos</a></span>
         <span>Feito com &lt;3 e muito café pixelizado</span>
       </div>
     } @else {
-      <div class="footer-bottom">
-        <span>© 2026 PIXEL THREADS · Projeto acadêmico P1 · <a href="assets/produtos/CREDITOS.txt" target="_blank" rel="noopener" class="link-muted">Créditos das fotos</a></span>
-        <a routerLink="/" class="link-muted">Voltar à loja</a>
+      <div class="d-flex flex-wrap justify-content-between gap-2 font-monospace">
+        <span>© 2026 PIXEL THREADS · Projeto acadêmico P1 · <a href="assets/produtos/CREDITOS.txt" target="_blank" rel="noopener">Créditos das fotos</a></span>
+        <a routerLink="/">Voltar à loja</a>
       </div>
     }
   </footer>

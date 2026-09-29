@@ -1,81 +1,91 @@
 <main>
 
   <!-- HERO -->
-  <section class="hero container">
-    <div class="hero-grid">
-      <div>
+  <section class="container py-5">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-7">
         <span class="eyebrow">Nova coleção 8-bit</span>
-        <h1>Vista o seu <span>modo geek</span> favorito.</h1>
-        <p>Camisetas, moletons e acessórios inspirados em games, cultura pixel e ficção científica. Estampas exclusivas, algodão premium e aquele acabamento que só quem entende do assunto reconhece.</p>
-        <div class="hero-actions">
-          <a routerLink="/busca" class="btn btn-primary pixel-cut">Ver coleção completa</a>
-          <a href="#lancamentos" class="btn btn-outline pixel-cut">Lançamentos da semana</a>
+        <h1 class="display-5 fw-bold">Vista o seu <span class="text-magenta">modo geek</span> favorito.</h1>
+        <p class="lead text-body-secondary">Camisetas, moletons e acessórios inspirados em games, cultura pixel e ficção científica. Estampas exclusivas, algodão premium e aquele acabamento que só quem entende do assunto reconhece.</p>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <a routerLink="/busca" class="btn btn-primary btn-lg">Ver coleção completa</a>
+          <a href="#lancamentos" class="btn btn-outline-info btn-lg">Lançamentos da semana</a>
         </div>
       </div>
-      <div class="hero-art pixel-cut">
-        <img src="assets/produtos/control-freak/foto-1.webp" alt="Homem vestindo a Camiseta Control Freak">
+      <div class="col-lg-5 order-first order-lg-last">
+        <div class="ratio ratio-4x3 rounded-3 overflow-hidden border">
+          <img class="object-fit-cover" src="assets/produtos/control-freak/foto-1.webp" alt="Homem vestindo a Camiseta Control Freak">
+        </div>
       </div>
     </div>
   </section>
 
   <!-- CATEGORIAS -->
   <section class="container">
-    <div class="chips">
-      <a routerLink="/busca" [queryParams]="{categoria: 'games'}" class="chip active pixel-cut-sm"><img src="assets/produtos/control-freak/foto-1.webp" alt="" aria-hidden="true">Games</a>
-      <a routerLink="/busca" [queryParams]="{categoria: 'filmes'}" class="chip pixel-cut-sm"><img src="assets/produtos/rick-and-morty/foto-1.webp" alt="" aria-hidden="true">Filmes &amp; Séries</a>
-      <a routerLink="/busca" [queryParams]="{categoria: 'animes'}" class="chip pixel-cut-sm"><img src="assets/produtos/demon-slayer/foto-1.webp" alt="" aria-hidden="true">Animes</a>
-      <a routerLink="/busca" [queryParams]="{categoria: 'herois'}" class="chip pixel-cut-sm"><img src="assets/produtos/x-men-97/foto-1.webp" alt="" aria-hidden="true">Heróis</a>
-      <a routerLink="/busca" [queryParams]="{categoria: 'infantil'}" class="chip pixel-cut-sm"><img src="assets/produtos/relampago-mcqueen/foto-1.webp" alt="" aria-hidden="true">Infantil</a>
-      <a routerLink="/busca" [queryParams]="{categoria: 'musica'}" class="chip pixel-cut-sm"><img src="assets/produtos/led-zeppelin/foto-1.webp" alt="" aria-hidden="true">Música</a>
+    <div class="d-flex flex-wrap gap-2 mb-4">
+      <a routerLink="/busca" [queryParams]="{categoria: 'games'}" class="btn btn-outline-secondary rounded-pill chip active"><img src="assets/produtos/control-freak/foto-1.webp" alt="" aria-hidden="true">Games</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'filmes'}" class="btn btn-outline-secondary rounded-pill chip"><img src="assets/produtos/rick-and-morty/foto-1.webp" alt="" aria-hidden="true">Filmes &amp; Séries</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'animes'}" class="btn btn-outline-secondary rounded-pill chip"><img src="assets/produtos/demon-slayer/foto-1.webp" alt="" aria-hidden="true">Animes</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'herois'}" class="btn btn-outline-secondary rounded-pill chip"><img src="assets/produtos/x-men-97/foto-1.webp" alt="" aria-hidden="true">Heróis</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'infantil'}" class="btn btn-outline-secondary rounded-pill chip"><img src="assets/produtos/relampago-mcqueen/foto-1.webp" alt="" aria-hidden="true">Infantil</a>
+      <a routerLink="/busca" [queryParams]="{categoria: 'musica'}" class="btn btn-outline-secondary rounded-pill chip"><img src="assets/produtos/led-zeppelin/foto-1.webp" alt="" aria-hidden="true">Música</a>
     </div>
   </section>
 
   <!-- VITRINE DE PRODUTOS -->
-  <section class="section container" id="lancamentos">
-    <div class="section-head">
+  <section class="container py-4" id="lancamentos">
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
       <div>
         <span class="eyebrow">Vitrine</span>
-        <h2>Lançamentos da semana</h2>
+        <h2 class="mb-0">Lançamentos da semana</h2>
       </div>
-      <a routerLink="/busca" class="btn btn-ghost btn-sm pixel-cut-sm">Ver tudo</a>
+      <a routerLink="/busca" class="btn btn-outline-secondary btn-sm">Ver tudo</a>
     </div>
 
-    <div class="product-grid">
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-lg-4">
       @for (produto of produtos; track produto.id) {
-        <a [routerLink]="['/produto', produto.id]" class="card pixel-cut">
-          <div class="card-art pixel-cut">
-            <img class="product-photo" [src]="produto.imagem" [alt]="produto.nome" loading="lazy">
-            @if (produto.novo) {
-              <span class="tag">NOVO</span>
-            }
-          </div>
-          <div class="card-body">
-            <span class="card-cat">{{ produto.categoria }}</span>
-            <h3 class="card-title">{{ produto.nome }}</h3>
-            <div class="card-footer">
-              <span class="price">{{ produto.preco | currency:'BRL' }}</span>
-              <span class="add-btn" role="button" aria-label="Adicionar à cesta" (click)="adicionarACesta(produto, $event)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-              </span>
+        <div class="col">
+          <a [routerLink]="['/produto', produto.id]" class="card h-100 card-produto text-decoration-none">
+            <div class="position-relative">
+              <div class="ratio ratio-1x1">
+                <img class="card-img-top object-fit-cover" [src]="produto.imagem" [alt]="produto.nome" loading="lazy">
+              </div>
+              @if (produto.novo) {
+                <span class="badge badge-novo position-absolute top-0 start-0 m-2">NOVO</span>
+              }
             </div>
-          </div>
-        </a>
+            <div class="card-body d-flex flex-column gap-1">
+              <span class="categoria-produto">{{ produto.categoria }}</span>
+              <h3 class="card-title h6 mb-0">{{ produto.nome }}</h3>
+              <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
+                <span class="price fs-5">{{ produto.preco | currency:'BRL' }}</span>
+                <span class="btn btn-sm btn-outline-info" role="button" aria-label="Adicionar à cesta" (click)="adicionarACesta(produto, $event)">
+                  <i class="bi bi-plus-lg"></i>
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
       }
     </div>
   </section>
 
   <!-- NEWSLETTER -->
-  <section class="container">
-    <div class="newsletter pixel-cut">
-      <div>
-        <span class="eyebrow">Fique por dentro</span>
-        <h2 style="margin-bottom:4px;">Receba drops exclusivos no seu e-mail</h2>
-        <p style="margin:0;">Avisamos antes de todo mundo quando uma estampa nova ou uma reposição limitada chega na loja.</p>
+  <section class="container py-4">
+    <div class="card p-4 p-md-5">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-7">
+          <span class="eyebrow">Fique por dentro</span>
+          <h2 class="mb-1">Receba drops exclusivos no seu e-mail</h2>
+          <p class="text-body-secondary mb-0">Avisamos antes de todo mundo quando uma estampa nova ou uma reposição limitada chega na loja.</p>
+        </div>
+        <div class="col-lg-5">
+          <form class="d-flex gap-2" #formInformativo="ngForm" (ngSubmit)="assinarInformativo(formInformativo)" novalidate>
+            <input type="email" class="form-control" [class.is-invalid]="informativoInvalido" name="newsletter-email" placeholder="seuemail@exemplo.com" required [(ngModel)]="emailInformativo" #campoEmail="ngModel" aria-label="E-mail para newsletter">
+            <button type="submit" class="btn btn-primary">Assinar</button>
+          </form>
+        </div>
       </div>
-      <form class="newsletter-form" #newsletterForm="ngForm" (ngSubmit)="enviarNewsletter(newsletterForm)" novalidate>
-        <input type="email" name="newsletter-email" placeholder="seuemail@exemplo.com" required [(ngModel)]="emailNewsletter" #emailField="ngModel" aria-label="E-mail para newsletter">
-        <button type="submit" class="btn btn-primary pixel-cut-sm">Assinar</button>
-      </form>
     </div>
   </section>
 

@@ -20,12 +20,12 @@ interface FiltroOpcao {
   styleUrl: './busca.component.css'
 })
 export class BuscaComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private produtoService = inject(ProdutoService);
-  private cestaService = inject(CestaService);
-  private toastService = inject(ToastService);
+  private rota = inject(ActivatedRoute);
+  private servicoProduto = inject(ProdutoService);
+  private servicoCesta = inject(CestaService);
+  private servicoToast = inject(ToastService);
 
-  todosProdutos: Produto[] = this.produtoService.getProdutos();
+  todosProdutos: Produto[] = this.servicoProduto.listarProdutos();
   resultados: Produto[] = [];
   termoBusca = '';
 
@@ -48,21 +48,21 @@ export class BuscaComponent implements OnInit {
   readonly itensPorPagina = 8;
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe(params => {
-      const categoria = params.get('categoria');
-      this.termoBusca = params.get('q') || '';
+    this.rota.queryParamMap.subscribe(parametros => {
+      const categoria = parametros.get('categoria');
+      this.termoBusca = parametros.get('q') || '';
 
       this.categorias.forEach(c => c.marcado = false);
       if (categoria) {
-        const alvo = this.mapCategoria(categoria);
-        const match = this.categorias.find(c => c.nome.toLowerCase() === alvo.toLowerCase());
-        if (match) match.marcado = true;
+        const alvo = this.mapearCategoria(categoria);
+        const encontrada = this.categorias.find(c => c.nome.toLowerCase() === alvo.toLowerCase());
+        if (encontrada) encontrada.marcado = true;
       }
       this.aplicarFiltros();
     });
   }
 
-  private mapCategoria(slug: string): string {
+  private mapearCategoria(identificador: string): string {
     const mapa: Record<string, string> = {
       games: 'Games',
       filmes: 'Filmes',
@@ -71,7 +71,7 @@ export class BuscaComponent implements OnInit {
       infantil: 'Infantil',
       musica: 'Música'
     };
-    return mapa[slug.toLowerCase()] || slug;
+    return mapa[identificador.toLowerCase()] || identificador;
   }
 
   aplicarFiltros(): void {
@@ -133,17 +133,17 @@ export class BuscaComponent implements OnInit {
     this.aplicarFiltros();
   }
 
-  adicionarACesta(produto: Produto, event: Event): void {
-    event.preventDefault();
-    event.stopPropagation();
-    this.cestaService.adicionarItem({
+  adicionarACesta(produto: Produto, evento: Event): void {
+    evento.preventDefault();
+    evento.stopPropagation();
+    this.servicoCesta.adicionarItem({
       produtoId: produto.id,
       nome: produto.nome,
       imagem: produto.imagem,
-      tamanho: this.produtoService.getTamanhoPadrao(produto),
+      tamanho: this.servicoProduto.obterTamanhoPadrao(produto),
       quantidade: 1,
       preco: produto.preco
     });
-    this.toastService.mostrar('Item adicionado à cesta ✓');
+    this.servicoToast.mostrar('Item adicionado à cesta ✓');
   }
 }

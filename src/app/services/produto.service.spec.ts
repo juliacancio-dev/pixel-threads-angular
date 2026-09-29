@@ -2,38 +2,38 @@ import { TestBed } from '@angular/core/testing';
 import { ProdutoService } from './produto.service';
 
 describe('ProdutoService', () => {
-  let service: ProdutoService;
+  let servico: ProdutoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ProdutoService);
+    servico = TestBed.inject(ProdutoService);
   });
 
   it('deve ser criado', () => {
-    expect(service).toBeTruthy();
+    expect(servico).toBeTruthy();
   });
 
   it('deve retornar todos os produtos', () => {
-    expect(service.getProdutos().length).toBe(17);
+    expect(servico.listarProdutos().length).toBe(17);
   });
 
   it('deve retornar um produto pelo id', () => {
-    const produto = service.getProdutoPorId(1);
+    const produto = servico.obterProdutoPorId(1);
     expect(produto?.nome).toBe('Camiseta Control Freak');
   });
 
   it('deve retornar undefined para um id inexistente', () => {
-    expect(service.getProdutoPorId(999)).toBeUndefined();
+    expect(servico.obterProdutoPorId(999)).toBeUndefined();
   });
 
   it('deve retornar produtos relacionados excluindo o produto atual', () => {
-    const relacionados = service.getRelacionados(1, 4);
+    const relacionados = servico.obterRelacionados(1, 4);
     expect(relacionados.length).toBe(4);
     expect(relacionados.some(p => p.id === 1)).toBeFalse();
   });
 
   it('deve usar tamanhos por idade nas camisetas infantis e P a GG nas adultas', () => {
-    const produtos = service.getProdutos();
+    const produtos = servico.listarProdutos();
     const infantis = produtos.filter(p => p.categoria === 'Infantil');
     const adultas = produtos.filter(p => p.categoria !== 'Infantil');
 
@@ -44,27 +44,27 @@ describe('ProdutoService', () => {
   });
 
   it('deve sugerir um tamanho padrão que exista no produto', () => {
-    const adulta = service.getProdutoPorId(1)!;
-    const infantil = service.getProdutos().find(p => p.categoria === 'Infantil')!;
+    const adulta = servico.obterProdutoPorId(1)!;
+    const infantil = servico.listarProdutos().find(p => p.categoria === 'Infantil')!;
 
-    expect(service.getTamanhoPadrao(adulta)).toBe('M');
-    expect(service.getTamanhoPadrao(infantil)).toBe('6');
+    expect(servico.obterTamanhoPadrao(adulta)).toBe('M');
+    expect(servico.obterTamanhoPadrao(infantil)).toBe('6');
   });
 
   it('deve buscar produtos por termo', () => {
-    const resultado = service.buscar('zeppelin');
+    const resultado = servico.buscar('zeppelin');
     expect(resultado.length).toBe(1);
     expect(resultado[0].nome).toContain('Zeppelin');
   });
 
   it('deve buscar produtos por categoria', () => {
-    const resultado = service.buscar('', 'Games');
+    const resultado = servico.buscar('', 'Games');
     expect(resultado.length).toBeGreaterThan(0);
     expect(resultado.every(p => p.categoria === 'Games')).toBeTrue();
   });
 
   it('deve combinar termo e categoria na busca', () => {
-    const resultado = service.buscar('rick', 'Filmes');
+    const resultado = servico.buscar('rick', 'Filmes');
     expect(resultado.length).toBe(1);
     expect(resultado[0].categoria).toBe('Filmes');
   });

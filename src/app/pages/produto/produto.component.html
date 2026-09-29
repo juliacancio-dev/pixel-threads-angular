@@ -1,24 +1,26 @@
 @if (produto) {
 <main class="container">
 
-  <nav class="breadcrumb" aria-label="Caminho de navegação">
-    <a routerLink="/">Início</a><span class="sep">/</span>
-    <a routerLink="/busca" [queryParams]="{categoria: produto.categoria.toLowerCase()}">{{ produto.categoria }}</a><span class="sep">/</span>
-    <span class="current">{{ produto.nome }}</span>
+  <nav aria-label="Caminho de navegação">
+    <ol class="breadcrumb small font-monospace py-3 mb-0">
+      <li class="breadcrumb-item"><a routerLink="/">Início</a></li>
+      <li class="breadcrumb-item"><a routerLink="/busca" [queryParams]="{categoria: produto.categoria.toLowerCase()}">{{ produto.categoria }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ produto.nome }}</li>
+    </ol>
   </nav>
 
-  <div class="product-detail">
+  <div class="row g-5 pt-2 pb-5">
 
     <!-- GALERIA -->
-    <div>
-      <div class="gallery-main pixel-cut" aria-live="polite">
-        <img class="product-photo" [src]="fotos[fotoAtiva]" [alt]="produto.nome + ' — foto ' + (fotoAtiva + 1)">
+    <div class="col-lg-6">
+      <div class="gallery-main ratio ratio-1x1 rounded-3 overflow-hidden border mb-3" aria-live="polite">
+        <img class="object-fit-cover" [src]="fotos[fotoAtiva]" [alt]="produto.nome + ' — foto ' + (fotoAtiva + 1)">
       </div>
       @if (fotos.length > 1) {
-        <div class="gallery-thumbs">
+        <div class="d-flex gap-2">
           @for (foto of fotos; track foto; let i = $index) {
-            <button type="button" [class.active]="fotoAtiva === i" (click)="selecionarFoto(i)" [attr.aria-label]="'Ver foto ' + (i + 1)">
-              <img class="product-photo" [src]="foto" alt="">
+            <button type="button" class="btn p-0 border miniatura overflow-hidden" [class.border-info]="fotoAtiva === i" (click)="selecionarFoto(i)" [attr.aria-label]="'Ver foto ' + (i + 1)">
+              <img class="w-100 h-100 object-fit-cover" [src]="foto" alt="">
             </button>
           }
         </div>
@@ -26,103 +28,104 @@
     </div>
 
     <!-- INFORMAÇÕES -->
-    <div>
+    <div class="col-lg-6">
       <span class="eyebrow">{{ produto.categoria }} · Edição limitada</span>
-      <h1>{{ produto.nome }}</h1>
-      <span class="stock-tag">Em estoque — envio em até 2 dias úteis</span>
+      <h1 class="fw-bold">{{ produto.nome }}</h1>
+      <span class="badge bg-success-subtle text-success-emphasis font-monospace mb-2">
+        <i class="bi bi-circle-fill me-1"></i>Em estoque — envio em até 2 dias úteis
+      </span>
 
-      <div class="pd-price">
+      <div class="fs-2 my-3">
         @if (produto.precoAntigo) {
-          <span class="old">{{ produto.precoAntigo | currency:'BRL' }}</span>
+          <span class="fs-6 font-monospace text-body-secondary text-decoration-line-through me-2">{{ produto.precoAntigo | currency:'BRL' }}</span>
         }
         <span class="price">{{ produto.preco | currency:'BRL' }}</span>
       </div>
-      <p>{{ produto.descricao }}</p>
+      <p class="text-body-secondary">{{ produto.descricao }}</p>
 
       <form (ngSubmit)="adicionarACesta()" novalidate>
-        <div class="option-group">
-          <span class="option-label">Tamanho <span style="color:var(--magenta)">*</span></span>
-          <div class="size-options">
+        <div class="my-4">
+          <span class="titulo-filtro d-block">Tamanho <span class="text-magenta">*</span></span>
+          <div class="d-flex flex-wrap gap-2">
             @for (tamanho of produto.tamanhos; track tamanho) {
-              <input type="radio" name="tamanho" [id]="'tam-' + tamanho" [value]="tamanho" [(ngModel)]="tamanhoSelecionado">
-              <label [for]="'tam-' + tamanho">{{ tamanho }}</label>
+              <input type="radio" class="btn-check" name="tamanho" autocomplete="off" [id]="'tam-' + tamanho" [value]="tamanho" [(ngModel)]="tamanhoSelecionado">
+              <label class="btn btn-outline-info botao-tamanho" [for]="'tam-' + tamanho">{{ tamanho }}</label>
             }
           </div>
           @if (tamanhoInvalido) {
-            <span class="field-error" style="display:block;">Selecione um tamanho.</span>
+            <div class="invalid-feedback d-block">Selecione um tamanho.</div>
           }
         </div>
 
-        <div class="option-group">
-          <span class="option-label">Quantidade</span>
-          <div class="qty-stepper">
-            <button type="button" class="qty-minus" aria-label="Diminuir quantidade" (click)="diminuirQuantidade()">−</button>
-            <input type="number" [(ngModel)]="quantidade" name="quantidade" min="1" max="10" aria-label="Quantidade">
-            <button type="button" class="qty-plus" aria-label="Aumentar quantidade" (click)="aumentarQuantidade()">+</button>
+        <div class="my-4">
+          <span class="titulo-filtro d-block">Quantidade</span>
+          <div class="input-group seletor-quantidade">
+            <button type="button" class="btn btn-outline-secondary" aria-label="Diminuir quantidade" (click)="diminuirQuantidade()">−</button>
+            <input type="number" class="form-control text-center" [(ngModel)]="quantidade" name="quantidade" min="1" max="10" aria-label="Quantidade">
+            <button type="button" class="btn btn-outline-secondary" aria-label="Aumentar quantidade" (click)="aumentarQuantidade()">+</button>
           </div>
         </div>
 
-        <div class="pd-actions">
-          <button type="submit" class="btn btn-primary pixel-cut">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L4 3H2"/></svg>
-            Adicionar à cesta
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <button type="submit" class="btn btn-primary btn-lg flex-fill">
+            <i class="bi bi-cart-plus me-1"></i> Adicionar à cesta
           </button>
-          <button type="button" class="btn btn-outline pixel-cut" (click)="comprarAgora()">Comprar agora</button>
+          <button type="button" class="btn btn-outline-info btn-lg flex-fill" (click)="comprarAgora()">Comprar agora</button>
         </div>
       </form>
 
-      <div class="pd-tabs" role="tablist">
-        <button type="button" [class.active]="abaAtiva === 'descricao'" (click)="selecionarAba('descricao')" role="tab">Descrição</button>
-        <button type="button" [class.active]="abaAtiva === 'medidas'" (click)="selecionarAba('medidas')" role="tab">Medidas</button>
-        <button type="button" [class.active]="abaAtiva === 'cuidados'" (click)="selecionarAba('cuidados')" role="tab">Cuidados</button>
-      </div>
-      @if (abaAtiva === 'descricao') {
-        <div class="pd-tab-panel" role="tabpanel">
-          <ul class="spec-list">
-            <li><strong>Tecido:</strong> 100% algodão penteado 30.1</li>
-            <li><strong>Estampa:</strong> Silk-screen alta durabilidade</li>
-            <li><strong>Modelagem:</strong> Unissex, corte reto</li>
-            <li><strong>Origem:</strong> Produzida no Brasil</li>
+      <ul class="nav nav-tabs mt-5" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button type="button" class="nav-link" [class.active]="abaAtiva === 'descricao'" [attr.aria-selected]="abaAtiva === 'descricao'" (click)="selecionarAba('descricao')" role="tab">Descrição</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button type="button" class="nav-link" [class.active]="abaAtiva === 'medidas'" [attr.aria-selected]="abaAtiva === 'medidas'" (click)="selecionarAba('medidas')" role="tab">Medidas</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button type="button" class="nav-link" [class.active]="abaAtiva === 'cuidados'" [attr.aria-selected]="abaAtiva === 'cuidados'" (click)="selecionarAba('cuidados')" role="tab">Cuidados</button>
+        </li>
+      </ul>
+      <div class="py-3 text-body-secondary" role="tabpanel">
+        @if (abaAtiva === 'descricao') {
+          <ul class="row row-cols-1 row-cols-sm-2 g-2 list-unstyled small mb-0">
+            <li class="col"><strong class="text-body">Tecido:</strong> 100% algodão penteado 30.1</li>
+            <li class="col"><strong class="text-body">Estampa:</strong> Silk-screen alta durabilidade</li>
+            <li class="col"><strong class="text-body">Modelagem:</strong> Unissex, corte reto</li>
+            <li class="col"><strong class="text-body">Origem:</strong> Produzida no Brasil</li>
           </ul>
-        </div>
-      }
-      @if (abaAtiva === 'medidas') {
-        <div class="pd-tab-panel" role="tabpanel">
+        }
+        @if (abaAtiva === 'medidas') {
           @if (produto.categoria === 'Infantil') {
-            <p style="margin:0;">2: 42×32cm · 4: 46×34cm · 6: 50×37cm · 8: 54×40cm · 10: 58×43cm · 12: 62×46cm (comprimento × largura, medidas aproximadas). O número corresponde à idade da criança em anos.</p>
+            <p class="mb-0">2: 42×32cm · 4: 46×34cm · 6: 50×37cm · 8: 54×40cm · 10: 58×43cm · 12: 62×46cm (comprimento × largura, medidas aproximadas). O número corresponde à idade da criança em anos.</p>
           } @else {
-            <p style="margin:0;">P: 66×48cm · M: 70×51cm · G: 74×54cm · GG: 78×57cm (comprimento × largura, medidas aproximadas).</p>
+            <p class="mb-0">P: 66×48cm · M: 70×51cm · G: 74×54cm · GG: 78×57cm (comprimento × largura, medidas aproximadas).</p>
           }
-        </div>
-      }
-      @if (abaAtiva === 'cuidados') {
-        <div class="pd-tab-panel" role="tabpanel">
-          <p style="margin:0;">Lavar à mão ou máquina em ciclo delicado, água fria, virada do avesso. Não usar alvejante. Secar à sombra.</p>
-        </div>
-      }
+        }
+        @if (abaAtiva === 'cuidados') {
+          <p class="mb-0">Lavar à mão ou máquina em ciclo delicado, água fria, virada do avesso. Não usar alvejante. Secar à sombra.</p>
+        }
+      </div>
     </div>
   </div>
 
   <!-- RELACIONADOS -->
-  <section class="section">
-    <div class="section-head">
-      <div>
-        <span class="eyebrow">Combina com</span>
-        <h2>Você também pode curtir</h2>
-      </div>
-    </div>
-    <div class="product-grid">
+  <section class="py-4">
+    <span class="eyebrow">Combina com</span>
+    <h2 class="mb-4">Você também pode curtir</h2>
+    <div class="row row-cols-2 row-cols-md-4 g-3 g-lg-4">
       @for (relacionado of relacionados; track relacionado.id) {
-        <a [routerLink]="['/produto', relacionado.id]" class="card pixel-cut">
-          <div class="card-art pixel-cut">
-            <img class="product-photo" [src]="relacionado.imagem" [alt]="relacionado.nome" loading="lazy">
-          </div>
-          <div class="card-body">
-            <span class="card-cat">{{ relacionado.categoria }}</span>
-            <h3 class="card-title">{{ relacionado.nome }}</h3>
-            <div class="card-footer"><span class="price">{{ relacionado.preco | currency:'BRL' }}</span></div>
-          </div>
-        </a>
+        <div class="col">
+          <a [routerLink]="['/produto', relacionado.id]" class="card h-100 card-produto text-decoration-none">
+            <div class="ratio ratio-1x1">
+              <img class="card-img-top object-fit-cover" [src]="relacionado.imagem" [alt]="relacionado.nome" loading="lazy">
+            </div>
+            <div class="card-body d-flex flex-column gap-1">
+              <span class="categoria-produto">{{ relacionado.categoria }}</span>
+              <h3 class="card-title h6 mb-0">{{ relacionado.nome }}</h3>
+              <span class="price fs-5 mt-auto pt-2">{{ relacionado.preco | currency:'BRL' }}</span>
+            </div>
+          </a>
+        </div>
       }
     </div>
   </section>

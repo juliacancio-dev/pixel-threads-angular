@@ -20,83 +20,83 @@ describe('ProdutoComponent', () => {
   });
 
   it('deve carregar o produto e os relacionados a partir do id da rota', () => {
-    const fixture = TestBed.createComponent(ProdutoComponent);
-    fixture.detectChanges();
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(ProdutoComponent);
+    montagem.detectChanges();
+    const componente = montagem.componentInstance;
 
-    expect(component.produto?.id).toBe(1);
-    expect(component.relacionados.length).toBe(4);
-    expect(component.relacionados.some(p => p.id === 1)).toBeFalse();
+    expect(componente.produto?.id).toBe(1);
+    expect(componente.relacionados.length).toBe(4);
+    expect(componente.relacionados.some(p => p.id === 1)).toBeFalse();
   });
 
   it('não deve diminuir a quantidade abaixo de 1', () => {
-    const fixture = TestBed.createComponent(ProdutoComponent);
-    fixture.detectChanges();
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(ProdutoComponent);
+    montagem.detectChanges();
+    const componente = montagem.componentInstance;
 
-    component.quantidade = 1;
-    component.diminuirQuantidade();
-    expect(component.quantidade).toBe(1);
+    componente.quantidade = 1;
+    componente.diminuirQuantidade();
+    expect(componente.quantidade).toBe(1);
   });
 
   it('não deve aumentar a quantidade acima de 10', () => {
-    const fixture = TestBed.createComponent(ProdutoComponent);
-    fixture.detectChanges();
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(ProdutoComponent);
+    montagem.detectChanges();
+    const componente = montagem.componentInstance;
 
-    component.quantidade = 10;
-    component.aumentarQuantidade();
-    expect(component.quantidade).toBe(10);
+    componente.quantidade = 10;
+    componente.aumentarQuantidade();
+    expect(componente.quantidade).toBe(10);
   });
 
   it('deve trocar a aba ativa ao chamar selecionarAba()', () => {
-    const fixture = TestBed.createComponent(ProdutoComponent);
-    fixture.detectChanges();
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(ProdutoComponent);
+    montagem.detectChanges();
+    const componente = montagem.componentInstance;
 
-    component.selecionarAba('medidas');
-    expect(component.abaAtiva).toBe('medidas');
+    componente.selecionarAba('medidas');
+    expect(componente.abaAtiva).toBe('medidas');
   });
 
   it('deve adicionar o produto à cesta e ir para a cesta ao clicar em Comprar agora', () => {
-    const fixture = TestBed.createComponent(ProdutoComponent);
-    fixture.detectChanges();
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(ProdutoComponent);
+    montagem.detectChanges();
+    const componente = montagem.componentInstance;
     const cesta = TestBed.inject(CestaService);
     const navegar = spyOn(TestBed.inject(Router), 'navigate');
     const totalAntes = cesta.totalItens();
 
-    component.quantidade = 2;
-    component.comprarAgora();
+    componente.quantidade = 2;
+    componente.comprarAgora();
 
     expect(cesta.totalItens()).toBe(totalAntes + 2);
     expect(navegar).toHaveBeenCalledWith(['/cesta']);
   });
 
   it('não deve ir para a cesta em Comprar agora sem tamanho selecionado', () => {
-    const fixture = TestBed.createComponent(ProdutoComponent);
-    fixture.detectChanges();
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(ProdutoComponent);
+    montagem.detectChanges();
+    const componente = montagem.componentInstance;
     const navegar = spyOn(TestBed.inject(Router), 'navigate');
 
-    component.tamanhoSelecionado = '';
-    component.comprarAgora();
+    componente.tamanhoSelecionado = '';
+    componente.comprarAgora();
 
-    expect(component.tamanhoInvalido).toBeTrue();
+    expect(componente.tamanhoInvalido).toBeTrue();
     expect(navegar).not.toHaveBeenCalled();
   });
 
   it('deve trocar a foto principal ao clicar numa miniatura da galeria', () => {
-    const fixture = TestBed.createComponent(ProdutoComponent);
-    fixture.detectChanges();
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(ProdutoComponent);
+    montagem.detectChanges();
+    const componente = montagem.componentInstance;
 
-    component.produto = TestBed.inject(ProdutoService).getProdutoPorId(2);
-    component.selecionarFoto(1);
-    fixture.detectChanges();
+    componente.produto = TestBed.inject(ProdutoService).obterProdutoPorId(2);
+    componente.selecionarFoto(1);
+    montagem.detectChanges();
 
-    const fotoPrincipal: HTMLImageElement = fixture.nativeElement.querySelector('.gallery-main img');
-    expect(component.fotos.length).toBe(3);
-    expect(fotoPrincipal.getAttribute('src')).toBe(component.fotos[1]);
+    const fotoPrincipal: HTMLImageElement = montagem.nativeElement.querySelector('.gallery-main img');
+    expect(componente.fotos.length).toBe(3);
+    expect(fotoPrincipal.getAttribute('src')).toBe(componente.fotos[1]);
   });
 });

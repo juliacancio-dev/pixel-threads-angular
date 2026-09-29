@@ -5,17 +5,17 @@ import { Injectable, signal } from '@angular/core';
 })
 export class ToastService {
 
-  private mensagemSignal = signal<string>('');
-  private visivelSignal = signal<boolean>(false);
-  private timer: any;
+  private mensagemSinal = signal<string>('');
+  private visivelSinal = signal<boolean>(false);
+  private temporizador: any;
 
-  mensagem = this.mensagemSignal.asReadonly();
-  visivel = this.visivelSignal.asReadonly();
+  mensagem = this.mensagemSinal.asReadonly();
+  visivel = this.visivelSinal.asReadonly();
 
   mostrar(mensagem: string): void {
-    this.mensagemSignal.set(mensagem);
-    this.visivelSignal.set(true);
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => this.visivelSignal.set(false), 2600);
+    this.mensagemSinal.set(mensagem);
+    this.visivelSinal.set(true);
+    clearTimeout(this.temporizador);
+    this.temporizador = setTimeout(() => this.visivelSinal.set(false), 2600);
   }
 }

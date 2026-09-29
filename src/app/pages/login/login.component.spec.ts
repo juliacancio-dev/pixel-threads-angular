@@ -15,45 +15,45 @@ describe('LoginComponent', () => {
   });
 
   it('deve ser criado com o formulário inválido inicialmente', () => {
-    const fixture = TestBed.createComponent(LoginComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(LoginComponent);
+    const componente = montagem.componentInstance;
 
-    expect(component).toBeTruthy();
-    expect(component.form.valid).toBeFalse();
+    expect(componente).toBeTruthy();
+    expect(componente.formulario.valid).toBeFalse();
   });
 
   it('deve validar e-mail e senha corretamente', () => {
-    const fixture = TestBed.createComponent(LoginComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(LoginComponent);
+    const componente = montagem.componentInstance;
 
-    component.form.setValue({ email: 'teste@pixelthreads.com', senha: '123456', lembrar: false });
-    expect(component.form.valid).toBeTrue();
+    componente.formulario.setValue({ email: 'teste@pixelthreads.com', senha: '123456', lembrar: false });
+    expect(componente.formulario.valid).toBeTrue();
   });
 
   it('deve invalidar senha com menos de 6 caracteres', () => {
-    const fixture = TestBed.createComponent(LoginComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(LoginComponent);
+    const componente = montagem.componentInstance;
 
-    component.form.setValue({ email: 'teste@pixelthreads.com', senha: '123', lembrar: false });
-    expect(component.form.get('senha')?.valid).toBeFalse();
+    componente.formulario.setValue({ email: 'teste@pixelthreads.com', senha: '123', lembrar: false });
+    expect(componente.formulario.get('senha')?.valid).toBeFalse();
   });
 
   it('deve alternar a visibilidade da senha', () => {
-    const fixture = TestBed.createComponent(LoginComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(LoginComponent);
+    const componente = montagem.componentInstance;
 
-    expect(component.mostrarSenha).toBeFalse();
-    component.toggleSenha();
-    expect(component.mostrarSenha).toBeTrue();
+    expect(componente.mostrarSenha).toBeFalse();
+    componente.alternarSenha();
+    expect(componente.mostrarSenha).toBeTrue();
   });
 
   it('deve entrar com um cliente cadastrado e ir para a loja', () => {
-    const fixture = TestBed.createComponent(LoginComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(LoginComponent);
+    const componente = montagem.componentInstance;
     const navegar = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
-    component.form.setValue({ email: 'cliente@pixelthreads.com', senha: '123456', lembrar: false });
-    component.enviar();
+    componente.formulario.setValue({ email: 'cliente@pixelthreads.com', senha: '123456', lembrar: false });
+    componente.enviar();
 
     expect(TestBed.inject(UsuarioService).estaLogado()).toBeTrue();
     expect(navegar).toHaveBeenCalledWith('/');
@@ -63,12 +63,12 @@ describe('LoginComponent', () => {
     TestBed.overrideProvider(ActivatedRoute, {
       useValue: { snapshot: { queryParamMap: convertToParamMap({ voltar: '/cesta' }) } }
     });
-    const fixture = TestBed.createComponent(LoginComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(LoginComponent);
+    const componente = montagem.componentInstance;
     const navegar = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
-    component.form.setValue({ email: 'cliente@pixelthreads.com', senha: '123456', lembrar: false });
-    component.enviar();
+    componente.formulario.setValue({ email: 'cliente@pixelthreads.com', senha: '123456', lembrar: false });
+    componente.enviar();
 
     expect(navegar).toHaveBeenCalledWith('/cesta');
   });
@@ -77,29 +77,29 @@ describe('LoginComponent', () => {
     TestBed.overrideProvider(ActivatedRoute, {
       useValue: { snapshot: { queryParamMap: convertToParamMap({ voltar: '//site-malicioso.com' }) } }
     });
-    const component = TestBed.createComponent(LoginComponent).componentInstance;
+    const componente = TestBed.createComponent(LoginComponent).componentInstance;
 
-    expect(component.voltar).toBe('/');
+    expect(componente.voltar).toBe('/');
   });
 
   it('deve recusar senha incorreta', () => {
-    const fixture = TestBed.createComponent(LoginComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(LoginComponent);
+    const componente = montagem.componentInstance;
     const navegar = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
-    component.form.setValue({ email: 'cliente@pixelthreads.com', senha: 'errada1', lembrar: false });
-    component.enviar();
+    componente.formulario.setValue({ email: 'cliente@pixelthreads.com', senha: 'errada1', lembrar: false });
+    componente.enviar();
 
-    expect(component.credenciaisInvalidas).toBeTrue();
+    expect(componente.credenciaisInvalidas).toBeTrue();
     expect(TestBed.inject(UsuarioService).estaLogado()).toBeFalse();
     expect(navegar).not.toHaveBeenCalled();
   });
 
   it('deve marcar todos os campos como tocados ao enviar formulário inválido', () => {
-    const fixture = TestBed.createComponent(LoginComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(LoginComponent);
+    const componente = montagem.componentInstance;
 
-    component.enviar();
-    expect(component.form.touched).toBeTrue();
+    componente.enviar();
+    expect(componente.formulario.touched).toBeTrue();
   });
 });

@@ -10,42 +10,42 @@ describe('UsuarioService', () => {
   });
 
   it('deve vir com o cliente de demonstração cadastrado e ninguém logado', () => {
-    const service = TestBed.inject(UsuarioService);
+    const servico = TestBed.inject(UsuarioService);
 
-    expect(service.emailCadastrado(USUARIO_DEMO.email)).toBeTrue();
-    expect(service.estaLogado()).toBeFalse();
+    expect(servico.emailCadastrado(USUARIO_DEMO.email)).toBeTrue();
+    expect(servico.estaLogado()).toBeFalse();
   });
 
   it('deve cadastrar um cliente e deixá-lo logado', () => {
-    const service = TestBed.inject(UsuarioService);
+    const servico = TestBed.inject(UsuarioService);
 
-    expect(service.cadastrar('Maria Souza', 'Maria@Teste.com ', 'segredo')).toBeTrue();
-    expect(service.emailCadastrado('maria@teste.com')).toBeTrue();
-    expect(service.primeiroNome()).toBe('Maria');
+    expect(servico.cadastrar('Maria Souza', 'Maria@Teste.com ', 'segredo')).toBeTrue();
+    expect(servico.emailCadastrado('maria@teste.com')).toBeTrue();
+    expect(servico.primeiroNome()).toBe('Maria');
   });
 
   it('não deve cadastrar o mesmo e-mail duas vezes', () => {
-    const service = TestBed.inject(UsuarioService);
+    const servico = TestBed.inject(UsuarioService);
 
-    service.cadastrar('Maria Souza', 'maria@teste.com', 'segredo');
-    expect(service.cadastrar('Outra Maria', 'MARIA@teste.com', 'outra')).toBeFalse();
+    servico.cadastrar('Maria Souza', 'maria@teste.com', 'segredo');
+    expect(servico.cadastrar('Outra Maria', 'MARIA@teste.com', 'outra')).toBeFalse();
   });
 
   it('deve entrar apenas com e-mail e senha corretos', () => {
-    const service = TestBed.inject(UsuarioService);
+    const servico = TestBed.inject(UsuarioService);
 
-    expect(service.entrar(USUARIO_DEMO.email, 'errada')).toBeFalse();
-    expect(service.entrar('naoexiste@teste.com', USUARIO_DEMO.senha)).toBeFalse();
-    expect(service.entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha)).toBeTrue();
-    expect(service.usuarioLogado()?.email).toBe(USUARIO_DEMO.email);
+    expect(servico.entrar(USUARIO_DEMO.email, 'errada')).toBeFalse();
+    expect(servico.entrar('naoexiste@teste.com', USUARIO_DEMO.senha)).toBeFalse();
+    expect(servico.entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha)).toBeTrue();
+    expect(servico.usuarioLogado()?.email).toBe(USUARIO_DEMO.email);
   });
 
   it('deve sair da conta', () => {
-    const service = TestBed.inject(UsuarioService);
+    const servico = TestBed.inject(UsuarioService);
 
-    service.entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha);
-    service.sair();
-    expect(service.estaLogado()).toBeFalse();
+    servico.entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha);
+    servico.sair();
+    expect(servico.estaLogado()).toBeFalse();
   });
 
   it('deve manter os cadastros salvos depois de recarregar a página', () => {

@@ -14,34 +14,34 @@ describe('EsqueciComponent', () => {
   });
 
   it('deve ser criado', () => {
-    const fixture = TestBed.createComponent(EsqueciComponent);
-    expect(fixture.componentInstance).toBeTruthy();
+    const montagem = TestBed.createComponent(EsqueciComponent);
+    expect(montagem.componentInstance).toBeTruthy();
   });
 
   it('deve validar o campo de e-mail', () => {
-    const fixture = TestBed.createComponent(EsqueciComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(EsqueciComponent);
+    const componente = montagem.componentInstance;
 
-    expect(component.form.valid).toBeFalse();
-    component.form.setValue({ email: 'usuario@pixelthreads.com' });
-    expect(component.form.valid).toBeTrue();
+    expect(componente.formulario.valid).toBeFalse();
+    componente.formulario.setValue({ email: 'usuario@pixelthreads.com' });
+    expect(componente.formulario.valid).toBeTrue();
   });
 
   it('deve resetar o formulário ao enviar com sucesso', () => {
-    const fixture = TestBed.createComponent(EsqueciComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(EsqueciComponent);
+    const componente = montagem.componentInstance;
 
-    component.form.setValue({ email: 'cliente@pixelthreads.com' });
-    component.enviar();
-    expect(component.form.value.email).toBe('');
+    componente.formulario.setValue({ email: 'cliente@pixelthreads.com' });
+    componente.enviar();
+    expect(componente.formulario.value.email).toBe('');
   });
 
   it('não deve enviar o link para um e-mail que não está cadastrado', () => {
-    const fixture = TestBed.createComponent(EsqueciComponent);
-    const component = fixture.componentInstance;
+    const montagem = TestBed.createComponent(EsqueciComponent);
+    const componente = montagem.componentInstance;
 
-    component.form.setValue({ email: 'ninguem@pixelthreads.com' });
-    component.enviar();
-    expect(component.form.value.email).toBe('ninguem@pixelthreads.com');
+    componente.formulario.setValue({ email: 'ninguem@pixelthreads.com' });
+    componente.enviar();
+    expect(componente.formulario.value.email).toBe('ninguem@pixelthreads.com');
   });
 });
