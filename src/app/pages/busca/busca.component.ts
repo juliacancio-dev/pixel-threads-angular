@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Produto } from '../../models/produto.model';
-import { ProdutoService } from '../../services/produto.service';
+import { ProdutoService, TAMANHOS_ADULTO, TAMANHOS_INFANTIL } from '../../services/produto.service';
 import { CestaService } from '../../services/cesta.service';
 import { ToastService } from '../../services/toast.service';
 
-interface FiltroCategoria {
+interface FiltroOpcao {
   nome: string;
   marcado: boolean;
 }
@@ -29,16 +29,23 @@ export class BuscaComponent implements OnInit {
   resultados: Produto[] = [];
   termoBusca = '';
 
-  categorias: FiltroCategoria[] = [
+  tamanhosAdulto: FiltroOpcao[] = TAMANHOS_ADULTO.map(nome => ({ nome, marcado: false }));
+  tamanhosInfantil: FiltroOpcao[] = TAMANHOS_INFANTIL.map(nome => ({ nome, marcado: false }));
+
+  categorias: FiltroOpcao[] = [
     { nome: 'Games', marcado: false },
     { nome: 'Filmes', marcado: false },
-    { nome: 'Programação', marcado: false },
-    { nome: 'Ciência', marcado: false },
-    { nome: 'Ficção', marcado: false }
+    { nome: 'Animes', marcado: false },
+    { nome: 'Heróis', marcado: false },
+    { nome: 'Infantil', marcado: false },
+    { nome: 'Música', marcado: false }
   ];
 
   precoMaximo = 150;
   ordenacao = 'relevancia';
+
+  paginaAtual = 1;
+  readonly itensPorPagina = 8;
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
@@ -59,9 +66,10 @@ export class BuscaComponent implements OnInit {
     const mapa: Record<string, string> = {
       games: 'Games',
       filmes: 'Filmes',
-      programacao: 'Programação',
-      ciencia: 'Ciência',
-      ficcao: 'Ficção'
+      animes: 'Animes',
+      herois: 'Heróis',
+      infantil: 'Infantil',
+      musica: 'Música'
     };
     return mapa[slug.toLowerCase()] || slug;
   }
@@ -73,6 +81,11 @@ export class BuscaComponent implements OnInit {
 
     if (categoriasMarcadas.length) {
       resultado = resultado.filter(p => categoriasMarcadas.includes(p.categoria));
+    }
+
+    const tamanhosMarcados = [...this.tamanhosAdulto, ...this.tamanhosInfantil].filter(t => t.marcado).map(t => t.nome);
+    if (tamanhosMarcados.length) {
+      resultado = resultado.filter(p => p.tamanhos.some(t => tamanhosMarcados.includes(t)));
     }
 
     if (this.termoBusca.trim()) {
@@ -89,10 +102,31 @@ export class BuscaComponent implements OnInit {
     }
 
     this.resultados = resultado;
+    this.paginaAtual = 1;
+  }
+
+  get totalPaginas(): number {
+    return Math.ceil(this.resultados.length / this.itensPorPagina);
+  }
+
+  get paginas(): number[] {
+    return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
+  }
+
+  get resultadosDaPagina(): Produto[] {
+    const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
+    return this.resultados.slice(inicio, inicio + this.itensPorPagina);
+  }
+
+  irParaPagina(pagina: number): void {
+    if (pagina < 1 || pagina > this.totalPaginas || pagina === this.paginaAtual) return;
+    this.paginaAtual = pagina;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   limparFiltros(): void {
     this.categorias.forEach(c => c.marcado = false);
+    [...this.tamanhosAdulto, ...this.tamanhosInfantil].forEach(t => t.marcado = false);
     this.precoMaximo = 150;
     this.ordenacao = 'relevancia';
     this.termoBusca = '';
@@ -105,10 +139,8 @@ export class BuscaComponent implements OnInit {
     this.cestaService.adicionarItem({
       produtoId: produto.id,
       nome: produto.nome,
-      emoji: produto.emoji,
       imagem: produto.imagem,
-      gradiente: produto.gradiente,
-      tamanho: 'M',
+      tamanho: this.produtoService.getTamanhoPadrao(produto),
       quantidade: 1,
       preco: produto.preco
     });

@@ -19,11 +19,21 @@
       </div>
 
       <div class="filter-group">
-        <h4>Tamanho</h4>
-        <label class="filter-check"><input type="checkbox"> P</label>
-        <label class="filter-check"><input type="checkbox" checked> M</label>
-        <label class="filter-check"><input type="checkbox"> G</label>
-        <label class="filter-check"><input type="checkbox"> GG</label>
+        <h4>Tamanho adulto</h4>
+        @for (tamanho of tamanhosAdulto; track tamanho.nome) {
+          <label class="filter-check">
+            <input type="checkbox" [(ngModel)]="tamanho.marcado" (change)="aplicarFiltros()"> {{ tamanho.nome }}
+          </label>
+        }
+      </div>
+
+      <div class="filter-group">
+        <h4>Tamanho infantil</h4>
+        @for (tamanho of tamanhosInfantil; track tamanho.nome) {
+          <label class="filter-check">
+            <input type="checkbox" [(ngModel)]="tamanho.marcado" (change)="aplicarFiltros()"> {{ tamanho.nome }} anos
+          </label>
+        }
       </div>
 
       <div class="filter-group">
@@ -57,15 +67,13 @@
 
       @if (resultados.length) {
         <div class="product-grid">
-          @for (produto of resultados; track produto.id) {
+          @for (produto of resultadosDaPagina; track produto.id) {
             <a [routerLink]="['/produto', produto.id]" class="card pixel-cut">
               <div class="card-art pixel-cut">
                 <img class="product-photo" [src]="produto.imagem" [alt]="produto.nome" loading="lazy">
-                <div class="product-tint" [style.background]="produto.gradiente" aria-hidden="true"></div>
                 @if (produto.novo) {
                   <span class="tag">NOVO</span>
                 }
-                <span class="product-print" aria-hidden="true">{{ produto.emoji }}</span>
               </div>
               <div class="card-body">
                 <span class="card-cat">{{ produto.categoria }}</span>
@@ -81,13 +89,15 @@
           }
         </div>
 
-        <nav class="pagination" aria-label="Paginação de resultados">
-          <a href="javascript:void(0)" aria-label="Página anterior">‹</a>
-          <span class="current">1</span>
-          <a href="javascript:void(0)">2</a>
-          <a href="javascript:void(0)">3</a>
-          <a href="javascript:void(0)" aria-label="Próxima página">›</a>
-        </nav>
+        @if (totalPaginas > 1) {
+          <nav class="pagination" aria-label="Paginação de resultados">
+            <button type="button" aria-label="Página anterior" [disabled]="paginaAtual === 1" (click)="irParaPagina(paginaAtual - 1)">‹</button>
+            @for (pagina of paginas; track pagina) {
+              <button type="button" [class.current]="pagina === paginaAtual" [attr.aria-current]="pagina === paginaAtual ? 'page' : null" (click)="irParaPagina(pagina)">{{ pagina }}</button>
+            }
+            <button type="button" aria-label="Próxima página" [disabled]="paginaAtual === totalPaginas" (click)="irParaPagina(paginaAtual + 1)">›</button>
+          </nav>
+        }
       } @else {
         <p style="color:var(--text-muted)">Nenhum produto encontrado com os filtros selecionados.</p>
       }
