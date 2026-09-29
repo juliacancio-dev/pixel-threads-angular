@@ -1,13 +1,45 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { CestaComponent } from './cesta.component';
+import { USUARIO_DEMO, UsuarioService } from '../../services/usuario.service';
 
 describe('CestaComponent', () => {
   beforeEach(async () => {
+    localStorage.removeItem('pixelthreads.usuarios');
+    localStorage.removeItem('pixelthreads.sessao');
+    sessionStorage.removeItem('pixelthreads.sessao');
     await TestBed.configureTestingModule({
       imports: [CestaComponent],
       providers: [provideRouter([])]
     }).compileComponents();
+  });
+
+  it('deve mandar para o login ao finalizar a compra sem estar logado', () => {
+    const fixture = TestBed.createComponent(CestaComponent);
+    const component = fixture.componentInstance;
+    const navegar = spyOn(TestBed.inject(Router), 'navigate');
+    const itensAntes = component.cestaService.itens().length;
+
+    component.finalizarCompra();
+
+    expect(navegar).toHaveBeenCalledWith(['/login'], { queryParams: { voltar: '/cesta' } });
+    expect(component.cestaService.itens().length).toBe(itensAntes);
+    expect(component.pedidoConfirmado).toBeNull();
+  });
+
+  it('deve finalizar a compra e esvaziar a cesta quando estiver logado', () => {
+    TestBed.inject(UsuarioService).entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha);
+    const fixture = TestBed.createComponent(CestaComponent);
+    const component = fixture.componentInstance;
+    const navegar = spyOn(TestBed.inject(Router), 'navigate');
+    const totalAntes = component.total;
+
+    component.finalizarCompra();
+
+    expect(navegar).not.toHaveBeenCalled();
+    expect(component.cestaService.itens().length).toBe(0);
+    expect(component.pedidoConfirmado?.total).toBe(totalAntes);
+    expect(component.pedidoConfirmado?.email).toBe(USUARIO_DEMO.email);
   });
 
   it('deve ser criado', () => {

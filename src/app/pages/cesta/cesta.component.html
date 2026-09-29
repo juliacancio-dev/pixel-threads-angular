@@ -5,66 +5,77 @@
     <span class="current">Minha cesta</span>
   </nav>
 
-  <span class="eyebrow">{{ cestaService.totalItens() }} {{ cestaService.totalItens() === 1 ? 'item' : 'itens' }}</span>
-  <h1>Minha cesta</h1>
-
-  @if (cestaService.itens().length) {
-    <div class="cart-layout">
-
-      <div class="cart-list">
-
-        @for (item of cestaService.itens(); track item.produtoId + '-' + item.tamanho; let i = $index) {
-          <div class="cart-item pixel-cut">
-            <div class="cart-item-art pixel-cut-sm">
-              <img class="product-photo" [src]="item.imagem" [alt]="item.nome">
-              <div class="product-tint" [style.background]="item.gradiente" aria-hidden="true"></div>
-              <span class="product-print" aria-hidden="true">{{ item.emoji }}</span>
-            </div>
-            <div class="cart-item-info">
-              <h3>{{ item.nome }}</h3>
-              <span>Tamanho {{ item.tamanho }}</span>
-            </div>
-            <div class="qty-stepper">
-              <button type="button" class="qty-minus" aria-label="Diminuir quantidade" (click)="diminuirQuantidade(i, item.quantidade)">−</button>
-              <input type="number" [ngModel]="item.quantidade" (ngModelChange)="onQuantidadeChange(i, $event)" min="1" max="10" aria-label="Quantidade">
-              <button type="button" class="qty-plus" aria-label="Aumentar quantidade" (click)="aumentarQuantidade(i, item.quantidade)">+</button>
-            </div>
-            <span class="price">{{ item.preco | currency:'BRL' }}</span>
-            <button type="button" class="cart-item-remove" aria-label="Remover item" (click)="removerItem(i)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
-            </button>
-          </div>
-        }
-
-        <a routerLink="/busca" class="btn btn-ghost pixel-cut" style="align-self:flex-start;">← Continuar comprando</a>
-      </div>
-
-      <!-- RESUMO -->
-      <aside class="summary-card pixel-cut">
-        <h3 style="margin-bottom:18px;">Resumo do pedido</h3>
-
-        <div class="summary-row"><span>Subtotal</span><span class="price">{{ cestaService.subtotal() | currency:'BRL' }}</span></div>
-        <div class="summary-row"><span>Frete</span>
-          @if (frete === 0) {
-            <span class="price" style="color:var(--success)">Grátis</span>
-          } @else {
-            <span class="price">{{ frete | currency:'BRL' }}</span>
-          }
-        </div>
-
-        <form class="coupon-form" #cupomForm="ngForm" (ngSubmit)="aplicarCupom(cupomForm)" novalidate>
-          <input type="text" name="cupom" placeholder="Cupom de desconto" [(ngModel)]="cupom" aria-label="Cupom de desconto">
-          <button type="submit" class="btn btn-ghost btn-sm pixel-cut-sm">Aplicar</button>
-        </form>
-
-        <div class="summary-row total"><span>Total</span><span class="price">{{ total | currency:'BRL' }}</span></div>
-
-        <a routerLink="/login" class="btn btn-primary btn-block pixel-cut" style="margin-top:18px;">Finalizar compra</a>
-        <p style="text-align:center; font-size:0.76rem; margin:14px 0 0;">Pagamento seguro · até 6x sem juros</p>
-      </aside>
+  @if (pedidoConfirmado) {
+    <div class="order-confirmed pixel-cut">
+      <span class="eyebrow">Pedido <span class="order-number">#{{ pedidoConfirmado.numero }}</span></span>
+      <h1>Compra finalizada!</h1>
+      <p>
+        {{ pedidoConfirmado.quantidadeItens }} {{ pedidoConfirmado.quantidadeItens === 1 ? 'item' : 'itens' }} ·
+        total de <strong class="price">{{ pedidoConfirmado.total | currency:'BRL' }}</strong>.
+        Enviamos os detalhes do pedido para <strong>{{ pedidoConfirmado.email }}</strong>.
+      </p>
+      <a routerLink="/busca" class="btn btn-primary pixel-cut">Continuar comprando</a>
     </div>
   } @else {
-    <p style="color:var(--text-muted)">Sua cesta está vazia. <a routerLink="/busca" class="link-muted">Continue comprando.</a></p>
+    <span class="eyebrow">{{ cestaService.totalItens() }} {{ cestaService.totalItens() === 1 ? 'item' : 'itens' }}</span>
+    <h1>Minha cesta</h1>
+
+    @if (cestaService.itens().length) {
+      <div class="cart-layout">
+
+        <div class="cart-list">
+
+          @for (item of cestaService.itens(); track item.produtoId + '-' + item.tamanho; let i = $index) {
+            <div class="cart-item pixel-cut">
+              <div class="cart-item-art pixel-cut-sm">
+                <img class="product-photo" [src]="item.imagem" [alt]="item.nome">
+              </div>
+              <div class="cart-item-info">
+                <h3>{{ item.nome }}</h3>
+                <span>Tamanho {{ item.tamanho }}</span>
+              </div>
+              <div class="qty-stepper">
+                <button type="button" class="qty-minus" aria-label="Diminuir quantidade" (click)="diminuirQuantidade(i, item.quantidade)">−</button>
+                <input type="number" [ngModel]="item.quantidade" (ngModelChange)="onQuantidadeChange(i, $event)" min="1" max="10" aria-label="Quantidade">
+                <button type="button" class="qty-plus" aria-label="Aumentar quantidade" (click)="aumentarQuantidade(i, item.quantidade)">+</button>
+              </div>
+              <span class="price">{{ item.preco | currency:'BRL' }}</span>
+              <button type="button" class="cart-item-remove" aria-label="Remover item" (click)="removerItem(i)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+              </button>
+            </div>
+          }
+
+          <a routerLink="/busca" class="btn btn-ghost pixel-cut" style="align-self:flex-start;">← Continuar comprando</a>
+        </div>
+
+        <!-- RESUMO -->
+        <aside class="summary-card pixel-cut">
+          <h3 style="margin-bottom:18px;">Resumo do pedido</h3>
+
+          <div class="summary-row"><span>Subtotal</span><span class="price">{{ cestaService.subtotal() | currency:'BRL' }}</span></div>
+          <div class="summary-row"><span>Frete</span>
+            @if (frete === 0) {
+              <span class="price" style="color:var(--success)">Grátis</span>
+            } @else {
+              <span class="price">{{ frete | currency:'BRL' }}</span>
+            }
+          </div>
+
+          <form class="coupon-form" #cupomForm="ngForm" (ngSubmit)="aplicarCupom(cupomForm)" novalidate>
+            <input type="text" name="cupom" placeholder="Cupom de desconto" [(ngModel)]="cupom" aria-label="Cupom de desconto">
+            <button type="submit" class="btn btn-ghost btn-sm pixel-cut-sm">Aplicar</button>
+          </form>
+
+          <div class="summary-row total"><span>Total</span><span class="price">{{ total | currency:'BRL' }}</span></div>
+
+          <button type="button" class="btn btn-primary btn-block pixel-cut" style="margin-top:18px;" (click)="finalizarCompra()">Finalizar compra</button>
+          <p style="text-align:center; font-size:0.76rem; margin:14px 0 0;">Pagamento seguro · até 6x sem juros</p>
+        </aside>
+      </div>
+    } @else {
+      <p style="color:var(--text-muted)">Sua cesta está vazia. <a routerLink="/busca" class="link-muted">Continue comprando.</a></p>
+    }
   }
 
 </main>

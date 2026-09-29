@@ -23,10 +23,8 @@ describe('CestaService', () => {
     const totalAntes = service.totalItens();
     service.adicionarItem({
       produtoId: 1,
-      nome: 'Camiseta Invaders 8-Bit',
-      emoji: '👾',
-      imagem: 'assets/produtos/camiseta-base.jpg',
-      gradiente: 'radial-gradient(circle at 30% 30%,#3a2470,#1c1140)',
+      nome: 'Camiseta Control Freak',
+      imagem: 'assets/produtos/control-freak/foto-1.webp',
       tamanho: 'M',
       quantidade: 2,
       preco: 79.9
@@ -39,10 +37,8 @@ describe('CestaService', () => {
   it('deve adicionar um novo item quando o produto ou tamanho forem diferentes', () => {
     service.adicionarItem({
       produtoId: 2,
-      nome: 'Camiseta Error 404',
-      emoji: '💻',
-      imagem: 'assets/produtos/camiseta-base.jpg',
-      gradiente: 'radial-gradient(circle at 70% 30%,#2c4a6b,#151d33)',
+      nome: 'Camiseta Rick and Morty Peace Among Worlds',
+      imagem: 'assets/produtos/rick-and-morty/foto-1.webp',
       tamanho: 'P',
       quantidade: 1,
       preco: 69.9

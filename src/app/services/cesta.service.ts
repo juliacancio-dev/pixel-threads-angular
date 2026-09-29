@@ -7,9 +7,9 @@ import { CartItem } from '../models/cart-item.model';
 export class CestaService {
 
   private itensSignal = signal<CartItem[]>([
-    { produtoId: 1, nome: 'Camiseta Invaders 8-Bit', emoji: '👾', imagem: 'assets/produtos/camiseta-base.jpg', gradiente: 'radial-gradient(circle at 30% 30%,#3a2470,#1c1140)', tamanho: 'M', quantidade: 1, preco: 79.90 },
-    { produtoId: 8, nome: 'Camiseta Retro Console', emoji: '🎮', imagem: 'assets/produtos/camiseta-base.jpg', gradiente: 'radial-gradient(circle at 55% 55%,#5c2a3d,#26101a)', tamanho: 'G', quantidade: 2, preco: 89.90 },
-    { produtoId: 7, nome: 'Camiseta Alien Pixel', emoji: '👽', imagem: 'assets/produtos/camiseta-base.jpg', gradiente: 'radial-gradient(circle at 45% 35%,#3d2a5c,#181026)', tamanho: 'P', quantidade: 1, preco: 74.90 }
+    { produtoId: 1, nome: 'Camiseta Control Freak', imagem: 'assets/produtos/control-freak/foto-1.webp', tamanho: 'M', quantidade: 1, preco: 79.90 },
+    { produtoId: 6, nome: 'Camiseta Dragon Ball Z Shenlong', imagem: 'assets/produtos/dragon-ball-shenlong/foto-1.webp', tamanho: 'G', quantidade: 2, preco: 89.90 },
+    { produtoId: 12, nome: 'Camiseta Os Mestres', imagem: 'assets/produtos/os-mestres/foto-1.webp', tamanho: 'P', quantidade: 1, preco: 74.90 }
   ]);
 
   itens = this.itensSignal.asReadonly();
@@ -36,6 +36,10 @@ export class CestaService {
 
   removerItem(index: number): void {
     this.itensSignal.update(itens => itens.filter((_, i) => i !== index));
+  }
+
+  limpar(): void {
+    this.itensSignal.set([]);
   }
 
   atualizarQuantidade(index: number, quantidade: number): void {
