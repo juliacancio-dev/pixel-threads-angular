@@ -24,10 +24,11 @@ export class ProdutoComponent implements OnInit {
   produto?: Produto;
   relacionados: Produto[] = [];
 
-  tamanhoSelecionado = 'M';
+  tamanhoSelecionado = '';
   tamanhoInvalido = false;
   quantidade = 1;
   abaAtiva: 'descricao' | 'medidas' | 'cuidados' = 'descricao';
+  fotoAtiva = 0;
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -38,11 +39,20 @@ export class ProdutoComponent implements OnInit {
         return;
       }
       this.relacionados = this.produtoService.getRelacionados(id, 4);
-      this.tamanhoSelecionado = 'M';
+      this.tamanhoSelecionado = this.produtoService.getTamanhoPadrao(this.produto);
       this.tamanhoInvalido = false;
       this.quantidade = 1;
       this.abaAtiva = 'descricao';
+      this.fotoAtiva = 0;
     });
+  }
+
+  get fotos(): string[] {
+    return this.produto?.fotos ?? (this.produto ? [this.produto.imagem] : []);
+  }
+
+  selecionarFoto(indice: number): void {
+    this.fotoAtiva = indice;
   }
 
   diminuirQuantidade(): void {
@@ -57,25 +67,30 @@ export class ProdutoComponent implements OnInit {
     this.abaAtiva = aba;
   }
 
-  adicionarACesta(): void {
+  adicionarACesta(): boolean {
     if (!this.tamanhoSelecionado) {
       this.tamanhoInvalido = true;
       this.toastService.mostrar('Confira os campos destacados em vermelho.');
-      return;
+      return false;
     }
     this.tamanhoInvalido = false;
-    if (!this.produto) return;
+    if (!this.produto) return false;
 
     this.cestaService.adicionarItem({
       produtoId: this.produto.id,
       nome: this.produto.nome,
-      emoji: this.produto.emoji,
       imagem: this.produto.imagem,
-      gradiente: this.produto.gradiente,
       tamanho: this.tamanhoSelecionado,
       quantidade: this.quantidade,
       preco: this.produto.preco
     });
     this.toastService.mostrar('Camiseta adicionada à cesta!');
+    return true;
+  }
+
+  comprarAgora(): void {
+    if (this.adicionarACesta()) {
+      this.router.navigate(['/cesta']);
+    }
   }
 }

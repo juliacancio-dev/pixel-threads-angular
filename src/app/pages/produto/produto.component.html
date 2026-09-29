@@ -12,20 +12,17 @@
     <!-- GALERIA -->
     <div>
       <div class="gallery-main pixel-cut" aria-live="polite">
-        <img class="product-photo" [src]="produto.imagem" [alt]="produto.nome">
-        <div class="product-tint" [style.background]="produto.gradiente" aria-hidden="true"></div>
-        <span class="product-print" aria-hidden="true">{{ produto.emoji }}</span>
+        <img class="product-photo" [src]="fotos[fotoAtiva]" [alt]="produto.nome + ' — foto ' + (fotoAtiva + 1)">
       </div>
-      <div class="gallery-thumbs">
-        <button type="button" class="active" aria-label="Ver imagem frontal">
-          <img class="product-photo" [src]="produto.imagem" [alt]="produto.nome">
-          <div class="product-tint" [style.background]="produto.gradiente" aria-hidden="true"></div>
-          <span class="product-print" aria-hidden="true">{{ produto.emoji }}</span>
-        </button>
-        <button type="button" aria-label="Ver imagem das costas">🧵</button>
-        <button type="button" aria-label="Ver imagem no manequim">🧍</button>
-        <button type="button" aria-label="Ver detalhe do tecido">🔍</button>
-      </div>
+      @if (fotos.length > 1) {
+        <div class="gallery-thumbs">
+          @for (foto of fotos; track foto; let i = $index) {
+            <button type="button" [class.active]="fotoAtiva === i" (click)="selecionarFoto(i)" [attr.aria-label]="'Ver foto ' + (i + 1)">
+              <img class="product-photo" [src]="foto" alt="">
+            </button>
+          }
+        </div>
+      }
     </div>
 
     <!-- INFORMAÇÕES -->
@@ -46,7 +43,7 @@
         <div class="option-group">
           <span class="option-label">Tamanho <span style="color:var(--magenta)">*</span></span>
           <div class="size-options">
-            @for (tamanho of ['P', 'M', 'G', 'GG']; track tamanho) {
+            @for (tamanho of produto.tamanhos; track tamanho) {
               <input type="radio" name="tamanho" [id]="'tam-' + tamanho" [value]="tamanho" [(ngModel)]="tamanhoSelecionado">
               <label [for]="'tam-' + tamanho">{{ tamanho }}</label>
             }
@@ -70,7 +67,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L4 3H2"/></svg>
             Adicionar à cesta
           </button>
-          <a routerLink="/cesta" class="btn btn-outline pixel-cut">Comprar agora</a>
+          <button type="button" class="btn btn-outline pixel-cut" (click)="comprarAgora()">Comprar agora</button>
         </div>
       </form>
 
@@ -91,7 +88,11 @@
       }
       @if (abaAtiva === 'medidas') {
         <div class="pd-tab-panel" role="tabpanel">
-          <p style="margin:0;">P: 66×48cm · M: 70×51cm · G: 74×54cm · GG: 78×57cm (comprimento × largura, medidas aproximadas).</p>
+          @if (produto.categoria === 'Infantil') {
+            <p style="margin:0;">2: 42×32cm · 4: 46×34cm · 6: 50×37cm · 8: 54×40cm · 10: 58×43cm · 12: 62×46cm (comprimento × largura, medidas aproximadas). O número corresponde à idade da criança em anos.</p>
+          } @else {
+            <p style="margin:0;">P: 66×48cm · M: 70×51cm · G: 74×54cm · GG: 78×57cm (comprimento × largura, medidas aproximadas).</p>
+          }
         </div>
       }
       @if (abaAtiva === 'cuidados') {
@@ -115,8 +116,6 @@
         <a [routerLink]="['/produto', relacionado.id]" class="card pixel-cut">
           <div class="card-art pixel-cut">
             <img class="product-photo" [src]="relacionado.imagem" [alt]="relacionado.nome" loading="lazy">
-            <div class="product-tint" [style.background]="relacionado.gradiente" aria-hidden="true"></div>
-            <span class="product-print" aria-hidden="true">{{ relacionado.emoji }}</span>
           </div>
           <div class="card-body">
             <span class="card-cat">{{ relacionado.categoria }}</span>
