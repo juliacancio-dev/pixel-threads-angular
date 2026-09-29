@@ -3,6 +3,8 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { FormsModule } from '@angular/forms';
 import { filter } from 'rxjs/operators';
 import { CestaService } from '../../services/cesta.service';
+import { ToastService } from '../../services/toast.service';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-header',
@@ -13,7 +15,9 @@ import { CestaService } from '../../services/cesta.service';
 })
 export class HeaderComponent {
   private router = inject(Router);
+  private toastService = inject(ToastService);
   cestaService = inject(CestaService);
+  usuarioService = inject(UsuarioService);
 
   menuAberto = false;
   termoBusca = '';
@@ -31,6 +35,12 @@ export class HeaderComponent {
 
   toggleMenu(): void {
     this.menuAberto = !this.menuAberto;
+  }
+
+  sair(): void {
+    this.usuarioService.sair();
+    this.toastService.mostrar('Você saiu da sua conta.');
+    this.router.navigate(['/']);
   }
 
   buscar(): void {

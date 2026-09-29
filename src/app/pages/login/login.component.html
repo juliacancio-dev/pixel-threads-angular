@@ -37,9 +37,14 @@
         <a routerLink="/esqueci" class="link-muted">Esqueci minha senha</a>
       </div>
 
+      @if (credenciaisInvalidas) {
+        <p class="form-alert" role="alert">E-mail ou senha incorretos. Confira os dados ou <a routerLink="/cadastro" class="link-muted">crie uma conta</a>.</p>
+      }
+
       <button type="submit" class="btn btn-primary btn-block pixel-cut">Entrar</button>
     </form>
 
-    <p class="auth-footer">Ainda não tem conta? <a routerLink="/cadastro" class="link-muted">Cadastre-se</a></p>
+    <p class="auth-footer">Ainda não tem conta? <a routerLink="/cadastro" [queryParams]="{ voltar: voltar === '/' ? null : voltar }" class="link-muted">Cadastre-se</a></p>
+    <p class="auth-footer demo-hint">Conta de teste: {{ usuarioDemo.email }} · senha {{ usuarioDemo.senha }}</p>
   </div>
 </main>

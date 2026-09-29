@@ -23,7 +23,13 @@
           id="cad-email"
           formControlName="email"
           placeholder="seuemail@exemplo.com">
-        <span class="field-error">Digite um e-mail válido.</span>
+        <span class="field-error">
+          @if (form.controls.email.errors?.['emailEmUso']) {
+            Este e-mail já está cadastrado. <a routerLink="/login" class="link-muted">Entrar</a>
+          } @else {
+            Digite um e-mail válido.
+          }
+        </span>
       </div>
 
       <div class="field" [class.invalid]="form.controls.senha.invalid && form.controls.senha.touched">

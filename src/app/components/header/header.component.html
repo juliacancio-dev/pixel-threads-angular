@@ -14,7 +14,7 @@
         <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="menuAberto = false">Início</a></li>
         <li><a routerLink="/busca" [queryParams]="{categoria: 'games'}" routerLinkActive="active" (click)="menuAberto = false">Games</a></li>
         <li><a routerLink="/busca" [queryParams]="{categoria: 'filmes'}" routerLinkActive="active" (click)="menuAberto = false">Filmes &amp; Séries</a></li>
-        <li><a routerLink="/busca" [queryParams]="{categoria: 'programacao'}" routerLinkActive="active" (click)="menuAberto = false">Programação</a></li>
+        <li><a routerLink="/busca" [queryParams]="{categoria: 'animes'}" routerLinkActive="active" (click)="menuAberto = false">Animes</a></li>
         <li><a routerLink="/busca" (click)="menuAberto = false">Ofertas</a></li>
       </ul>
 
@@ -26,9 +26,16 @@
       </form>
 
       <div class="nav-icons">
-        <a routerLink="/login" class="icon-btn" aria-label="Entrar na conta">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
-        </a>
+        @if (usuarioService.estaLogado()) {
+          <span class="user-greet">Olá, {{ usuarioService.primeiroNome() }}</span>
+          <button type="button" class="icon-btn" aria-label="Sair da conta" title="Sair" (click)="sair()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 4h4v16h-4"/><path d="M10 8l-4 4 4 4"/><path d="M6 12h10"/></svg>
+          </button>
+        } @else {
+          <a routerLink="/login" class="icon-btn" aria-label="Entrar na conta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          </a>
+        }
         <a routerLink="/cesta" class="icon-btn" aria-label="Ver cesta de compras">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L4 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg>
           <span class="badge">{{ cestaService.totalItens() }}</span>
