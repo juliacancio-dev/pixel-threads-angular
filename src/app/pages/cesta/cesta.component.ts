@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { Endereco } from '../../models/usuario.model';
 import { CestaService } from '../../services/cesta.service';
 import { ToastService } from '../../services/toast.service';
 import { UsuarioService } from '../../services/usuario.service';
@@ -11,6 +12,7 @@ interface PedidoConfirmado {
   quantidadeItens: number;
   total: number;
   email: string;
+  endereco?: Endereco;
 }
 
 @Component({
@@ -67,7 +69,8 @@ export class CestaComponent {
       numero: String(Math.floor(100000 + Math.random() * 900000)),
       quantidadeItens: this.servicoCesta.totalItens(),
       total: this.total,
-      email: usuario.email
+      email: usuario.email,
+      endereco: usuario.endereco
     };
     this.servicoCesta.limpar();
     this.servicoToast.mostrar('Pedido realizado com sucesso!');

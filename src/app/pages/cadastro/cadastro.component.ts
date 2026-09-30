@@ -2,8 +2,14 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Endereco } from '../../models/usuario.model';
 import { ToastService } from '../../services/toast.service';
 import { UsuarioService } from '../../services/usuario.service';
+
+export const ESTADOS = [
+  'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
+  'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
+];
 
 function validarSenhasIguais(controle: AbstractControl): ValidationErrors | null {
   const senha = controle.get('senha')?.value;
@@ -25,6 +31,7 @@ export class CadastroComponent {
   private servicoToast = inject(ToastService);
   private servicoUsuario = inject(UsuarioService);
 
+  readonly estados = ESTADOS;
   mostrarSenha = false;
   mostrarConfirmarSenha = false;
 
@@ -40,8 +47,23 @@ export class CadastroComponent {
     email: ['', [Validators.required, Validators.email]],
     senha: ['', [Validators.required, Validators.minLength(6)]],
     confirmarSenha: ['', [Validators.required]],
+    endereco: this.construtorFormulario.group({
+      cep: ['', [Validators.required, Validators.pattern(/^\d{5}-?\d{3}$/)]],
+      rua: ['', [Validators.required]],
+      numero: ['', [Validators.required]],
+      complemento: [''],
+      bairro: ['', [Validators.required]],
+      cidade: ['', [Validators.required]],
+      estado: ['', [Validators.required]]
+    }),
     aceiteTermos: [false, [Validators.requiredTrue]]
   }, { validators: validarSenhasIguais });
+
+  /** Campo inválido e já tocado pelo usuário, ex.: campoInvalido('endereco.cep'). */
+  campoInvalido(caminho: string): boolean {
+    const campo = this.formulario.get(caminho);
+    return !!campo && campo.invalid && campo.touched;
+  }
 
   alternarSenha(): void {
     this.mostrarSenha = !this.mostrarSenha;
@@ -53,8 +75,8 @@ export class CadastroComponent {
 
   enviar(): void {
     if (this.formulario.valid) {
-      const { nome, email, senha } = this.formulario.getRawValue();
-      if (!this.servicoUsuario.cadastrar(nome!, email!, senha!)) {
+      const { nome, email, senha, endereco } = this.formulario.getRawValue();
+      if (!this.servicoUsuario.cadastrar(nome!, email!, senha!, endereco as Endereco)) {
         this.formulario.controls.email.setErrors({ emailEmUso: true });
         this.formulario.controls.email.markAsTouched();
         this.servicoToast.mostrar('Este e-mail já está cadastrado.');

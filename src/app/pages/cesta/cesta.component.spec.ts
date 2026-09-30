@@ -40,6 +40,7 @@ describe('CestaComponent', () => {
     expect(componente.servicoCesta.itens().length).toBe(0);
     expect(componente.pedidoConfirmado?.total).toBe(totalAntes);
     expect(componente.pedidoConfirmado?.email).toBe(USUARIO_DEMO.email);
+    expect(componente.pedidoConfirmado?.endereco).toEqual(USUARIO_DEMO.endereco);
   });
 
   it('deve ser criado', () => {

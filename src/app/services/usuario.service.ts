@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { Usuario, UsuarioLogado } from '../models/usuario.model';
+import { Endereco, Usuario, UsuarioLogado } from '../models/usuario.model';
 
 /**
  * Simula o banco de dados de clientes da loja.
@@ -13,7 +13,16 @@ const CHAVE_SESSAO = 'pixelthreads.sessao';
 export const USUARIO_DEMO: Usuario = {
   nome: 'Cliente Demo',
   email: 'cliente@pixelthreads.com',
-  senha: '123456'
+  senha: '123456',
+  endereco: {
+    cep: '01310-100',
+    rua: 'Avenida Paulista',
+    numero: '1000',
+    complemento: 'Apto 42',
+    bairro: 'Bela Vista',
+    cidade: 'São Paulo',
+    estado: 'SP'
+  }
 };
 
 @Injectable({
@@ -33,11 +42,11 @@ export class UsuarioService {
   }
 
   /** Cadastra o cliente e já deixa ele logado. Retorna false se o e-mail já existir. */
-  cadastrar(nome: string, email: string, senha: string): boolean {
+  cadastrar(nome: string, email: string, senha: string, endereco?: Endereco): boolean {
     if (this.emailCadastrado(email)) {
       return false;
     }
-    const usuario: Usuario = { nome: nome.trim(), email: this.normalizar(email), senha };
+    const usuario: Usuario = { nome: nome.trim(), email: this.normalizar(email), senha, endereco };
     this.usuarios = [...this.usuarios, usuario];
     this.salvar(localStorage, CHAVE_USUARIOS, this.usuarios);
     this.iniciarSessao(usuario, false);
@@ -61,7 +70,7 @@ export class UsuarioService {
   }
 
   private iniciarSessao(usuario: Usuario, lembrar: boolean): void {
-    const sessao: UsuarioLogado = { nome: usuario.nome, email: usuario.email };
+    const sessao: UsuarioLogado = { nome: usuario.nome, email: usuario.email, endereco: usuario.endereco };
     this.logadoSinal.set(sessao);
     this.remover(lembrar ? sessionStorage : localStorage, CHAVE_SESSAO);
     this.salvar(lembrar ? localStorage : sessionStorage, CHAVE_SESSAO, sessao);
@@ -78,8 +87,9 @@ export class UsuarioService {
 
   private carregarUsuarios(): Usuario[] {
     const salvos = this.ler<Usuario[]>(localStorage, CHAVE_USUARIOS) ?? [];
-    const temDemo = salvos.some(u => u.email === USUARIO_DEMO.email);
-    return temDemo ? salvos : [USUARIO_DEMO, ...salvos];
+    // O cliente demo sempre vem da versão atual do código, não da cópia salva.
+    const outros = salvos.filter(u => u.email !== USUARIO_DEMO.email);
+    return [USUARIO_DEMO, ...outros];
   }
 
   private carregarSessao(): UsuarioLogado | null {

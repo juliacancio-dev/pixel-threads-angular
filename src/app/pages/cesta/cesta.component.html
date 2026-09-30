@@ -16,6 +16,15 @@
         total de <strong class="price">{{ pedidoConfirmado.total | currency:'BRL' }}</strong>.
         Enviamos os detalhes do pedido para <strong class="text-body">{{ pedidoConfirmado.email }}</strong>.
       </p>
+      @if (pedidoConfirmado.endereco; as endereco) {
+        <div class="border rounded p-3 mb-4">
+          <span class="titulo-filtro d-block"><i class="bi bi-truck me-1"></i>Entrega em</span>
+          <p class="mb-0 text-body">
+            {{ endereco.rua }}, {{ endereco.numero }}@if (endereco.complemento) { · {{ endereco.complemento }} }<br>
+            {{ endereco.bairro }} · {{ endereco.cidade }}/{{ endereco.estado }} · CEP {{ endereco.cep }}
+          </p>
+        </div>
+      }
       <div><a routerLink="/busca" class="btn btn-primary">Continuar comprando</a></div>
     </div>
   } @else {

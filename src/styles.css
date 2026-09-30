@@ -257,3 +257,4 @@ body {
 /* Login, cadastro e recuperação de senha */
 .area-conta { min-height: calc(100vh - 80px); }
 .cartao-conta { max-width: 440px; }
+.cartao-conta-largo { max-width: 600px; }
