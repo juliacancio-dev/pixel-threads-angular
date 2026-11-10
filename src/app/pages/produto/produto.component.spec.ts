@@ -1,4 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { CATALOGO } from '../../services/catalogo';
 import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { ProdutoComponent } from './produto.component';
@@ -11,12 +14,15 @@ describe('ProdutoComponent', () => {
       imports: [ProdutoComponent],
       providers: [
         provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
         {
           provide: ActivatedRoute,
           useValue: { paramMap: of(convertToParamMap({ id: '1' })) }
         }
       ]
     }).compileComponents();
+    TestBed.inject(ProdutoService).definirProdutos(CATALOGO);
   });
 
   it('deve carregar o produto e os relacionados a partir do id da rota', () => {

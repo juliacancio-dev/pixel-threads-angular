@@ -1,4 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { CATALOGO } from '../../services/catalogo';
+import { ProdutoService } from '../../services/produto.service';
 import { provideRouter } from '@angular/router';
 import { BuscaComponent } from './busca.component';
 
@@ -6,8 +10,11 @@ describe('BuscaComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BuscaComponent],
-      providers: [provideRouter([])]
+      providers: [provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting()]
     }).compileComponents();
+    TestBed.inject(ProdutoService).definirProdutos(CATALOGO);
   });
 
   it('deve ser criado e listar todos os produtos sem filtro', () => {

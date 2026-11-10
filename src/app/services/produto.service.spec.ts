@@ -1,12 +1,42 @@
 import { TestBed } from '@angular/core/testing';
-import { ProdutoService } from './produto.service';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { ProdutoService, URL_API } from './produto.service';
+import { CATALOGO } from './catalogo';
 
 describe('ProdutoService', () => {
   let servico: ProdutoService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()]
+    });
     servico = TestBed.inject(ProdutoService);
+    servico.definirProdutos(CATALOGO);
+  });
+
+  it('deve buscar os produtos na API ao carregar', async () => {
+    const http = TestBed.inject(HttpTestingController);
+    const carregando = servico.carregarProdutos();
+
+    http.expectOne(`${URL_API}/produtos`).flush([CATALOGO[0], CATALOGO[1]]);
+    await carregando;
+
+    expect(servico.listarProdutos().length).toBe(2);
+    expect(servico.erroAoCarregar).toBeFalse();
+    http.verify();
+  });
+
+  it('deve ficar sem produtos e marcar erro quando a API está fora do ar', async () => {
+    const http = TestBed.inject(HttpTestingController);
+    spyOn(console, 'error');
+    const carregando = servico.carregarProdutos();
+
+    http.expectOne(`${URL_API}/produtos`).error(new ProgressEvent('error'));
+    await carregando;
+
+    expect(servico.listarProdutos().length).toBe(0);
+    expect(servico.erroAoCarregar).toBeTrue();
   });
 
   it('deve ser criado', () => {

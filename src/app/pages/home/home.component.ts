@@ -20,6 +20,7 @@ export class HomeComponent {
   private servicoToast = inject(ToastService);
 
   produtos: Produto[] = this.servicoProduto.listarProdutos();
+  erroAoCarregar = this.servicoProduto.erroAoCarregar;
   emailInformativo = '';
   informativoInvalido = false;
 

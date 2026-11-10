@@ -42,6 +42,12 @@
       <a routerLink="/busca" class="btn btn-outline-secondary btn-sm">Ver tudo</a>
     </div>
 
+    @if (erroAoCarregar) {
+      <div class="alert alert-warning" role="alert">
+        Não foi possível carregar os produtos. A API da loja está rodando? No terminal, rode <code>npm run api</code> e recarregue a página.
+      </div>
+    }
+
     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-lg-4">
       @for (produto of produtos; track produto.id) {
         <div class="col">

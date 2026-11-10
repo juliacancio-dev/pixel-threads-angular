@@ -1,4 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { CATALOGO } from '../../services/catalogo';
+import { ProdutoService } from '../../services/produto.service';
 import { provideRouter } from '@angular/router';
 import { HomeComponent } from './home.component';
 
@@ -6,8 +10,11 @@ describe('HomeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HomeComponent],
-      providers: [provideRouter([])]
+      providers: [provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting()]
     }).compileComponents();
+    TestBed.inject(ProdutoService).definirProdutos(CATALOGO);
   });
 
   it('deve ser criado e carregar os produtos', () => {
