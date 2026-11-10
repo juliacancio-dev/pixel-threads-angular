@@ -1,0 +1,540 @@
+{
+  "info": {
+    "name": "Pixel Threads API - Atividade",
+    "description": "Atividade: inserir 10 produtos (POST), inserir 2 clientes (POST), alterar 1 cliente (PUT) e consultar os produtos (GET).\n\nAntes de rodar, suba a API deste projeto com `npm run api` (porta 3000). Os dados ficam em api/pixelthreads.db.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "clienteId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Produtos - POST (10 inserções)",
+      "item": [
+        {
+          "name": "POST Produto 01 - Camiseta Control Freak",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Produto voltou com id', () => pm.expect(pm.response.json().id).to.be.a('number'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/produtos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Camiseta Control Freak\",\n  \"categoria\": \"Games\",\n  \"imagem\": \"assets/produtos/control-freak/foto-1.webp\",\n  \"tamanhos\": [\n    \"P\",\n    \"M\",\n    \"G\",\n    \"GG\"\n  ],\n  \"preco\": 79.9,\n  \"novo\": true,\n  \"descricao\": \"Todos os controles que marcaram a história dos videogames reunidos numa estampa só. Para quem não larga o joystick por nada.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Produto 02 - Camiseta Rick and Morty Peace Among Worlds",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Produto voltou com id', () => pm.expect(pm.response.json().id).to.be.a('number'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/produtos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Camiseta Rick and Morty Peace Among Worlds\",\n  \"categoria\": \"Filmes\",\n  \"imagem\": \"assets/produtos/rick-and-morty/foto-1.webp\",\n  \"fotos\": [\n    \"assets/produtos/rick-and-morty/foto-1.webp\",\n    \"assets/produtos/rick-and-morty/foto-2.webp\",\n    \"assets/produtos/rick-and-morty/foto-3.webp\"\n  ],\n  \"tamanhos\": [\n    \"P\",\n    \"M\",\n    \"G\",\n    \"GG\"\n  ],\n  \"preco\": 89.9,\n  \"novo\": true,\n  \"descricao\": \"O Rick mais sincero do multiverso mandando sua mensagem de paz entre os mundos. Estampa com cores neon sobre malha preta.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Produto 03 - Camiseta Demon Slayer Olhares",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Produto voltou com id', () => pm.expect(pm.response.json().id).to.be.a('number'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/produtos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Camiseta Demon Slayer Olhares\",\n  \"categoria\": \"Animes\",\n  \"imagem\": \"assets/produtos/demon-slayer/foto-1.webp\",\n  \"fotos\": [\n    \"assets/produtos/demon-slayer/foto-1.webp\",\n    \"assets/produtos/demon-slayer/foto-2.webp\",\n    \"assets/produtos/demon-slayer/foto-3.webp\"\n  ],\n  \"tamanhos\": [\n    \"P\",\n    \"M\",\n    \"G\",\n    \"GG\"\n  ],\n  \"preco\": 84.9,\n  \"descricao\": \"Os olhares de Tanjiro, Nezuko, Zenitsu e Inosuke em faixas coloridas. Para fãs de Kimetsu no Yaiba.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Produto 04 - Camiseta X-Men '97",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Produto voltou com id', () => pm.expect(pm.response.json().id).to.be.a('number'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/produtos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Camiseta X-Men '97\",\n  \"categoria\": \"Heróis\",\n  \"imagem\": \"assets/produtos/x-men-97/foto-1.webp\",\n  \"tamanhos\": [\n    \"P\",\n    \"M\",\n    \"G\",\n    \"GG\"\n  ],\n  \"preco\": 94.9,\n  \"precoAntigo\": 119.9,\n  \"novo\": true,\n  \"descricao\": \"Os mutantes da série animada X-Men '97 em quadrinhos coloridos sobre malha off-white. Um clássico dos anos 90 de volta.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Produto 05 - Camiseta You Are Offline",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Produto voltou com id', () => pm.expect(pm.response.json().id).to.be.a('number'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/produtos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Camiseta You Are Offline\",\n  \"categoria\": \"Games\",\n  \"imagem\": \"assets/produtos/you-are-offline/foto-1.webp\",\n  \"tamanhos\": [\n    \"P\",\n    \"M\",\n    \"G\",\n    \"GG\"\n  ],\n  \"preco\": 69.9,\n  \"descricao\": \"O dinossauro mais famoso da internet, aquele que aparece quando a conexão cai. Estampa minimalista em pixel art.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Produto 06 - Camiseta Dragon Ball Z Shenlong",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Produto voltou com id', () => pm.expect(pm.response.json().id).to.be.a('number'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/produtos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Camiseta Dragon Ball Z Shenlong\",\n  \"categoria\": \"Animes\",\n  \"imagem\": \"assets/produtos/dragon-ball-shenlong/foto-1.webp\",\n  \"tamanhos\": [\n    \"P\",\n    \"M\",\n    \"G\",\n    \"GG\"\n  ],\n  \"preco\": 89.9,\n  \"descricao\": \"Shenlong e as sete esferas do dragão numa estampa detalhada. Faça seu pedido e vista a lenda.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Produto 07 - Camiseta Led Zeppelin Mothership",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Produto voltou com id', () => pm.expect(pm.response.json().id).to.be.a('number'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/produtos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Camiseta Led Zeppelin Mothership\",\n  \"categoria\": \"Música\",\n  \"imagem\": \"assets/produtos/led-zeppelin/foto-1.webp\",\n  \"tamanhos\": [\n    \"P\",\n    \"M\",\n    \"G\",\n    \"GG\"\n  ],\n  \"preco\": 94.9,\n  \"descricao\": \"A arte clássica do álbum Mothership do Led Zeppelin. Rock pesado para quem tem bom gosto musical.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Produto 08 - Camiseta Seu Madruga \"Deus Ajuda\"",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Produto voltou com id', () => pm.expect(pm.response.json().id).to.be.a('number'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/produtos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Camiseta Seu Madruga \\\"Deus Ajuda\\\"\",\n  \"categoria\": \"Filmes\",\n  \"imagem\": \"assets/produtos/seu-madruga/foto-1.webp\",\n  \"tamanhos\": [\n    \"P\",\n    \"M\",\n    \"G\",\n    \"GG\"\n  ],\n  \"preco\": 69.9,\n  \"precoAntigo\": 84.9,\n  \"descricao\": \"\\\"Deus ajuda quem cedo madruga\\\" com o personagem mais querido da vila. Humor clássico da TV em estampa branca.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Produto 09 - Camiseta Fantasma \"Do You Believe in Ghosts?\"",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Produto voltou com id', () => pm.expect(pm.response.json().id).to.be.a('number'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/produtos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Camiseta Fantasma \\\"Do You Believe in Ghosts?\\\"\",\n  \"categoria\": \"Games\",\n  \"imagem\": \"assets/produtos/fantasma/foto-1.webp\",\n  \"tamanhos\": [\n    \"P\",\n    \"M\",\n    \"G\",\n    \"GG\"\n  ],\n  \"preco\": 84.9,\n  \"novo\": true,\n  \"descricao\": \"Um fantasminha travesso em tons de roxo estampado nas costas. Visual moderno e divertido sobre malha branca.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Produto 10 - Camiseta Princesa Peach",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('Produto voltou com id', () => pm.expect(pm.response.json().id).to.be.a('number'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/produtos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Camiseta Princesa Peach\",\n  \"categoria\": \"Games\",\n  \"imagem\": \"assets/produtos/princesa-peach/foto-1.webp\",\n  \"tamanhos\": [\n    \"P\",\n    \"M\",\n    \"G\",\n    \"GG\"\n  ],\n  \"preco\": 79.9,\n  \"descricao\": \"A princesa mais famosa do Reino dos Cogumelos em estampa estilo brasão universitário sobre malha rosa.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Clientes - POST (2 inserções)",
+      "item": [
+        {
+          "name": "POST Cliente 01 - Ana Souza",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "const cliente = pm.response.json();",
+                  "pm.collectionVariables.set('clienteId', cliente.id);",
+                  "pm.test('Senha não volta na resposta', () => pm.expect(cliente).to.not.have.property('senha'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/clientes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Ana Souza\",\n  \"email\": \"ana.souza@email.com\",\n  \"senha\": \"ana12345\",\n  \"endereco\": {\n    \"cep\": \"01310-100\",\n    \"rua\": \"Avenida Paulista\",\n    \"numero\": \"1500\",\n    \"complemento\": \"Apto 31\",\n    \"bairro\": \"Bela Vista\",\n    \"cidade\": \"São Paulo\",\n    \"estado\": \"SP\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST Cliente 02 - Bruno Lima",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/clientes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Bruno Lima\",\n  \"email\": \"bruno.lima@email.com\",\n  \"senha\": \"bruno123\",\n  \"endereco\": {\n    \"cep\": \"20040-020\",\n    \"rua\": \"Rua da Assembleia\",\n    \"numero\": \"10\",\n    \"complemento\": \"\",\n    \"bairro\": \"Centro\",\n    \"cidade\": \"Rio de Janeiro\",\n    \"estado\": \"RJ\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Cliente - PUT (alteração)",
+      "item": [
+        {
+          "name": "PUT Cliente - altera dados da Ana",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('Nome foi alterado', () => pm.expect(pm.response.json().nome).to.eql('Ana Souza Martins'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/clientes/{{clienteId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Ana Souza Martins\",\n  \"email\": \"ana.martins@email.com\",\n  \"senha\": \"ana12345\",\n  \"endereco\": {\n    \"cep\": \"30130-010\",\n    \"rua\": \"Avenida Afonso Pena\",\n    \"numero\": \"800\",\n    \"complemento\": \"Sala 5\",\n    \"bairro\": \"Centro\",\n    \"cidade\": \"Belo Horizonte\",\n    \"estado\": \"MG\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET Cliente - confere a alteração",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Cidade nova é Belo Horizonte', () => pm.expect(pm.response.json().endereco.cidade).to.eql('Belo Horizonte'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/clientes/{{clienteId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Produtos - GET (consulta)",
+      "item": [
+        {
+          "name": "GET Produtos - lista todos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('Tem pelo menos 10 produtos', () => pm.expect(pm.response.json().length).to.be.at.least(10));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/produtos"
+          }
+        },
+        {
+          "name": "GET Produto por id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 OK', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/produtos/1"
+          }
+        }
+      ]
+    }
+  ]
+}
