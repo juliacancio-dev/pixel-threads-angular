@@ -1,62 +1,127 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { USUARIO_DEMO, UsuarioService } from './usuario.service';
+import { URL_API } from './produto.service';
+
+/** O que a API devolve para o cliente demo (sem a senha). */
+const CLIENTE_DEMO = { id: 1, nome: USUARIO_DEMO.nome, email: USUARIO_DEMO.email, endereco: USUARIO_DEMO.endereco };
 
 describe('UsuarioService', () => {
+  let servico: UsuarioService;
+  let http: HttpTestingController;
+
+  function configurar(): void {
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()]
+    });
+    servico = TestBed.inject(UsuarioService);
+    http = TestBed.inject(HttpTestingController);
+  }
+
   beforeEach(() => {
-    localStorage.removeItem('pixelthreads.usuarios');
     localStorage.removeItem('pixelthreads.sessao');
     sessionStorage.removeItem('pixelthreads.sessao');
-    TestBed.configureTestingModule({});
+    configurar();
   });
 
-  it('deve vir com o cliente de demonstração cadastrado e ninguém logado', () => {
-    const servico = TestBed.inject(UsuarioService);
+  afterEach(() => http.verify());
 
-    expect(servico.emailCadastrado(USUARIO_DEMO.email)).toBeTrue();
+  it('deve começar sem ninguém logado', () => {
     expect(servico.estaLogado()).toBeFalse();
   });
 
-  it('deve cadastrar um cliente e deixá-lo logado', () => {
-    const servico = TestBed.inject(UsuarioService);
+  it('deve apagar os cadastros antigos que ficavam salvos no navegador', () => {
+    localStorage.setItem('pixelthreads.usuarios', JSON.stringify([USUARIO_DEMO]));
+    TestBed.resetTestingModule();
+    configurar();
 
-    expect(servico.cadastrar('Maria Souza', 'Maria@Teste.com ', 'segredo')).toBeTrue();
-    expect(servico.emailCadastrado('maria@teste.com')).toBeTrue();
+    expect(localStorage.getItem('pixelthreads.usuarios')).toBeNull();
+  });
+
+  it('deve perguntar à API se o e-mail está cadastrado', async () => {
+    const resposta = servico.emailCadastrado(' Cliente@PixelThreads.com ');
+
+    const requisicao = http.expectOne(`${URL_API}/clientes/existe`);
+    expect(requisicao.request.method).toBe('POST');
+    expect(requisicao.request.body).toEqual({ email: 'cliente@pixelthreads.com' });
+    requisicao.flush({ existe: true });
+
+    expect(await resposta).toBeTrue();
+  });
+
+  it('deve cadastrar o cliente na API e deixá-lo logado', async () => {
+    const resposta = servico.cadastrar('Maria Souza ', 'Maria@Teste.com ', 'segredo', USUARIO_DEMO.endereco);
+
+    const requisicao = http.expectOne(`${URL_API}/clientes`);
+    expect(requisicao.request.method).toBe('POST');
+    expect(requisicao.request.body).toEqual({
+      nome: 'Maria Souza', email: 'maria@teste.com', senha: 'segredo', endereco: USUARIO_DEMO.endereco
+    });
+    requisicao.flush({ id: 7, nome: 'Maria Souza', email: 'maria@teste.com', endereco: USUARIO_DEMO.endereco });
+
+    expect(await resposta).toBeTrue();
     expect(servico.primeiroNome()).toBe('Maria');
+    expect(servico.usuarioLogado()?.id).toBe(7);
   });
 
-  it('não deve cadastrar o mesmo e-mail duas vezes', () => {
-    const servico = TestBed.inject(UsuarioService);
+  it('não deve cadastrar quando a API diz que o e-mail já existe', async () => {
+    const resposta = servico.cadastrar('Outra Maria', 'maria@teste.com', 'outra1');
 
-    servico.cadastrar('Maria Souza', 'maria@teste.com', 'segredo');
-    expect(servico.cadastrar('Outra Maria', 'MARIA@teste.com', 'outra')).toBeFalse();
+    http.expectOne(`${URL_API}/clientes`).flush({ erro: 'E-mail já cadastrado' }, { status: 409, statusText: 'Conflict' });
+
+    expect(await resposta).toBeFalse();
+    expect(servico.estaLogado()).toBeFalse();
   });
 
-  it('deve entrar apenas com e-mail e senha corretos', () => {
-    const servico = TestBed.inject(UsuarioService);
+  it('deve entrar quando a API confirma e-mail e senha', async () => {
+    const resposta = servico.entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha);
 
-    expect(servico.entrar(USUARIO_DEMO.email, 'errada')).toBeFalse();
-    expect(servico.entrar('naoexiste@teste.com', USUARIO_DEMO.senha)).toBeFalse();
-    expect(servico.entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha)).toBeTrue();
+    const requisicao = http.expectOne(`${URL_API}/login`);
+    expect(requisicao.request.body).toEqual({ email: USUARIO_DEMO.email, senha: USUARIO_DEMO.senha });
+    requisicao.flush(CLIENTE_DEMO);
+
+    expect(await resposta).toBeTrue();
     expect(servico.usuarioLogado()?.email).toBe(USUARIO_DEMO.email);
+    expect(servico.usuarioLogado()).not.toEqual(jasmine.objectContaining({ senha: jasmine.anything() }));
   });
 
-  it('deve sair da conta', () => {
-    const servico = TestBed.inject(UsuarioService);
+  it('não deve entrar quando a API recusa a senha', async () => {
+    const resposta = servico.entrar(USUARIO_DEMO.email, 'errada');
 
-    servico.entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha);
+    http.expectOne(`${URL_API}/login`).flush({ erro: 'E-mail ou senha incorretos' }, { status: 401, statusText: 'Unauthorized' });
+
+    expect(await resposta).toBeFalse();
+    expect(servico.estaLogado()).toBeFalse();
+  });
+
+  it('deve falhar quando a API está fora do ar', async () => {
+    const resposta = servico.entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha);
+
+    http.expectOne(`${URL_API}/login`).error(new ProgressEvent('error'));
+
+    await expectAsync(resposta).toBeRejected();
+    expect(servico.estaLogado()).toBeFalse();
+  });
+
+  it('deve sair da conta', async () => {
+    const resposta = servico.entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha);
+    http.expectOne(`${URL_API}/login`).flush(CLIENTE_DEMO);
+    await resposta;
+
     servico.sair();
     expect(servico.estaLogado()).toBeFalse();
   });
 
-  it('deve manter os cadastros salvos depois de recarregar a página', () => {
-    TestBed.inject(UsuarioService).cadastrar('Maria Souza', 'maria@teste.com', 'segredo');
+  it('deve manter o cliente logado depois de recarregar a página', async () => {
+    const resposta = servico.entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha);
+    http.expectOne(`${URL_API}/login`).flush(CLIENTE_DEMO);
+    await resposta;
 
-    // simula recarregar a página: um novo serviço lê o que ficou salvo no navegador
+    // simula recarregar a página: um novo serviço lê a sessão que ficou no navegador
     TestBed.resetTestingModule();
-    TestBed.configureTestingModule({});
-    const recarregado = TestBed.inject(UsuarioService);
+    configurar();
 
-    expect(recarregado.emailCadastrado('maria@teste.com')).toBeTrue();
-    expect(recarregado.usuarioLogado()?.nome).toBe('Maria Souza');
+    expect(servico.usuarioLogado()?.nome).toBe('Cliente Demo');
   });
 });

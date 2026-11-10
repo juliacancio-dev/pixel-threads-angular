@@ -21,9 +21,16 @@ export class EsqueciComponent {
     email: ['', [Validators.required, Validators.email]]
   });
 
-  enviar(): void {
+  async enviar(): Promise<void> {
     if (this.formulario.valid) {
-      if (!this.servicoUsuario.emailCadastrado(this.formulario.value.email!)) {
+      let existe: boolean;
+      try {
+        existe = await this.servicoUsuario.emailCadastrado(this.formulario.value.email!);
+      } catch {
+        this.servicoToast.mostrar('Não foi possível falar com o servidor. Tente de novo em instantes.');
+        return;
+      }
+      if (!existe) {
         this.servicoToast.mostrar('Não encontramos nenhuma conta com este e-mail.');
         return;
       }

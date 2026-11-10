@@ -40,10 +40,24 @@ export class LoginComponent {
     this.mostrarSenha = !this.mostrarSenha;
   }
 
-  enviar(): void {
+  /** Evita mandar o login duas vezes enquanto a API ainda está respondendo. */
+  private enviando = false;
+
+  async enviar(): Promise<void> {
+    if (this.enviando) return;
     if (this.formulario.valid) {
       const { email, senha, lembrar } = this.formulario.getRawValue();
-      if (!this.servicoUsuario.entrar(email!, senha!, !!lembrar)) {
+      this.enviando = true;
+      let entrou: boolean;
+      try {
+        entrou = await this.servicoUsuario.entrar(email!, senha!, !!lembrar);
+      } catch {
+        this.servicoToast.mostrar('Não foi possível falar com o servidor. Tente de novo em instantes.');
+        return;
+      } finally {
+        this.enviando = false;
+      }
+      if (!entrou) {
         this.credenciaisInvalidas = true;
         this.servicoToast.mostrar('E-mail ou senha incorretos.');
         return;

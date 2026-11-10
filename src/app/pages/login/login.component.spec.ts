@@ -1,16 +1,20 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
 import { LoginComponent } from './login.component';
-import { UsuarioService } from '../../services/usuario.service';
+import { USUARIO_DEMO, UsuarioService } from '../../services/usuario.service';
+import { URL_API } from '../../services/produto.service';
+
+const CLIENTE_DEMO = { id: 1, nome: USUARIO_DEMO.nome, email: USUARIO_DEMO.email, endereco: USUARIO_DEMO.endereco };
 
 describe('LoginComponent', () => {
   beforeEach(async () => {
-    localStorage.removeItem('pixelthreads.usuarios');
     localStorage.removeItem('pixelthreads.sessao');
     sessionStorage.removeItem('pixelthreads.sessao');
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
-      providers: [provideRouter([])]
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()]
     }).compileComponents();
   });
 
@@ -47,19 +51,21 @@ describe('LoginComponent', () => {
     expect(componente.mostrarSenha).toBeTrue();
   });
 
-  it('deve entrar com um cliente cadastrado e ir para a loja', () => {
+  it('deve entrar com um cliente cadastrado e ir para a loja', async () => {
     const montagem = TestBed.createComponent(LoginComponent);
     const componente = montagem.componentInstance;
     const navegar = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
     componente.formulario.setValue({ email: 'cliente@pixelthreads.com', senha: '123456', lembrar: false });
-    componente.enviar();
+    const envio = componente.enviar();
+    TestBed.inject(HttpTestingController).expectOne(`${URL_API}/login`).flush(CLIENTE_DEMO);
+    await envio;
 
     expect(TestBed.inject(UsuarioService).estaLogado()).toBeTrue();
     expect(navegar).toHaveBeenCalledWith('/');
   });
 
-  it('deve voltar para a página de origem depois de entrar', () => {
+  it('deve voltar para a página de origem depois de entrar', async () => {
     TestBed.overrideProvider(ActivatedRoute, {
       useValue: { snapshot: { queryParamMap: convertToParamMap({ voltar: '/cesta' }) } }
     });
@@ -68,7 +74,9 @@ describe('LoginComponent', () => {
     const navegar = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
     componente.formulario.setValue({ email: 'cliente@pixelthreads.com', senha: '123456', lembrar: false });
-    componente.enviar();
+    const envio = componente.enviar();
+    TestBed.inject(HttpTestingController).expectOne(`${URL_API}/login`).flush(CLIENTE_DEMO);
+    await envio;
 
     expect(navegar).toHaveBeenCalledWith('/cesta');
   });
@@ -82,13 +90,16 @@ describe('LoginComponent', () => {
     expect(componente.voltar).toBe('/');
   });
 
-  it('deve recusar senha incorreta', () => {
+  it('deve recusar senha incorreta', async () => {
     const montagem = TestBed.createComponent(LoginComponent);
     const componente = montagem.componentInstance;
     const navegar = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
     componente.formulario.setValue({ email: 'cliente@pixelthreads.com', senha: 'errada1', lembrar: false });
-    componente.enviar();
+    const envio = componente.enviar();
+    TestBed.inject(HttpTestingController).expectOne(`${URL_API}/login`)
+      .flush({ erro: 'E-mail ou senha incorretos' }, { status: 401, statusText: 'Unauthorized' });
+    await envio;
 
     expect(componente.credenciaisInvalidas).toBeTrue();
     expect(TestBed.inject(UsuarioService).estaLogado()).toBeFalse();

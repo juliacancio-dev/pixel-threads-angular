@@ -1,15 +1,17 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { EsqueciComponent } from './esqueci.component';
+import { URL_API } from '../../services/produto.service';
 
 describe('EsqueciComponent', () => {
   beforeEach(async () => {
-    localStorage.removeItem('pixelthreads.usuarios');
     localStorage.removeItem('pixelthreads.sessao');
     sessionStorage.removeItem('pixelthreads.sessao');
     await TestBed.configureTestingModule({
       imports: [EsqueciComponent],
-      providers: [provideRouter([])]
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()]
     }).compileComponents();
   });
 
@@ -27,21 +29,25 @@ describe('EsqueciComponent', () => {
     expect(componente.formulario.valid).toBeTrue();
   });
 
-  it('deve resetar o formulário ao enviar com sucesso', () => {
+  it('deve resetar o formulário ao enviar com sucesso', async () => {
     const montagem = TestBed.createComponent(EsqueciComponent);
     const componente = montagem.componentInstance;
 
     componente.formulario.setValue({ email: 'cliente@pixelthreads.com' });
-    componente.enviar();
+    const envio = componente.enviar();
+    TestBed.inject(HttpTestingController).expectOne(`${URL_API}/clientes/existe`).flush({ existe: true });
+    await envio;
     expect(componente.formulario.value.email).toBe('');
   });
 
-  it('não deve enviar o link para um e-mail que não está cadastrado', () => {
+  it('não deve enviar o link para um e-mail que não está cadastrado', async () => {
     const montagem = TestBed.createComponent(EsqueciComponent);
     const componente = montagem.componentInstance;
 
     componente.formulario.setValue({ email: 'ninguem@pixelthreads.com' });
-    componente.enviar();
+    const envio = componente.enviar();
+    TestBed.inject(HttpTestingController).expectOne(`${URL_API}/clientes/existe`).flush({ existe: false });
+    await envio;
     expect(componente.formulario.value.email).toBe('ninguem@pixelthreads.com');
   });
 });

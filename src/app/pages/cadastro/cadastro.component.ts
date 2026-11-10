@@ -73,10 +73,24 @@ export class CadastroComponent {
     this.mostrarConfirmarSenha = !this.mostrarConfirmarSenha;
   }
 
-  enviar(): void {
+  /** Evita mandar o cadastro duas vezes enquanto a API ainda está respondendo. */
+  private enviando = false;
+
+  async enviar(): Promise<void> {
+    if (this.enviando) return;
     if (this.formulario.valid) {
       const { nome, email, senha, endereco } = this.formulario.getRawValue();
-      if (!this.servicoUsuario.cadastrar(nome!, email!, senha!, endereco as Endereco)) {
+      this.enviando = true;
+      let cadastrou: boolean;
+      try {
+        cadastrou = await this.servicoUsuario.cadastrar(nome!, email!, senha!, endereco as Endereco);
+      } catch {
+        this.servicoToast.mostrar('Não foi possível falar com o servidor. Tente de novo em instantes.');
+        return;
+      } finally {
+        this.enviando = false;
+      }
+      if (!cadastrou) {
         this.formulario.controls.email.setErrors({ emailEmUso: true });
         this.formulario.controls.email.markAsTouched();
         this.servicoToast.mostrar('Este e-mail já está cadastrado.');

@@ -9,6 +9,8 @@ export interface Endereco {
 }
 
 export interface Usuario {
+  /** Gerado pelo banco de dados quando o cliente é cadastrado. */
+  id?: number;
   nome: string;
   email: string;
   senha: string;

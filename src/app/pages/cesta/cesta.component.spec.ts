@@ -1,16 +1,18 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter, Router } from '@angular/router';
 import { CestaComponent } from './cesta.component';
 import { USUARIO_DEMO, UsuarioService } from '../../services/usuario.service';
+import { URL_API } from '../../services/produto.service';
 
 describe('CestaComponent', () => {
   beforeEach(async () => {
-    localStorage.removeItem('pixelthreads.usuarios');
     localStorage.removeItem('pixelthreads.sessao');
     sessionStorage.removeItem('pixelthreads.sessao');
     await TestBed.configureTestingModule({
       imports: [CestaComponent],
-      providers: [provideRouter([])]
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()]
     }).compileComponents();
   });
 
@@ -27,8 +29,11 @@ describe('CestaComponent', () => {
     expect(componente.pedidoConfirmado).toBeNull();
   });
 
-  it('deve finalizar a compra e esvaziar a cesta quando estiver logado', () => {
-    TestBed.inject(UsuarioService).entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha);
+  it('deve finalizar a compra e esvaziar a cesta quando estiver logado', async () => {
+    const login = TestBed.inject(UsuarioService).entrar(USUARIO_DEMO.email, USUARIO_DEMO.senha);
+    TestBed.inject(HttpTestingController).expectOne(`${URL_API}/login`)
+      .flush({ id: 1, nome: USUARIO_DEMO.nome, email: USUARIO_DEMO.email, endereco: USUARIO_DEMO.endereco });
+    await login;
     const montagem = TestBed.createComponent(CestaComponent);
     const componente = montagem.componentInstance;
     const navegar = spyOn(TestBed.inject(Router), 'navigate');
