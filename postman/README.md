@@ -11,9 +11,10 @@ A collection [`pixel-threads-api.postman_collection.json`](pixel-threads-api.pos
 
 **Banco de dados:** [`api/pixelthreads.db`](../api/pixelthreads.db) (SQLite), já com o resultado da atividade:
 10 produtos e os clientes Ana Souza (com os dados alterados pelo PUT) e Bruno Lima.
+Tem também 2 pedidos de exemplo (códigos 1 e 2).
 O banco também tem o **Cliente Demo** (`cliente@pixelthreads.com` / `123456`), que a API cria sozinha para testar o login do site.
 
-**O site usa este mesmo banco.** Os produtos da loja vêm da API, e quem se cadastra ou faz login no site é salvo e conferido no banco.
+**O site usa este mesmo banco.** Os produtos da loja vêm da API, quem se cadastra ou faz login no site é salvo e conferido no banco, e **"Finalizar compra" grava o pedido no banco** (precisa estar logado).
 Para ver: rode `npm run api` num terminal e `npm start` em outro, e abra http://localhost:4200.
 
 ---
@@ -62,6 +63,11 @@ Deixe esse terminal aberto. Para testar, abra http://localhost:3000/api/produtos
 | | GET de conferência | Ana com os dados novos |
 | **4. Produtos - GET** | Lista todos os produtos | `200` com a lista de produtos |
 | | Produto por id | `200` com o produto 1 |
+| **5. Pedidos e cupons (site, JSON)** | Valida cupons, cria pedido (com e sem cupom), tenta um inválido, consulta por código e por cliente | `201` com o pedido (desconto e total calculados pela API), `400`, `404` (cupom inválido), `200` |
+| **7. Cupons (cadastro)** | Lista, cria, repete, inválido, altera %, desativa, reativa e exclui um cupom | `200`, `201`, `400`, `409`, `404` |
+| **6. Contrato do professor** | Todas as rotas dos PDFs de Produto, Cliente e Pedido | `200` com texto (ex.: `Produto gravado com sucesso! 11`) ou JSON |
+
+A pasta 5 também depende da ordem (o POST guarda o código do pedido em `pedidoId`). Rodando a collection uma segunda vez, os clientes da pasta 2 respondem `409` (já existem); para repetir tudo do zero, veja "Quero zerar o banco" abaixo.
 
 **A ordem importa.** O POST da Ana guarda o `id` dela na variável `clienteId`, e o PUT usa esse `id`.
 
@@ -80,6 +86,58 @@ Deixe esse terminal aberto. Para testar, abra http://localhost:3000/api/produtos
 | PUT | `/api/clientes/{id}` | Altera um cliente (substitui o cadastro inteiro) |
 | POST | `/api/clientes/existe` | Diz se um e-mail já tem conta (`{ "email": "..." }`) |
 | POST | `/api/login` | Confere e-mail e senha (`{ "email": "...", "senha": "..." }`) |
+
+### Rotas do contrato do professor
+
+Os PDFs `EndPointsAPIProduto`, `EndPointsAPICliente` e `EndPointsAPIPedido` descrevem uma API em Java com outras rotas e nomes de campo. Elas também existem aqui, convivendo com as rotas do site, e mexem nas mesmas tabelas.
+Como no contrato, **gravar, alterar e excluir respondem com uma frase em texto**, e **consultar algo que não existe responde `{}`** (status 200).
+
+| Método | Rota | Resposta |
+|---|---|---|
+| GET | `/api/produto/{codigo}` | Produto (com `codigo` e `valor` além dos campos do site) |
+| POST | `/api/produto` | `Produto gravado com sucesso! {id}`. Aceita `{ "descricao", "valor" }`; o que faltar ganha valor padrão |
+| PUT | `/api/produto` | `Produto alterado com sucesso! {id}` ou `404 Produto não encontrado!` (só troca o que veio no corpo) |
+| DELETE | `/api/produto/{codigo}` | `Produto removido com sucesso!` |
+| GET | `/api/produtos` | Lista todos |
+| GET | `/api/produto/vitrine` | Lançamentos e produtos em promoção |
+| GET | `/api/produto/busca/{termo}` | Busca (tipo `LIKE %termo%`) no nome e na descrição |
+| GET | `/api/cliente/{codigo}` | Cliente (sem a senha) |
+| POST | `/api/cliente` | `Cliente gravado com sucesso! {id}` (aceita `documento`) |
+| PUT | `/api/cliente` | `Cliente alterado com sucesso! {id}` (corpo com `codigo`; só troca o que veio) |
+| DELETE | `/api/cliente/{codigo}` | `Cliente removido com sucesso!` (os pedidos dele ficam, sem cliente) |
+| POST | `/api/cliente/login` | O cliente, ou `{}` se e-mail/senha estiverem errados |
+| PATCH | `/api/cliente/resetarSenha` | Senha vira `Senha1234` (o e-mail não é enviado de verdade, como no contrato) |
+| PATCH | `/api/cliente/alterarSenha` | Troca a senha conferindo e-mail + `documento` (`403` se o documento não bater) |
+| GET | `/api/pedido/{codigo}` | Pedido, ou `{}` |
+| POST | `/api/pedido` | `Pedido gravado com sucesso! {codigo}`. Aceita só `{ "codigoPedido": 1 }` (pedido vazio) ou também `clienteId` e `itens` |
+| PUT | `/api/pedido` | `Pedido alterado com sucesso! {codigo}` ou `404 Pedido não encontrado!`. Aceita `status` e `itens` |
+| DELETE | `/api/pedido/{codigo}` | `Pedido removido com sucesso!` |
+
+### Cupons
+
+| Método | Rota | O que faz |
+|---|---|---|
+| GET | `/api/cupons` | Lista os cupons (`{ codigo, percentual, ativo }`) |
+| GET | `/api/cupons/{codigo}` | Busca um cupom (`404` se não existir) |
+| POST | `/api/cupons` | Cria um cupom: `{ "codigo": "blackfriday", "percentual": 25 }`. Código de 3 a 20 letras, números, `-` ou `_` (guardado em maiúsculas); percentual de 1 a 100. `201`, `400` ou `409` (código repetido) |
+| PUT | `/api/cupons/{codigo}` | Altera `percentual` e/ou `ativo` (manda só o que quer mudar) |
+| DELETE | `/api/cupons/{codigo}` | `Cupom removido com sucesso!` ou `404` |
+| POST | `/api/cupons/validar` | Confere um cupom (`{ "codigo": "pixel10" }`, sem diferenciar maiúsculas). `200` com `{ codigo, percentual }` ou `404` se não existir ou estiver inativo |
+
+O banco já vem com o cupom **`PIXEL10`** (10%), o mesmo do banner do site. No site, a página **`/cupons`** (link "Gerenciar cupons" no rodapé da home) cria, ativa/desativa, muda o desconto e exclui cupons. Cupom desativado não vale nas compras. Apagar ou mudar um cupom não altera pedidos já feitos, que guardam o código e o desconto da hora da compra. A página e as rotas não têm controle de acesso (projeto acadêmico).
+
+**Como o desconto funciona:** vale só sobre os produtos, nunca sobre o frete, e o frete grátis (subtotal a partir de R$ 150) é decidido pelo subtotal *antes* do desconto. Um cupom por pedido. Quem calcula é a API ao gravar o pedido (`total = subtotal - desconto + frete`), o site só mostra a mesma conta. Cupom inexistente no pedido responde `400`.
+
+### Pedidos (rotas do site, em JSON)
+
+| Método | Rota | O que faz |
+|---|---|---|
+| GET | `/api/pedidos` | Lista os pedidos (`?clienteId=1` filtra por cliente) |
+| GET | `/api/pedidos/{id}` | Busca um pedido |
+| POST | `/api/pedidos` | Cria o pedido e devolve ele completo (`201`) |
+
+**Pedido:** `codigoPedido`, `clienteId`, `data`, `status` (`recebido`, `pago`, `enviado`, `entregue` ou `cancelado`), `subtotal`, `frete`, `cupom`, `desconto`, `total`, `itens` e `enderecoEntrega`.
+Para criar, mande `clienteId`, `itens: [{ produtoId, tamanho, quantidade }]` (quantidade de 1 a 10) e, se quiser, `cupom`. **O preço e o nome vêm sempre do banco**, nunca do corpo da requisição, e o frete segue a regra do site (grátis a partir de R$ 150). O item guarda uma cópia do nome e do preço da hora da compra, então mudar o produto depois não altera pedidos antigos. O pedido todo é gravado numa transação: se um item for inválido, nada é salvo.
 
 **Produto** (mesmos campos de `src/app/models/produto.model.ts`):
 `nome`, `categoria`, `imagem`, `fotos` (lista, opcional), `tamanhos` (lista), `preco`, `precoAntigo` (opcional), `novo`, `descricao`. O `id` é gerado pela API.

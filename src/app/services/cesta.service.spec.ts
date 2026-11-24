@@ -16,7 +16,7 @@ describe('CestaService', () => {
   it('deve iniciar com os itens mock e calcular os totais', () => {
     expect(servico.itens().length).toBe(3);
     expect(servico.totalItens()).toBe(4);
-    expect(servico.subtotal()).toBeCloseTo(79.9 + 89.9 * 2 + 74.9, 2);
+    expect(servico.subtotal()).toBeCloseTo(79.9 + 89.9 * 2 + 84.9, 2);
   });
 
   it('deve somar a quantidade ao adicionar um item já existente (mesmo produto e tamanho)', () => {

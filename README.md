@@ -7,6 +7,7 @@ E-commerce de roupas geek construído em Angular 18 (standalone components + Sig
 - [Stack](#stack)
 - [Requisitos](#requisitos)
 - [Como rodar](#como-rodar)
+- [Backend (API)](#backend-api)
 - [Scripts disponíveis](#scripts-disponíveis)
 - [Rotas](#rotas)
 - [Estrutura do projeto](#estrutura-do-projeto)
@@ -34,11 +35,23 @@ npm start
 
 A aplicação abre em `http://localhost:4200`.
 
+## Backend (API)
+
+A loja usa uma API própria (`api/server.js`, Node + SQLite, sem dependências extras) para **produtos, clientes e pedidos**. Precisa de Node 24+. Em dois terminais:
+
+```bash
+npm run api   # API em http://localhost:3000
+npm start     # site em http://localhost:4200
+```
+
+Rotas, exemplos e a collection do Postman: [postman/README.md](postman/README.md).
+
 ## Scripts disponíveis
 
 | Comando         | Descrição                                                   |
 | --------------- | ------------------------------------------------------------ |
 | `npm start`      | Sobe o servidor de desenvolvimento em `localhost:4200`       |
+| `npm run api`    | Sobe a API (produtos, clientes, pedidos) em `localhost:3000` |
 | `npm run build`  | Gera o build de produção em `dist/pixel-threads-angular`     |
 | `npm run watch`  | Build em modo desenvolvimento com rebuild automático         |
 | `npm test`       | Executa os testes unitários (Karma + Jasmine) no navegador   |

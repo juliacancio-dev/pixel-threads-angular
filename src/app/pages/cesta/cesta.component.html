@@ -76,16 +76,26 @@
               }
             </div>
 
+            @if (cupomAplicado; as aplicado) {
+              <div class="d-flex justify-content-between mb-2 text-success">
+                <span>
+                  Cupom <span class="font-monospace">{{ aplicado.codigo }}</span> ({{ aplicado.percentual }}%)
+                  <button type="button" class="btn btn-link link-danger p-0 ms-1 align-baseline small" (click)="removerCupom()">remover</button>
+                </span>
+                <span class="price">−{{ desconto | currency:'BRL' }}</span>
+              </div>
+            }
+
             <form class="input-group my-3" #formCupom="ngForm" (ngSubmit)="aplicarCupom(formCupom)" novalidate>
-              <input type="text" class="form-control font-monospace" name="cupom" placeholder="Cupom de desconto" [(ngModel)]="cupom" aria-label="Cupom de desconto">
-              <button type="submit" class="btn btn-outline-secondary">Aplicar</button>
+              <input type="text" class="form-control font-monospace" name="cupom" placeholder="Cupom de desconto" [(ngModel)]="cupom" [disabled]="cupomAplicado !== null" aria-label="Cupom de desconto">
+              <button type="submit" class="btn btn-outline-secondary" [disabled]="validandoCupom || cupomAplicado !== null">Aplicar</button>
             </form>
 
             <div class="d-flex justify-content-between fw-bold fs-5 border-top pt-3">
               <span>Total</span><span class="price">{{ total | currency:'BRL' }}</span>
             </div>
 
-            <button type="button" class="btn btn-primary btn-lg w-100 mt-3" (click)="finalizarCompra()">Finalizar compra</button>
+            <button type="button" class="btn btn-primary btn-lg w-100 mt-3" [disabled]="enviandoPedido" (click)="finalizarCompra()">{{ enviandoPedido ? 'Enviando pedido...' : 'Finalizar compra' }}</button>
             <p class="text-center small text-body-secondary mt-3 mb-0">Pagamento seguro · até 6x sem juros</p>
           </div>
         </aside>

@@ -1,0 +1,100 @@
+<main class="container">
+
+  <nav aria-label="Caminho de navegação">
+    <ol class="breadcrumb small font-monospace py-3 mb-0">
+      <li class="breadcrumb-item"><a routerLink="/">Início</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Cupons</li>
+    </ol>
+  </nav>
+
+  <span class="eyebrow">Promoções</span>
+  <h1 class="fw-bold">Cupons de desconto</h1>
+  <p class="text-body-secondary">Crie, ative ou desative os cupons que os clientes digitam na cesta. O desconto vale só sobre os produtos, não sobre o frete.</p>
+
+  <div class="row g-4 pb-5 align-items-start">
+
+    <section class="col-lg-4" aria-labelledby="titulo-novo-cupom">
+      <div class="card p-4">
+        <h2 class="h5 mb-3" id="titulo-novo-cupom">Novo cupom</h2>
+        <form [formGroup]="formulario" (ngSubmit)="criar()" novalidate>
+          <div class="mb-3">
+            <label for="cupom-codigo" class="form-label">Código<span class="text-magenta ms-1">*</span></label>
+            <input
+              type="text"
+              class="form-control font-monospace text-uppercase"
+              id="cupom-codigo"
+              formControlName="codigo"
+              placeholder="BLACKFRIDAY"
+              maxlength="20"
+              autocomplete="off"
+              [class.is-invalid]="campoInvalido('codigo')">
+            <div class="invalid-feedback">De 3 a 20 letras, números, "-" ou "_", sem espaços.</div>
+          </div>
+
+          <div class="mb-4">
+            <label for="cupom-percentual" class="form-label">Desconto (%)<span class="text-magenta ms-1">*</span></label>
+            <input
+              type="number"
+              class="form-control"
+              id="cupom-percentual"
+              formControlName="percentual"
+              min="1" max="100" step="1"
+              [class.is-invalid]="campoInvalido('percentual')">
+            <div class="invalid-feedback">Digite um valor de 1 a 100.</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100" [disabled]="salvando">{{ salvando ? 'Criando...' : 'Criar cupom' }}</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="col-lg-8" aria-labelledby="titulo-lista-cupons">
+      <h2 class="h5 mb-3" id="titulo-lista-cupons">Cupons cadastrados <span class="text-body-secondary font-monospace small">({{ cupons().length }})</span></h2>
+
+      @if (carregando()) {
+        <div class="alert alert-secondary">Carregando cupons...</div>
+      } @else if (erroAoCarregar()) {
+        <div class="alert alert-danger">
+          Não foi possível buscar os cupons. A API está rodando? (<code>npm run api</code>)
+          <button type="button" class="btn btn-sm btn-outline-danger ms-2" (click)="carregar()">Tentar de novo</button>
+        </div>
+      } @else if (cupons().length === 0) {
+        <div class="alert alert-secondary">Nenhum cupom cadastrado ainda. Crie o primeiro ao lado.</div>
+      } @else {
+        <div class="d-flex flex-column gap-3">
+          @for (cupom of cupons(); track cupom.codigo) {
+            <div class="card" [attr.data-cupom]="cupom.codigo">
+              <div class="card-body d-flex flex-wrap align-items-center gap-3">
+                <div class="flex-grow-1">
+                  <h3 class="h6 font-monospace mb-1">{{ cupom.codigo }}</h3>
+                  @if (cupom.ativo) {
+                    <span class="badge text-bg-success">Ativo</span>
+                  } @else {
+                    <span class="badge text-bg-secondary">Desativado</span>
+                  }
+                </div>
+
+                <div class="input-group input-group-sm campo-percentual">
+                  <input
+                    type="number" class="form-control text-center" min="1" max="100" step="1"
+                    [value]="cupom.percentual" #campoPercentual
+                    (change)="alterarPercentual(cupom, campoPercentual.value)"
+                    [attr.aria-label]="'Desconto do cupom ' + cupom.codigo + ' em porcentagem'">
+                  <span class="input-group-text">%</span>
+                </div>
+
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="alternarAtivo(cupom)">
+                  {{ cupom.ativo ? 'Desativar' : 'Ativar' }}
+                </button>
+                <button type="button" class="btn btn-link link-danger p-1" [attr.aria-label]="'Excluir cupom ' + cupom.codigo" (click)="excluir(cupom)">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  </div>
+
+</main>
